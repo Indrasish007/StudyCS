@@ -10,6 +10,7 @@ import { getAllNotes, NoteData } from "./lib/notes";
 import MarkdownRenderer from "./components/MarkdownRenderer";
 import RevisionView from "./components/RevisionView";
 import SearchModal from "./components/SearchModal";
+import Dashboard from "./components/Dashboard";
 
 // Metallic spiral ring component
 function SpiralRings() {
@@ -38,6 +39,7 @@ export default function App() {
   const [activeMode, setActiveMode] = useState<"notes" | "revision">("notes");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSubjectDrawerOpen, setIsSubjectDrawerOpen] = useState(false);
+  const [showDashboard, setShowDashboard] = useState<boolean>(true);
   
   // Mobile active page view: "left" (Outline/TOC/Controls) or "right" (Note Content/Sub-views)
   const [mobileView, setMobileView] = useState<"left" | "right">("right");
@@ -76,6 +78,7 @@ export default function App() {
     setActiveSubject(slug);
     setMobileView("right");
     setIsSubjectDrawerOpen(false);
+    setShowDashboard(false);
     
     // Scroll right page back to top
     if (rightPageRef.current) {
@@ -87,6 +90,7 @@ export default function App() {
     setActiveMode(mode);
     setMobileView("right");
     setIsSubjectDrawerOpen(false);
+    setShowDashboard(false);
     
     if (rightPageRef.current) {
       rightPageRef.current.scrollTop = 0;
@@ -137,6 +141,33 @@ export default function App() {
 
   const currentThemeColor = tabColorClasses[subjectColor] || tabColorClasses.indigo;
 
+  if (showDashboard) {
+    return (
+      <>
+        <Dashboard
+          notes={allNotes}
+          onSelectSubject={(slug) => {
+            setActiveSubject(slug);
+            setActiveMode("notes");
+            setShowDashboard(false);
+          }}
+          onOpenRevision={() => {
+            setActiveMode("revision");
+            setShowDashboard(false);
+          }}
+          onSearchOpen={() => setIsSearchOpen(true)}
+        />
+        <SearchModal
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+          notes={allNotes}
+          onSelectSubject={handleSubjectChange}
+          onNavigate={(page) => handleModeChange(page as any)}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-tr from-[#0a0715] via-[#120e24] to-[#080510] text-slate-800 p-2 md:p-6 lg:p-8 flex flex-col justify-between selection:bg-yellow-300 selection:text-slate-900">
       
@@ -152,7 +183,11 @@ export default function App() {
             <Menu size={18} />
           </button>
           
-          <div className="flex items-center gap-2">
+          <div 
+            className="flex items-center gap-2 cursor-pointer hover:opacity-85 transition duration-150" 
+            title="Return to Dashboard"
+            onClick={() => setShowDashboard(true)}
+          >
             <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-600/20">
               A
             </div>
@@ -190,8 +225,17 @@ export default function App() {
           })}
         </div>
 
-        {/* Global Search trigger */}
-        <div className="flex items-center gap-2">
+        {/* Dashboard Shortcut & Search trigger */}
+        <div className="flex items-center gap-2.5">
+          <button 
+            onClick={() => setShowDashboard(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-900/40 hover:border-slate-700 text-slate-355 text-xs font-bold transition duration-150"
+            title="Return to Dashboard"
+          >
+            <span className="text-indigo-400 font-bold text-sm">🏠</span>
+            <span className="hidden sm:inline">Dashboard</span>
+          </button>
+
           <button 
             onClick={() => setIsSearchOpen(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-900/40 hover:border-slate-700 text-slate-400 text-xs transition duration-150"
@@ -461,6 +505,28 @@ export default function App() {
                     <X size={14} />
                   </button>
                 </div>
+
+                {/* Dashboard Shortcut */}
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block font-daughter">
+                    Main Menu
+                  </span>
+                  <button
+                    onClick={() => {
+                      setShowDashboard(true);
+                      setIsSubjectDrawerOpen(false);
+                    }}
+                    className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-800 bg-slate-950/40 text-slate-350 hover:text-white hover:bg-indigo-950/20 hover:border-indigo-800/30 transition duration-150 group"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-indigo-400 group-hover:scale-110 transition-transform">🏠</span>
+                      <span className="text-[11px] font-bold font-sans">Return to Dashboard</span>
+                    </div>
+                    <ChevronRight size={11} className="text-slate-500" />
+                  </button>
+                </div>
+
+                <div className="border-t border-slate-800/80 my-1.5" />
 
                 {/* Notebook Functions / Mode Bar in Menu */}
                 <div className="space-y-2">
