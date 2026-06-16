@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import Fuse from "fuse.js";
 import { Search, BookOpen, Compass, CornerDownLeft, X } from "lucide-react";
 import { NoteData } from "@/lib/notes";

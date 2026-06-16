@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   BookOpen, Compass, Search, 
-  FileText, ChevronRight, Menu, X, ArrowLeft, Clock, Award
+  ChevronRight, Menu, X, ArrowLeft, Clock, Award
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -38,8 +38,6 @@ export default function App() {
   const [activeMode, setActiveMode] = useState<"notes" | "revision">("notes");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSubjectDrawerOpen, setIsSubjectDrawerOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [pageFlip, setPageFlip] = useState(false);
   
   // Mobile active page view: "left" (Outline/TOC/Controls) or "right" (Note Content/Sub-views)
   const [mobileView, setMobileView] = useState<"left" | "right">("right");
@@ -75,26 +73,19 @@ export default function App() {
   const currentNote = allNotes.find((n) => n.metadata.slug === activeSubject) || allNotes[0];
 
   const handleSubjectChange = (slug: string) => {
-    setPageFlip(true);
     setActiveSubject(slug);
     setMobileView("right");
-    setIsMobileMenuOpen(false);
     setIsSubjectDrawerOpen(false);
     
     // Scroll right page back to top
     if (rightPageRef.current) {
       rightPageRef.current.scrollTop = 0;
     }
-
-    setTimeout(() => {
-      setPageFlip(false);
-    }, 600);
   };
 
   const handleModeChange = (mode: typeof activeMode) => {
     setActiveMode(mode);
     setMobileView("right");
-    setIsMobileMenuOpen(false);
     setIsSubjectDrawerOpen(false);
     
     if (rightPageRef.current) {
@@ -436,7 +427,7 @@ export default function App() {
         onClose={() => setIsSearchOpen(false)}
         notes={allNotes}
         onSelectSubject={handleSubjectChange}
-        onNavigate={handleModeChange}
+        onNavigate={(page) => handleModeChange(page as any)}
       />
 
       {/* Unified Left Drawer for Subject & Mode Navigation (Hamburger Menu) */}

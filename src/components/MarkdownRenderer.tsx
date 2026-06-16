@@ -1,4 +1,3 @@
-import React from "react";
 import { slugify } from "../lib/notes";
 
 interface MarkdownRendererProps {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BookOpen, Sigma, HelpCircle, FileText, Search, Copy, Check, BrainCircuit } from "lucide-react";
 import { getRevisionData, RevisionConcept } from "../lib/notes";
 import Flashcard from "./learning/Flashcard";
