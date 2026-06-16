@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
+  <style>
+    .bg { fill: #070319; }
+    .grid-line { stroke: #ffffff; stroke-opacity: 0.02; stroke-width: 1; }
+    .edge { stroke: #818cf8; stroke-width: 2.5; stroke-linecap: round; }
+    .visited-edge { stroke: #10b981; stroke-width: 3; }
+    .node { fill: #1e1b4b; stroke: #6366f1; stroke-width: 2.5; }
+    .visited-node { fill: #064e3b; stroke: #10b981; stroke-width: 3; }
+    .text { fill: #f8fafc; font-family: 'Courier New', Courier, monospace; font-size: 11px; text-anchor: middle; font-weight: bold; }
+    .title { fill: #818cf8; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; letter-spacing: 1.5px; }
+    .commentary { fill: #94a3b8; font-family: 'Courier New', Courier, monospace; font-size: 11px; }
+  </style>
+  
+  <rect width="100%" height="100%" class="bg" rx="16" />
+  
+  <!-- Grid -->
+  <g>
+    <line x1="50" y1="0" x2="50" y2="350" class="grid-line" />
+    <line x1="150" y1="0" x2="150" y2="350" class="grid-line" />
+    <line x1="250" y1="0" x2="250" y2="350" class="grid-line" />
+    <line x1="350" y1="0" x2="350" y2="350" class="grid-line" />
+    <line x1="450" y1="0" x2="450" y2="350" class="grid-line" />
+    <line x1="0" y1="50" x2="500" y2="50" class="grid-line" />
+    <line x1="0" y1="150" x2="500" y2="150" class="grid-line" />
+    <line x1="0" y1="250" x2="500" y2="250" class="grid-line" />
+  </g>
+
+  <!-- Title -->
+  <text x="30" y="40" class="title">AI: DEPTH-FIRST SEARCH STATE TREE</text>
+  
+  <!-- Edges -->
+  <line x1="250" y1="80" x2="160" y2="150" class="visited-edge" />
+  <line x1="250" y1="80" x2="340" y2="150" class="edge" />
+  <line x1="160" y1="150" x2="100" y2="230" class="visited-edge" />
+  <line x1="160" y1="150" x2="220" y2="230" class="edge" />
+
+  <!-- Nodes -->
+  <circle cx="250" cy="80" r="22" class="visited-node" />
+  <text x="250" y="84" class="text">ROOT A</text>
+  
+  <circle cx="160" cy="150" r="22" class="visited-node" />
+  <text x="160" y="154" class="text">State B</text>
+  
+  <circle cx="340" cy="150" r="22" class="node" />
+  <text x="340" y="154" class="text">State C</text>
+
+  <circle cx="100" cy="230" r="22" class="visited-node" />
+  <text x="100" y="234" class="text">Goal D</text>
+  
+  <circle cx="220" cy="230" r="22" class="node" />
+  <text x="220" y="234" class="text">State E</text>
+
+  <!-- Commentary -->
+  <text x="30" y="300" class="commentary">// Green nodes represent chosen traversal path (DFS: Root A -&gt; B -&gt; Goal D)</text>
+  <text x="30" y="315" class="commentary">// DFS finds path in O(b^m) worst-case time complexity</text>
+</svg>

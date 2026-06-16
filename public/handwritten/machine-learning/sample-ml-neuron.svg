@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
+  <style>
+    .bg { fill: #110515; }
+    .grid-line { stroke: #ffffff; stroke-opacity: 0.02; stroke-width: 1; }
+    .edge { stroke: #d946ef; stroke-width: 2.5; stroke-linecap: round; }
+    .node { fill: #2e083a; stroke: #d946ef; stroke-width: 2.5; }
+    .sum-node { fill: #470c58; stroke: #f472b6; stroke-width: 3; }
+    .text { fill: #fdf2ff; font-family: 'Courier New', Courier, monospace; font-size: 11px; text-anchor: middle; font-weight: bold; }
+    .title { fill: #d946ef; font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; letter-spacing: 1.5px; }
+    .commentary { fill: #e9d5ff; font-family: 'Courier New', Courier, monospace; font-size: 11px; }
+  </style>
+  
+  <rect width="100%" height="100%" class="bg" rx="16" />
+  
+  <!-- Grid -->
+  <g>
+    <line x1="50" y1="0" x2="50" y2="350" class="grid-line" />
+    <line x1="150" y1="0" x2="150" y2="350" class="grid-line" />
+    <line x1="250" y1="0" x2="250" y2="350" class="grid-line" />
+    <line x1="350" y1="0" x2="350" y2="350" class="grid-line" />
+    <line x1="450" y1="0" x2="450" y2="350" class="grid-line" />
+    <line x1="0" y1="50" x2="500" y2="50" class="grid-line" />
+    <line x1="0" y1="150" x2="500" y2="150" class="grid-line" />
+    <line x1="0" y1="250" x2="500" y2="250" class="grid-line" />
+  </g>
+
+  <!-- Title -->
+  <text x="30" y="40" class="title">ML: ARTIFICIAL NEURON (PERCEPTRON) SCHEMA</text>
+  
+  <!-- Edges -->
+  <line x1="100" y1="100" x2="250" y2="175" class="edge" />
+  <line x1="100" y1="250" x2="250" y2="175" class="edge" />
+  <line x1="250" y1="175" x2="400" y2="175" class="edge" />
+
+  <!-- Nodes -->
+  <!-- Inputs -->
+  <circle cx="100" cy="100" r="22" class="node" />
+  <text x="100" y="104" class="text">Input X1</text>
+  <text x="175" y="125" class="text" style="fill: #f472b6;">w1</text>
+
+  <circle cx="100" cy="250" r="22" class="node" />
+  <text x="100" y="254" class="text">Input X2</text>
+  <text x="175" y="235" class="text" style="fill: #f472b6;">w2</text>
+
+  <!-- Sum & Act Center -->
+  <circle cx="250" cy="175" r="30" class="sum-node" />
+  <text x="250" y="174" class="text">Σ (w.x)</text>
+  <text x="250" y="186" class="text" style="font-size: 8px;">+ bias</text>
+
+  <!-- Output -->
+  <circle cx="400" cy="175" r="22" class="node" />
+  <text x="400" y="179" class="text">Out Y</text>
+
+  <!-- Commentary -->
+  <text x="30" y="300" class="commentary">// Formula: Y = f( Σ(wi * xi) + b )</text>
+  <text x="30" y="315" class="commentary">// Activation Function f(x) can be Sigmoid, ReLU, or Step Function</text>
+</svg>

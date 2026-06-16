@@ -1,0 +1,373 @@
+Machine Learning (ML) — Ultimate Revision Notes
+
+Source: Based on the high-yield "Complete ML Machine Learning in one shot | Semester Exam | Hindi" One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+
+Course Outline & Timestamps
+- 00:00 - 01:45 | Chapter 0: Introduction & Overview
+- 01:45 - 01:23:31 | Chapter 1: Introduction to Machine Learning
+- 01:23:31 - 02:31:11 | Chapter 2: Regression & Bayesian Learning
+- 02:31:11 - 03:42:35 | Chapter 3: Decision Tree Learning
+- 03:42:35 - 05:41:09 | Chapter 4: Artificial Neural Networks (ANN)
+- 05:41:09 - End | Chapter 5: Reinforcement Learning
+
+
+Chapter 1: Introduction to Machine Learning
+
+1.1 Defining Machine Learning
+Machine Learning (ML) is a branch of Artificial Intelligence that enables computers to learn and improve from experience without being explicitly programmed. 
+
+The industry-standard definition was formulated by Tom M. Mitchell (1997):
+- Well-Posed Learning Problem: A computer program is said to learn from experience E with respect to some class of tasks T and performance measure P, if its performance at tasks in T, as measured by P, improves with experience E.
+
+Example Problems Defined by (T, P, E):
+- Checkers Game:
+  - Task (T): Playing checkers
+  - Performance (P): Percent of games won against opponents
+  - Experience (E): Playing practice games against itself
+- Handwriting Recognition:
+  - Task (T): Recognizing handwritten words within images
+  - Performance (P): Percent of words correctly classified
+  - Experience (E): Database of handwritten words with labels
+- Robot Driving:
+  - Task (T): Driving on public highways using steering/pedals
+  - Performance (P): Average distance traveled before human intervention
+  - Experience (E): Sequence of camera images and steering commands recorded while observing human driving
+- Spam Filtering:
+  - Task (T): Classifying emails as spam or ham
+  - Performance (P): Fraction of emails correctly classified
+  - Experience (E): Historical database of emails marked as spam or ham by users
+
+
+1.2 Designing a Learning System
+Building an ML system involves a structured design pipeline:
+
+1. Choose Training Experience -> (Direct vs Indirect, Self-play vs Teacher)
+2. Choose Target Function -> (V: BoardState -> Real Number Score/Rating)
+3. Choose Target Function Representation -> (V_hat(b) = w0 + w1*x1 + w2*x2 + ... + w6*x6)
+4. Choose Learning Algorithm -> (LMS weight update: w_i = w_i + eta * (V_train(b) - V_hat(b)) * x_i)
+
+Step 1: Choosing the Training Experience
+The type of training data determines the capability and constraints of the learning system:
+- Direct vs. Indirect Feedback:
+  - Direct: The agent receives immediate feedback on each move (e.g., whether a move is optimal).
+  - Indirect: The agent only receives feedback at the end of the game (win, loss, or draw). Indirect feedback is much harder to learn from since the agent must solve the credit assignment problem (deciding which specific moves contributed to the final outcome).
+- Self-play vs. Teacher:
+  - Teacher-Guided: A teacher plays against the agent or provides optimal moves.
+  - Self-Play: The agent plays against itself to generate training examples. It requires no human guidance but can explore slower.
+- Data Representativeness: The training distribution must closely match the test distribution.
+
+Step 2: Choosing the Target Function
+We must mathematically define what the system needs to learn:
+- Let Board be the set of all possible checkers board states.
+- We define a target function V: Board -> R that assigns a numerical score to any board state:
+  - If b is a final winning state: V(b) = +100
+  - If b is a final losing state: V(b) = -100
+  - If b is a final draw state: V(b) = 0
+  - If b is an intermediate state: V(b) = V(b'), where b' is the optimal final state reachable from b.
+- Since calculating V(b) exactly for all states is computationally intractable, the learning system will attempt to learn an approximation function, denoted as V_hat(b).
+
+Step 3: Choosing a Representation for the Target Function
+We must represent V_hat(b) in a form that the computer can compute and adjust. A simple and effective representation is a linear combination of board features:
+V_hat(b) = w0 + w1*x1 + w2*x2 + w3*x3 + w4*x4 + w5*x5 + w6*x6
+
+Where:
+- x1: Number of black pieces on the board.
+- x2: Number of red pieces on the board.
+- x3: Number of black kings.
+- x4: Number of red kings.
+- x5: Number of black pieces threatened by red (can be captured in the next turn).
+- x6: Number of red pieces threatened by black.
+- w0, w1, ..., w6: The weight coefficients to be learned.
+
+Step 4: Choosing the Learning Algorithm
+To find the optimal weights, we need a learning algorithm that adjusts w_i based on training instances.
+- Training Instances: Formulated as pairs (b, V_train(b)). We estimate V_train(b) using successor states: V_train(b) = V_hat(Successor(b))
+- Least Mean Squares (LMS) Weight Update Rule:
+  For each training example, the algorithm calculates the prediction error and adjusts weights:
+  w_i = w_i + eta * (V_train(b) - V_hat(b)) * x_i
+  where eta is a small positive constant called the learning rate.
+
+
+1.3 Types of Learning
+Machine learning problems are traditionally categorized based on the feedback mechanism:
+
+Paradigms:
+- Supervised Learning: Labeled input-output pairs (x, y) where the labels are provided.
+  - Regression: Predicts a continuous output (e.g., house prices).
+  - Classification: Predicts a discrete category/class (e.g., spam vs. ham).
+- Unsupervised Learning: Unlabeled input data. Find underlying structures.
+  - Clustering: Grouping similar data points together (e.g., K-Means customer segments).
+  - Association Rule Learning: Finding relationships between variables (e.g., market basket analysis).
+- Reinforcement Learning: Interaction with environment. Learn from actions, states, and numerical rewards/penalties.
+- Semi-Supervised Learning: Combines a small amount of labeled data with a large amount of unlabeled data.
+
+
+1.4 Perspectives & Issues in Machine Learning
+- Hypothesis Space Bias: Inductive bias of the learning algorithm (e.g., linear regression assumes the relationship is linear).
+- Data Sufficiency: How much training data is required to generalize successfully without overfitting.
+- Overfitting vs. Underfitting: Finding the optimal balance between model complexity and generalization.
+- Tractability and Scaling: Can the algorithms scale to huge dimensional feature spaces and massive datasets.
+
+
+Chapter 2: Regression & Bayesian Learning
+
+2.1 Regression Models
+Regression algorithms model the relationship between dependent target variables and independent features.
+
+Simple Linear Regression
+Predicts a continuous target y from a single feature x using a linear hypothesis:
+h_theta(x) = theta_0 + theta_1 * x
+- theta_0: Y-intercept (bias).
+- theta_1: Slope parameter.
+
+Cost Function (Mean Squared Error - MSE)
+J(theta_0, theta_1) = (1 / (2*m)) * sum over i (h_theta(x^(i)) - y^(i))^2
+where m is the total number of training examples.
+
+Gradient Descent Optimization
+We update parameters simultaneously in the opposite direction of the gradient:
+theta_j = theta_j - alpha * (partial derivative of J with respect to theta_j)
+where alpha is the learning rate.
+
+The gradients are calculated as:
+For theta_0: theta_0 = theta_0 - alpha * (1 / m) * sum over i (h_theta(x^(i)) - y^(i))
+For theta_1: theta_1 = theta_1 - alpha * (1 / m) * sum over i (h_theta(x^(i)) - y^(i)) * x^(i)
+
+Multiple Linear Regression
+When predicting targets using n different features:
+h_theta(x) = theta_0 + theta_1 * x1 + theta_2 * x2 + ... + theta_n * xn = theta_T * x
+where x0 = 1 is the dummy bias feature.
+
+Logistic Regression
+Despite its name, Logistic Regression is a classification algorithm used to predict binary outcomes (y in {0, 1}).
+We map the linear combination to a probability between 0 and 1 using the Sigmoid (Logistic) Function:
+h_theta(x) = g(theta_T * x) = 1 / (1 + e^-(theta_T * x))
+
+g(z) = 1 / (1 + e^-z)
+
+Decision Boundary
+Predict y = 1 if h_theta(x) >= 0.5 <=> theta_T * x >= 0
+Predict y = 0 if h_theta(x) < 0.5 <=> theta_T * x < 0
+
+
+2.2 Bayesian Learning
+Bayesian learning provides a probabilistic approach to inference, treating parameters and hypotheses as random variables with prior beliefs.
+
+Bayes Theorem
+P(h | D) = (P(D | h) * P(h)) / P(D)
+- P(h): Prior probability of hypothesis h.
+- P(D): Prior probability of observing data D.
+- P(D|h): Likelihood of observing data D given hypothesis h.
+- P(h|D): Posterior probability of hypothesis h given data D.
+
+Maximum A Posteriori (MAP) Hypothesis
+The most probable hypothesis given the observed training data D:
+h_MAP = argmax over h (P(D|h) * P(h))
+
+Maximum Likelihood (ML) Hypothesis
+If we assume that every hypothesis is equally likely a priori:
+h_ML = argmax over h P(D|h)
+
+
+2.3 Naive Bayes Classifier
+The Naive Bayes Classifier is a highly efficient classification algorithm based on Bayes Theorem.
+
+The "Naive" Assumption
+It assumes that all features A1, A2, ..., An are conditionally independent given the target class label V:
+P(A1, A2, ..., An | V) = product over i P(Ai | V)
+
+Classification Formulation
+To predict the class label v_NB of an instance with attributes a1, a2, ..., an:
+v_NB = argmax over v_j (P(v_j) * product over i P(a_i | v_j))
+
+Laplace Smoothing:
+If an attribute value a_i never appears with class v_j in the training data, then P(a_i|v_j) = 0, causing the entire product to become 0. To fix this:
+P(a_i | v_j) = (n_c + 1) / (n + |Domain(A_i)|)
+where n_c is the count of class v_j samples having feature value a_i, n is total count of class v_j samples, and |Domain(A_i)| is the number of possible values of attribute A_i.
+
+
+2.4 Bayesian Belief Networks (BBN)
+While Naive Bayes assumes absolute conditional independence, Bayesian Belief Networks allow us to represent conditional dependencies selectively.
+- Structure: Directed Acyclic Graph (DAG) representing causal relationships (edges) between variables (nodes).
+- CPT: Conditional Probability Tables for each variable given its parents.
+The joint probability of any combination is:
+P(x1, x2, ..., xn) = product over i P(x_i | Parents(x_i))
+
+
+Chapter 3: Decision Tree Learning
+
+3.1 Representation & Concept
+A Decision Tree is a flowchart-like tree structure representing a classification model:
+- Internal Nodes: Represent tests on attributes.
+- Branches: Represent outcomes of the attribute test.
+- Leaf Nodes: Represent class labels or final decisions.
+
+
+3.2 Mathematical Split Metrics
+To build a decision tree, we must decide which attribute to split on at each node.
+
+Entropy
+Entropy measures the impurity or randomness of a collection of examples S:
+Entropy(S) = - sum over i (p_i * log2(p_i))
+where p_i is the proportion of examples in S that belong to class i.
+- If S is homogeneous: Entropy(S) = 0.
+- If S has an equal mix of positive and negative: Entropy(S) = 1.0.
+
+Information Gain
+Information Gain measures the expected reduction in entropy achieved by partitioning the dataset S based on attribute A:
+Gain(S, A) = Entropy(S) - sum over v ( (|S_v| / |S|) * Entropy(S_v) )
+The goal is to choose the attribute A that maximizes Gain(S, A).
+
+Gini Index (Gini Impurity)
+Used in CART (Classification and Regression Trees) as an alternative to Entropy:
+Gini(S) = 1 - sum over i (p_i^2)
+
+
+3.3 The ID3 Algorithm
+The ID3 (Iterative Dichotomiser 3) algorithm builds a decision tree top-down:
+1. Calculate the entropy of the current dataset.
+2. For each attribute, calculate the Information Gain.
+3. Select the attribute with the highest Information Gain to be the decision node.
+4. Partition the dataset into subsets using the chosen attribute's values.
+5. Repeat the process recursively for each subset.
+6. Stopping Conditions:
+   - All samples in the subset belong to the same class.
+   - No attributes are left to split.
+   - No samples are left in the subset.
+
+
+3.4 Overfitting in Decision Trees
+A decision tree can grow too deep, learning noise and random fluctuations in the training set instead of the general underlying pattern.
+
+Overfitting Definition:
+A hypothesis h is said to overfit the training data if there exists an alternative hypothesis h' such that:
+error_train(h) < error_train(h') AND error_test(h) > error_test(h')
+
+Avoidance Strategies (Pruning)
+- Pre-Pruning (Early Stopping): Stop growing the tree before it reaches its maximum depth (e.g., stop if samples in a node is below a threshold).
+- Post-Pruning (Reduced Error Pruning):
+  1. Grow the tree to its maximum size.
+  2. Evaluate validation set performance.
+  3. Recursively examine decision nodes starting from leaves. Collapse a node into a leaf (majority class) and evaluate accuracy.
+  4. If the collapsed tree performs as well or better on validation data, keep it pruned.
+- Rule Post-Pruning:
+  1. Convert fully grown tree into equivalent IF-THEN rules.
+  2. Prune individual preconditions of each rule if it improves validation accuracy.
+  3. Sort the rules by accuracy and use them in that order to classify.
+
+
+Chapter 4: Artificial Neural Networks (ANN)
+
+4.1 Biological vs. Artificial Neuron
+- Dendrites -> Input channels (x1, x2, ..., xn)
+- Synapses -> Weights (w1, w2, ..., wn)
+- Soma -> Summation block (sum w_i * x_i + b)
+- Axon -> Output signal and Activation Function
+
+
+4.2 The Perceptron Model
+A Perceptron consists of a single neuron with a step/threshold activation function:
+z = sum over i (w_i * x_i) + b
+Output o = sgn(z) = 1 if z > 0, else -1
+
+Perceptron Training Rule:
+w_i = w_i + delta_w_i
+delta_w_i = eta * (t - o) * x_i
+where eta is the learning rate, t is target label (+/- 1) and o is output.
+
+Perceptron Convergence Theorem:
+Guaranteed to converge to a set of weights that perfectly classifies all training examples within a finite number of steps IF and ONLY IF the training data is linearly separable and the learning rate is sufficiently small.
+
+The XOR Limitation:
+A single-layer perceptron cannot represent XOR because XOR is non-linearly separable. This limitation was proven by Minsky and Papert (1969).
+
+
+4.3 Activation Functions
+- Step Function: 1 if z >= 0, else 0.
+- Sigmoid (Logistic) Function: f(z) = 1 / (1 + e^-z) | Range: (0, 1) | Derivative: f'(z) = f(z) * (1 - f(z))
+- Hyperbolic Tangent (Tanh): f(z) = tanh(z) = (e^z - e^-z) / (e^z + e^-z) | Range: (-1, 1) | Derivative: f'(z) = 1 - f(z)^2
+- Rectified Linear Unit (ReLU): f(z) = max(0, z) | Range: [0, infinity) | Highly efficient, prevents vanishing gradient problem.
+
+
+4.4 Multi-layer Perceptron (MLP) & Backpropagation
+To solve non-linear problems like XOR, we stack neurons in multiple layers: Input, Hidden, and Output.
+
+The Backpropagation Algorithm
+Uses Gradient Descent to minimize squared error over all output units:
+E(w) = 0.5 * sum over k (t_k - o_k)^2
+Using the Chain Rule, error is propagated backwards from the output layer to update hidden layer weights.
+
+Step-by-Step Algorithm (using Sigmoid):
+1. Forward Pass: Feed input vector x to compute activations of all hidden and output units.
+2. Compute Output Error (delta_k): For each output unit k:
+   delta_k = o_k * (1 - o_k) * (t_k - o_k)
+3. Compute Hidden Error (delta_h): For each hidden unit h:
+   delta_h = o_h * (1 - o_h) * sum over k (w_kh * delta_k)
+4. Update Weights: Adjust each weight w_ji (from node i to node j):
+   w_ji = w_ji + delta_w_ji
+   where delta_w_ji = eta * delta_j * x_ji (x_ji is input from i to j).
+
+
+Chapter 5: Reinforcement Learning
+
+5.1 Basic Framework
+Reinforcement Learning models an agent interacting with an environment to learn a policy that maximizes cumulative rewards.
+
+                    ┌───────────────┐
+                    │  Environment  │
+                    └─┬───────────▲─┘
+     Current State s  │           │ Action a
+     Current Reward r │           │
+                    ┌─▼───────────┴─┐
+                    │     Agent     │
+                    └───────────────┘
+
+- State (s_t): The current representation of the environment.
+- Action (a_t): The decision/move made by the agent.
+- Reward (r_t): Numerical feedback received from the environment.
+- Policy (pi): A mapping from states to actions, pi(s) -> a. Goal is to find optimal policy.
+
+
+5.2 Markov Decision Processes (MDP)
+To model the environment, we use an MDP (S, A, P, R, gamma):
+- S: A finite set of states.
+- A: A finite set of actions.
+- P(s' | s, a): Transition probability distribution.
+- R(s, a, s'): Reward function.
+- gamma: Discount factor in [0, 1] (smaller = shortsighted, larger = farsighted).
+
+The Markov Property:
+Future state transition depends only on the current state and action, independent of history:
+P(S_{t+1} | S_t, A_t, S_{t-1}, ...) = P(S_{t+1} | S_t, A_t)
+
+
+5.3 Value Functions
+- State-Value Function V^pi(s): Expected cumulative discounted reward starting from state s following policy pi.
+- Action-Value Function Q^pi(s, a): Expected cumulative discounted reward starting from state s, taking action a, and following policy pi.
+  Q^pi(s, a) = R(s, a) + gamma * sum over s' (P(s' | s, a) * V^pi(s'))
+
+
+5.4 Bellman Optimality Equation
+V*(s) = max over a ( R(s, a) + gamma * sum over s' (P(s' | s, a) * V*(s')) )
+Q*(s, a) = R(s, a) + gamma * sum over s' (P(s' | s, a) * max over a' Q*(s', a'))
+
+
+5.5 Q-Learning
+Q-Learning is a model-free, off-policy, temporal-difference reinforcement learning algorithm. It learns optimal Q*(s, a) directly without knowing transitions or rewards.
+
+Q-Table Update Equation:
+Q(s, a) = Q(s, a) + alpha * ( R(s, a) + gamma * max over a' Q(s', a') - Q(s, a) )
+where alpha is the learning rate.
+- TD Target: R(s, a) + gamma * max over a' Q(s', a')
+- TD Error: TD Target - Q(s, a)
+
+
+5.6 Exploration vs. Exploitation Trade-off
+- Exploitation: Choosing the action estimated to have the highest Q-value.
+- Exploration: Choosing random or non-optimal actions to discover new paths.
+
+The epsilon-Greedy Strategy:
+Choose action a:
+- With probability 1 - epsilon: argmax over a' Q(s, a') (Exploit)
+- With probability epsilon: A random action from A (Explore)
+Usually epsilon starts high (1.0) and decays over time.

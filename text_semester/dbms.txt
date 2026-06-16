@@ -1,0 +1,356 @@
+Database Management Systems (DBMS) — Ultimate Revision Notes
+
+Source: Based on the high-yield "DBMS in 100 Minutes | Complete Placement Revision" One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+
+Course Outline & Timestamps
+- 00:00 - 03:19 | Introduction
+- 03:19 - 15:13 | Chapter 1: Basics of DBMS
+- 15:13 - 25:28 | Chapter 2: Entity-Relationship (ER) Model
+- 25:28 - 41:43 | Chapter 3: Functional Dependencies (FDs) & Key Extraction
+- 41:43 - 53:55 | Chapter 4: Database Normalization
+- 53:55 - 01:08:36 | Chapter 5: Indexing Techniques
+- 01:08:36 - End | Chapter 6: Structured Query Language (SQL)
+
+
+Chapter 1: Basics of DBMS
+
+1.1 Fundamental Concepts
+- Data: Raw, unorganized, and unprocessed facts, observations, or figures (e.g., "101", "John", "50000").
+- Information: Data that has been processed, structured, formatted, or presented in a meaningful context (e.g., "Employee ID 101, named John, has a salary of $50,000").
+- Database: A systematic, logically organized, and sharing-enabled collection of related data.
+- DBMS (Database Management System): A specialized software package designed to define, store, manipulate, retrieve, and manage databases efficiently and securely (e.g., MySQL, Oracle, PostgreSQL, SQL Server).
+
+
+1.2 File System vs. Database Management System
+Before DBMS, data was managed using traditional operating system files. This approach had severe limitations:
+
+- Data Redundancy & Inconsistency:
+  - File System: High. Multiple copies of same data are stored in different files, leading to storage waste and conflicting records.
+  - DBMS: Low. Centralized storage database architecture minimizes duplication; updates propagate automatically.
+- Data Access & Querying:
+  - File System: Difficult. Requires writing custom programs (e.g., in C/Java) to search, filter, or retrieve specific data.
+  - DBMS: Easy. Standardized, declarative querying languages (SQL) allow rapid data extraction.
+- Data Isolation:
+  - File System: High. Data is scattered in different files and formats, making integration highly complex.
+  - DBMS: Low. Integrated logical schema brings all data entities into a unified view.
+- Concurrent Access:
+  - File System: Unsafe. If two users edit the same file simultaneously, updates are overwritten (loss of data integrity).
+  - DBMS: Safe. Lock-based and time-stamp protocols manage concurrent operations safely.
+- Security & Authorization:
+  - File System: Basic. File-level access permissions are too coarse.
+  - DBMS: Granular. Column, table, and row-level access control based on user roles.
+- Crash Recovery:
+  - File System: Absent/Weak. If system crashes mid-write, files get corrupted.
+  - DBMS: Robust. Write-ahead logging (WAL) and recovery managers restore state using transaction logs.
+
+
+1.3 Three-Schema Architecture (ANSI-SPARC)
+To hide complexity and provide logical/physical separation of data, DBMS uses a Three-Level Architecture:
+
+                    External Views (Student/Admin/Finance Portals)
+                                  │
+                                  ▼
+                     Conceptual / Logical Schema (Entities, Relations, Constraints)
+                                  │
+                                  ▼
+                     Internal / Physical Schema (Indexes, File Sizes, Blocks)
+                                  │
+                                  ▼
+                     Physical Storage (HDD/SSD/Cloud Files)
+
+1. External Level (View Schema):
+   - The highest level of abstraction.
+   - Defines how end-users or application programs interact with the database.
+   - Allows different users to see custom, simplified views of the same database based on their roles.
+2. Conceptual Level (Logical Schema):
+   - The middle level of abstraction.
+   - Defines what data is stored in the database and what relationships exist among those data items.
+   - Contains tables, schemas, entities, data types, and integrity constraints without worrying about physical storage.
+3. Internal Level (Physical Schema):
+   - The lowest level of database design.
+   - Defines how the data is physically stored in the secondary storage devices.
+   - Describes block allocations, record sizes, index structures (B+ trees, hashing), and data compression techniques.
+
+
+1.4 Data Independence
+Data independence refers to the ability to modify schema definition at one level without affecting the schemas at higher levels.
+
+- Logical Data Independence:
+  - The ability to modify the conceptual schema (e.g., adding/deleting columns, split/merge tables) without changing the external schema or existing application programs.
+  - Example: If a new column DateOfBirth is added to a Student table, the existing queries that select only StudentID and StudentName do not break.
+- Physical Data Independence:
+  - The ability to modify the physical schema (e.g., changing index types, migrating from HDD to SSD, altering block size) without changing the conceptual/logical schema.
+  - Example: Creating a B+ Tree index on the Email column to speed up queries does not change the table design or SQL code structure.
+
+
+Chapter 2: Entity-Relationship (ER) Model
+
+The Entity-Relationship (ER) model is a visual blueprint of a database representing real-world entities, attributes, and relationships. It is converted into physical relational tables during the implementation phase.
+
+2.1 Core Elements
+- Entity: A distinct, real-world object or event that is distinguishable from other objects (e.g., a specific Student, Course, Employee).
+- Entity Set: A collection of entities of the same type sharing similar properties (e.g., all Students in a university).
+- Attribute: Characteristics or properties that describe an entity (e.g., Name, RollNumber, Salary).
+
+
+2.2 Classification of Attributes
+Understanding attribute types is essential for proper schema design:
+
+1. Simple vs. Composite:
+   - Simple Attributes: Atomic values that cannot be split further (e.g., RollNumber, Salary).
+   - Composite Attributes: Can be divided into smaller sub-parts to represent independent values (e.g., Name split into First_Name, Middle_Name, Last_Name).
+2. Single-valued vs. Multi-valued:
+   - Single-valued: Holds exactly one value for a given entity instance (e.g., DateOfBirth, AadhaarNumber).
+   - Multi-valued: Can hold multiple values for a single entity (e.g., Phone_Number (mobile and home), Skills).
+3. Derived Attributes:
+   - Values that are not stored directly in the database but calculated from other stored attributes.
+   - Example: Calculating Age dynamically using the current date and DateOfBirth.
+4. Key Attribute:
+   - An attribute whose values uniquely identify each entity in an entity set (e.g., Roll_Number in Student).
+
+
+2.3 Strong vs. Weak Entity Sets
+- Strong Entity Set: Has its own primary key (e.g., Emp_ID). Independent existence. Represented by a single Rectangle.
+- Weak Entity Set: Does not have a primary key. It relies on a strong entity. Uses a partial key / discriminator (dashed underline) to differentiate between weak entities sharing same owner. Existentially dependent. Represented by a Double Rectangle. Double Diamond for its identifying relationship.
+- Example: A Dependents table (child name, age) is a weak entity set dependent on the Employee strong entity. If the employee leaves the company, their dependents' records are deleted automatically.
+
+
+2.4 Cardinality Constraints (Mapping Constraints)
+Cardinality defines the number of entity instances of one entity set that can be associated with entity instances of another set via a relationship.
+1. One-to-One (1:1): An instance in Entity Set A is associated with at most one instance in Entity Set B, and vice versa. (e.g., Citizen [Has] Passport).
+2. One-to-Many (1:N): An instance in A is associated with multiple instances in B, but an instance in B is associated with at most one instance in A. (e.g., Department [Employs] Employee).
+3. Many-to-One (N:1): Multiple instances in A are associated with at most one instance in B. (e.g., Employee [Works_In] Department).
+4. Many-to-Many (M:N): An instance in A is associated with multiple instances in B, and vice versa. (e.g., Student [Enroll] Course).
+
+
+2.5 Participation Constraints
+- Total Participation: Every entity in the entity set must participate in at least one relationship instance (Double Line in ER). (e.g., Every Employee must work in a Department).
+- Partial Participation: Entities in the entity set may or may not participate in relationship instances (Single Line in ER). (e.g., Not every Employee is a manager of a Department).
+
+
+2.6 ER Diagram to Relational Tables Conversion Rules
+To translate a conceptual ER diagram into standard relational tables (RDBMS), follow these structural rules:
+1. Strong Entity Set: Map directly to a standalone table. All simple attributes become columns. Composite attributes are flattened (sub-parts become columns).
+2. Weak Entity Set: Map to a separate table. Columns include all attributes of the weak entity set + the primary key of the identifying strong entity set (acting as a Foreign Key). Primary key is a composite of the strong entity PK + weak entity discriminator.
+3. Relationship Sets (M:N): Must create a distinct table. Columns include primary keys of both participating entity sets + any descriptive attributes. Primary Key is a composite of both foreign keys.
+4. Relationship Sets (1:N / N:1): Do NOT create a separate table. Instead, take the primary key from the "One" side and add it as a Foreign Key in the "Many" side's table.
+5. Relationship Sets (1:1): No separate table. Put the primary key of either table into the other table as a foreign key. To prevent NULL values, choose the table with total participation to receive the foreign key.
+
+
+Chapter 3: Functional Dependencies (FDs) & Key Extraction
+
+Functional Dependency is the formal mathematical foundation used to evaluate schema design, calculate keys, and eliminate data redundancy.
+
+3.1 Understanding Functional Dependency (FD)
+An FD is represented as X -> Y (Read: "X functionally determines Y").
+- Definition: If two tuples (rows) have identical values in attributes X, they must have identical values in attributes Y. If t1[X] = t2[X], then t1[Y] = t2[Y] must hold true.
+- Trivial Dependency: If the dependent (RHS) is a subset of the determinant (LHS). X -> Y is trivial if Y is subset of X (e.g., A, B -> A).
+- Non-Trivial Dependency: If the dependent is not a subset of the determinant. X -> Y is non-trivial if Y is not subset of X (e.g., RollNumber -> Name). It is completely non-trivial if X intersect Y is empty.
+
+
+3.2 Attribute Closure (X+)
+The attribute closure of a set of attributes X (denoted as X+) is the complete set of all attributes in a relation that can be determined logically using the given set of Functional Dependencies.
+
+Step-by-Step Closure Algorithm:
+1. Initialize X+ = X.
+2. Loop through the list of FDs: If the Left-Hand Side (LHS) of any FD A -> B is a subset of the current X+, add the Right-Hand Side (RHS) B to X+.
+3. Repeat this process until no new attributes can be added to X+.
+
+Worked Example:
+Relation R(A, B, C, D, E) and FDs:
+1. A -> B
+2. B -> C
+3. C -> D
+4. E -> A
+
+Let's calculate the closure for {A}:
+- Step 1: A+ = {A}
+- Step 2: Check FDs.
+  - Using A -> B (since A is subset of A+): A+ = {A, B}
+  - Using B -> C (since B is subset of A+): A+ = {A, B, C}
+  - Using C -> D (since C is subset of A+): A+ = {A, B, C, D}
+  - E -> A cannot be used because E is not in A+.
+- Result: A+ = {A, B, C, D}. Since it does not contain E, A alone cannot be a candidate key.
+
+
+3.3 Keys in RDBMS
+- Super Key: A set of one or more attributes that can uniquely identify a row in a table. (X+ = R).
+- Candidate Key (CK): A minimal Super Key. No proper subset of a candidate key can be a super key. X is a CK if X+ = R, and for any attribute A in X, (X - {A})+ != R.
+- Primary Key (PK): A candidate key selected by the database designer to uniquely identify records. Cannot accept NULL values.
+- Prime Attribute: An attribute that is a member of any Candidate Key.
+- Non-Prime Attribute: An attribute that is not a part of any Candidate Key.
+
+
+3.4 Sanchit Sir's Cheat Code: Finding Candidate Keys Instantly
+For finding Candidate Keys of a relation R under a set of FDs, use this shortcut:
+1. Rule 1 (Essential Attributes): Identify all attributes that only appear on the Left-Hand Side (LHS) or do not appear in any FDs. These attributes MUST be part of every candidate key.
+2. Rule 2 (Useless Attributes): Identify attributes that only appear on the Right-Hand Side (RHS). These will NEVER be part of any Candidate Key.
+3. Step-by-step Application:
+   - Find the closure of the "essential attributes".
+   - If the closure contains all attributes of R, then this set is the one and only Candidate Key.
+   - If the closure is incomplete, combine the essential attributes with other attributes (excluding RHS-only attributes) one by one, and calculate their closures to find all minimal keys.
+
+Example Application:
+Let R(A, B, C, D, E, F) and FDs:
+- A -> B
+- C -> D
+- D -> E
+- B -> F
+
+1. LHS attributes: A, C, D, B
+   RHS attributes: B, D, E, F
+2. A and C are never on the RHS. Hence, {A, C} must be present in every Candidate Key.
+3. Check (AC)+ closure:
+   - (AC)+ = {A, C}
+   - Applying A -> B => {A, C, B}
+   - Applying C -> D => {A, C, B, D}
+   - Applying D -> E => {A, C, B, D, E}
+   - Applying B -> F => {A, C, B, D, E, F}
+4. Since (AC)+ = R, {A, C} is the only Candidate Key for this relation.
+
+
+Chapter 4: Database Normalization
+
+Normalization is a systematic process of decomposing database tables to eliminate data redundancy and prevent operational anomalies.
+
+4.1 Database Anomalies
+If a database is not normalized, it suffers from three primary anomalies:
+1. Insertion Anomaly: Inability to insert certain data because other data is not yet available. (e.g., Cannot insert a new department's details until at least one employee is hired).
+2. Deletion Anomaly: The unintentional loss of data caused by the deletion of unrelated records. (e.g., Deleting the last employee of a department deletes all details of that department).
+3. Update Anomaly: Inconsistency that occurs when updating duplicate data in multiple rows. (e.g., If department name changes, we must update it in every employee record).
+
+
+4.2 Hierarchy of Normal Forms
+Database schemas are structured into progressively stricter normal forms:
+BCNF -> 3NF -> 2NF -> 1NF
+
+
+4.3 Detailed Rules of Normal Forms
+
+First Normal Form (1NF)
+- Rule: Every attribute (column) must contain only atomic (indivisible) values.
+- Violations: Multivalued attributes, composite attributes, or nested relations are not allowed.
+
+Second Normal Form (2NF)
+- Rule: Must be in 1NF, and there must be no Partial Dependency.
+- Partial Dependency: Occurs when a non-prime attribute depends on a proper subset of a Candidate Key.
+- Condition for 2NF: No FD should look like: Proper Subset of CK -> Non-Prime Attribute
+
+Third Normal Form (3NF)
+- Rule: Must be in 2NF, and there must be no Transitive Dependency.
+- Transitive Dependency: A non-prime attribute determines another non-prime attribute.
+- Condition for 3NF: For every non-trivial functional dependency X -> Y, at least one of the following must hold:
+  1. X is a Super Key (LHS is a key).
+  2. Y is a Prime Attribute (RHS is part of some candidate key).
+
+Boyce-Codd Normal Form (BCNF)
+- Rule: A stricter version of 3NF.
+- Condition for BCNF: For every non-trivial functional dependency X -> Y:
+  1. X must be a Super Key (LHS must be a key).
+  - Note: The 3NF escape hatch (where Y can be a prime attribute) is removed here.
+
+
+Quick Comparison Matrix of Normal Forms
+- 1NF: Atomic values. No multivalued attributes. Lossless Join: Yes. Dependency Preservation: Yes.
+- 2NF: Eliminate Partial Dependencies. Proper Subset of CK !=> Non-Prime. Lossless Join: Yes. Dependency Preservation: Yes.
+- 3NF: Eliminate Transitive Dependencies. X is Super Key OR Y is Prime. Lossless Join: Yes. Dependency Preservation: Yes.
+- BCNF: Eliminate all anomalies. X must be a Super Key. Lossless Join: Yes. Dependency Preservation: No.
+
+
+Chapter 5: Indexing Techniques
+
+Indexing is a data structure technique used to quickly locate and access data in a database file without scanning the entire table block-by-block.
+
+5.1 Single-Level Indexing Types
+1. Primary Index:
+   - Data file ordered on key field (Primary Key). Sparse index (points to Block Anchors).
+2. Clustered Index:
+   - Data file ordered on non-key field (e.g., Dept_ID). Sparse index.
+3. Secondary Index:
+   - Data file is unordered. Built on key/non-key field. Dense index (contains pointer for every record).
+
+
+5.2 Dense vs. Sparse Indexing
+- Dense Index: Contains an index record for every single record in the data file. Fast lookup but takes high storage space and slower updates.
+- Sparse Index: Contains index records for only some records (usually block anchors). Takes much less memory but slower lookup.
+
+
+5.3 Multi-Level Indexing and B/B+ Trees
+When the index table itself becomes so massive that it cannot fit into physical RAM, we must build an index on top of the existing index, creating a multi-level indexing structure (usually B/B+ trees).
+
+B-Tree vs. B+ Tree
+- B-Tree: Stores both search keys and data record pointers in all nodes (internal and leaf nodes). Internal nodes are larger, meaning fewer child pointers fit in a single block.
+- B+ Tree (Modern Standard): Internal nodes store only search keys and child pointers. All data record pointers are stored strictly in the leaf nodes. Leaf nodes are linked together as a doubly linked list, allowing fast range queries and sequential scans. Maximizes block fan-out and minimizes tree height.
+
+
+Chapter 6: Structured Query Language (SQL)
+
+SQL is the standardized declarative interface used to define, manipulate, and query relational databases.
+
+6.1 Classification of SQL Commands
+- DDL (Data Definition Language): Defines, changes, and destroys schema structures. (CREATE, ALTER, DROP, TRUNCATE). Auto-committed.
+- DML (Data Manipulation Language): Handles data retrieval and modification. (SELECT, INSERT, UPDATE, DELETE).
+- DCL (Data Control Language): Controls permissions and security. (GRANT, REVOKE).
+- TCL (Transaction Control Language): Manages database transactions. (COMMIT, ROLLBACK, SAVEPOINT).
+
+
+6.2 Key Constraints and Referential Integrity
+Constraints are rules enforced on data columns to ensure database reliability:
+- PRIMARY KEY: Uniquely identifies each record. Cannot contain NULL.
+- UNIQUE: Ensures all values are distinct.
+- NOT NULL: Prevents insertion of NULL values.
+- CHECK: Enforces conditional checks (e.g., CHECK (Age >= 18)).
+- FOREIGN KEY: Enforces Referential Integrity between parent and child tables.
+  - ON DELETE CASCADE: Deletes child records when parent is deleted.
+  - ON DELETE SET NULL: Sets child foreign key columns to NULL.
+  - ON DELETE RESTRICT / NO ACTION: Rejects parent deletion if matching child records exist.
+
+
+6.3 Relational Joins
+Joins combine columns from tables based on a common matching column.
+1. Inner Join (INNER JOIN): Returns only rows that have matching values in both tables.
+2. Left Outer Join (LEFT OUTER JOIN): Returns all records from left table, and matched records from right. Unmatched RHS filled with NULL.
+3. Right Outer Join (RIGHT OUTER JOIN): Returns all records from right table, and matched records from left. Unmatched LHS filled with NULL.
+4. Full Outer Join (FULL OUTER JOIN): Returns all records when there is a match in either left or right table. Unmatched filled with NULL.
+
+
+6.4 Aggregation & SQL Query Execution Order
+- WHERE: Filters individual rows before groups are formed. Cannot contain aggregate functions (like SUM, AVG, COUNT).
+- HAVING: Filters groups after aggregation.
+
+Logical Order of Query Execution
+1. FROM (and JOINs) - Get table source and combine records
+2. WHERE - Filter individual rows
+3. GROUP BY - Group identical rows
+4. HAVING - Filter grouped rows
+5. SELECT - Select specific output columns
+6. DISTINCT - Remove duplicates
+7. ORDER BY - Sort results (ASC/DESC)
+8. LIMIT / OFFSET - Restrict output row count
+
+
+SQL Cheat Sheet Queries
+
+Creating a Table with Constraints:
+CREATE TABLE Employees (
+    Emp_ID INT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Age INT CHECK (Age >= 18),
+    Dept_ID INT,
+    Salary DECIMAL(10, 2) DEFAULT 30000.00,
+    FOREIGN KEY (Dept_ID) REFERENCES Departments(Dept_ID) 
+        ON DELETE SET NULL
+);
+
+Fetching Employee Counts by Department (With Filtering):
+SELECT Dept_ID, COUNT(Emp_ID) AS Total_Employees, AVG(Salary) AS Avg_Salary
+FROM Employees
+WHERE Salary > 20000
+GROUP BY Dept_ID
+HAVING COUNT(Emp_ID) >= 2
+ORDER BY Avg_Salary DESC;
+
+Using Subqueries:
+SELECT Name, Salary 
+FROM Employees 
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
