@@ -212,7 +212,6 @@ export default function App() {
             notes={allNotes}
             onSelectSubject={handleSubjectChange}
             onNavigate={setCurrentView}
-            onSearchOpen={() => setIsSearchOpen(true)}
           />
         )}
 

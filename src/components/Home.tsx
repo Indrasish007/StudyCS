@@ -9,7 +9,6 @@ import {
   Map,
   ArrowRight,
   Sparkles,
-  Award,
   Clock,
   Layers,
   ChevronRight,
@@ -27,7 +26,6 @@ interface HomeProps {
   notes: NoteData[];
   onSelectSubject: (slug: string) => void;
   onNavigate: (view: "home" | "dashboard" | "about" | "notes") => void;
-  onSearchOpen: () => void;
 }
 
 const iconMap: Record<string, React.ComponentType<any>> = {
@@ -166,7 +164,6 @@ export default function Home({
   notes,
   onSelectSubject,
   onNavigate,
-  onSearchOpen,
 }: HomeProps) {
   const subjectsSectionRef = useRef<HTMLDivElement>(null);
 

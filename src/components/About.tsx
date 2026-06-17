@@ -1,11 +1,9 @@
 import { motion } from "framer-motion";
 import { Youtube, ExternalLink, ShieldAlert, Award, Heart, GraduationCap } from "lucide-react";
 
-interface AboutProps {
-  onNavigate: (view: "home" | "dashboard" | "about" | "notes") => void;
-}
+interface AboutProps {}
 
-export default function About({ onNavigate }: AboutProps) {
+export default function About({}: AboutProps) {
   const contributors = [
     {
       name: "Gate Smashers",
