@@ -1,6 +1,6 @@
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Search, BookOpen, ArrowRight, HelpCircle } from "lucide-react";
+import { X, Search, ArrowRight, HelpCircle } from "lucide-react";
 import { NoteData } from "../lib/notes";
 
 interface TopicIndexModalProps {
@@ -279,7 +279,7 @@ export default function TopicIndexModal({
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                         {groupedTopics[letter].map((item, idx) => {
-                          const badge = colorBadges[item.color] || colorBadges.indigo;
+                          const _badge = colorBadges[item.color] || colorBadges.indigo;
                           return (
                             <div
                               key={idx}

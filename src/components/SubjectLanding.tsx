@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { 
-  ArrowLeft, Clock, Award, BookOpen, Layers, 
-  ExternalLink, ArrowRight, Play, RefreshCw, Calendar, Tag
+  ArrowLeft, Layers, 
+  ExternalLink, ArrowRight, Play, Calendar
 } from "lucide-react";
 import { NoteData } from "../lib/notes";
 import { getSubjectProgress } from "../lib/progress";
@@ -28,16 +28,16 @@ export default function SubjectLanding({
   useEffect(() => {
     updateSeo({
       title: `${meta.title} Syllabus & Study Hub`,
-      description: `Comprehensive study guide and active-recall notes for ${meta.subject}. Includes ${meta.topicsCount} sections, playlist length: ${meta.lectureDuration}, channel: ${meta.channel}.`,
+      description: `Comprehensive study guide and active-recall notes for ${meta.subject}. Includes ${meta.topicsCount} sections.`,
       slug: `subjects/${meta.slug}`,
       type: "article",
-      image: meta.image,
     });
   }, [note]);
 
+  // Show at most 3 related notes (excluding the current one)
   const relatedNotes = useMemo(() => {
-    return allNotes.filter((n) => meta.relatedSlugs?.includes(n.metadata.slug));
-  }, [allNotes, meta.relatedSlugs]);
+    return allNotes.filter((n) => n.metadata.slug !== meta.slug).slice(0, 3);
+  }, [allNotes, meta.slug]);
 
   const circleRadius = 24;
   const circumference = 2 * Math.PI * circleRadius;
@@ -76,15 +76,15 @@ export default function SubjectLanding({
         <section className="relative overflow-hidden rounded-2xl border border-white/5 bg-[#0D1220]/75 backdrop-blur-md p-6 md:p-8 flex flex-col md:flex-row justify-between gap-6 shadow-xl">
           <div className="space-y-4 flex-1">
             
-            {/* Version & Date */}
+            {/* Difficulty & Reading time */}
             <div className="flex flex-wrap items-center gap-3 text-[10px] text-slate-400 font-semibold">
               <span className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded border border-white/5">
-                <Tag size={10} className="text-[#7C5CFF]" />
-                Version: {meta.version}
+                <Play size={10} className="text-[#7C5CFF]" fill="currentColor" />
+                {meta.difficulty}
               </span>
               <span className="flex items-center gap-1 bg-white/5 px-2 py-0.5 rounded border border-white/5">
                 <Calendar size={10} className="text-[#22D3EE]" />
-                Updated: {meta.lastUpdated}
+                ~{meta.readingTime} min read
               </span>
             </div>
 
@@ -92,33 +92,26 @@ export default function SubjectLanding({
               {meta.title}
             </h1>
             <p className="text-xs md:text-sm text-slate-400 leading-relaxed max-w-xl">
-              Access the complete examination study syllabus, topic outlines, original video lectures, and active-recall revision cards for {meta.subject}.
+              Access the complete examination study syllabus, topic outlines, and active-recall revision cards for {meta.subject}.
             </p>
 
-            {/* Video lecture attribution specs */}
+            {/* Stats grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-white/5 border border-white/5 mt-4">
               <div>
-                <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-bold">Source Channel</span>
+                <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-bold">Subject</span>
                 <span className="text-xs text-slate-200 flex items-center gap-1 mt-1.5 font-semibold">
-                  <Play size={11} className="text-red-500 animate-pulse" fill="currentColor" />
-                  {meta.channel}
+                  {meta.icon} {meta.subject}
                 </span>
               </div>
               <div>
-                <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-bold">Playlist Duration</span>
-                <strong className="text-xs text-slate-200 mt-1.5 block font-semibold">{meta.lectureDuration}</strong>
+                <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-bold">Topics Count</span>
+                <strong className="text-xs text-slate-200 mt-1.5 block font-semibold">{meta.topicsCount} sections</strong>
               </div>
               <div>
-                <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-bold">Original Source</span>
-                <a
-                  href={meta.lectureLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-[#7C5CFF] hover:underline flex items-center gap-1 mt-1.5 font-semibold transition"
-                >
-                  <span>Watch Video</span>
-                  <ExternalLink size={10} />
-                </a>
+                <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-bold">Word Count</span>
+                <span className="text-xs text-[#7C5CFF] flex items-center gap-1 mt-1.5 font-semibold">
+                  {meta.wordCount.toLocaleString()} words
+                </span>
               </div>
             </div>
           </div>
@@ -184,7 +177,7 @@ export default function SubjectLanding({
                     onClick={() => onSelectTopic(meta.slug, item.id)}
                     className="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-[#121A2B]/10 hover:bg-[#121A2B]/45 transition cursor-pointer group"
                   >
-                    <span className={`text-xs ${isChapter ? "text-white font-bold" : "text-slate-350 pl-3"} truncate`}>
+                    <span className={`text-xs ${isChapter ? "text-white font-bold" : "text-slate-400 pl-3"} truncate`}>
                       {item.text}
                     </span>
                     <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#7C5CFF] group-hover:border-[#7C5CFF] transition shrink-0">

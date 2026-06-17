@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Type, Maximize2, Minimize2, Eye, EyeOff, Layout, Printer, Info } from "lucide-react";
 
 interface ReaderSettingsProps {

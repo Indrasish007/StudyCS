@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { 
   BookOpen, Compass, Search, 
-  ChevronRight, Menu, X, ArrowLeft
+  ChevronRight, Menu, X, ArrowLeft, Bookmark
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -11,6 +11,7 @@ import MarkdownRenderer from "./components/MarkdownRenderer";
 import RevisionView from "./components/RevisionView";
 import SearchModal from "./components/SearchModal";
 import Dashboard from "./components/Dashboard";
+import BookmarksPanel from "./components/BookmarksPanel";
 
 // Glossy black spiral ring component
 function SpiralRings() {
@@ -52,6 +53,8 @@ export default function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSubjectDrawerOpen, setIsSubjectDrawerOpen] = useState(false);
   const [showDashboard, setShowDashboard] = useState<boolean>(true);
+  // Left panel tab: "toc" or "bookmarks"
+  const [leftTab, setLeftTab] = useState<"toc" | "bookmarks">("toc");
   
   // Mobile active page view: "left" (Outline/TOC/Controls) or "right" (Note Content/Sub-views)
   const [mobileView, setMobileView] = useState<"left" | "right">("right");
@@ -284,34 +287,74 @@ export default function App() {
                   </button>
                 )}
 
-                {/* Section Content Outline (TOC) */}
-                {currentNote.toc.length > 0 ? (
-                  <div className="space-y-0 font-hand">
-                    {currentNote.toc.map((item) => {
-                      const isChapter = item.level === 1;
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => handleAnchorClick(item.id)}
-                          className="w-full flex items-center text-left py-0 transition-all duration-150 border-b border-transparent group animate-fade-in"
-                          style={{ height: '28px', lineHeight: '28px' }}
-                        >
-                          {isChapter ? (
-                            <span className="font-daughter font-bold text-xs md:text-sm text-indigo-900 truncate">
-                              {item.text}
-                            </span>
-                          ) : (
-                            <div className="w-full flex items-center justify-between pl-4 text-slate-700 font-hand text-[11px] md:text-xs">
-                              <span className="truncate flex-1 group-hover:text-indigo-600 transition-colors">{item.text}</span>
-                              <ChevronRight size={10} className="text-slate-400 shrink-0 mr-2 group-hover:text-indigo-600 transition-colors" />
-                            </div>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ) : (
-                  <p className="text-xs text-slate-400 font-medium font-hand">No sections outlined for this note.</p>
+                {/* Left Panel Tabs: TOC vs Bookmarks */}
+                <div className="flex gap-1 mb-3 p-1 rounded-lg bg-indigo-50/60 border border-indigo-100">
+                  <button
+                    onClick={() => setLeftTab("toc")}
+                    className={`flex-1 flex items-center justify-center gap-1 py-1 rounded-md text-[10px] font-bold font-daughter transition-all ${
+                      leftTab === "toc"
+                        ? "bg-indigo-600 text-white shadow-sm"
+                        : "text-indigo-700 hover:bg-indigo-100"
+                    }`}
+                  >
+                    <BookOpen size={10} /> Contents
+                  </button>
+                  <button
+                    onClick={() => setLeftTab("bookmarks")}
+                    className={`flex-1 flex items-center justify-center gap-1 py-1 rounded-md text-[10px] font-bold font-daughter transition-all ${
+                      leftTab === "bookmarks"
+                        ? "bg-amber-500 text-white shadow-sm"
+                        : "text-indigo-700 hover:bg-indigo-100"
+                    }`}
+                  >
+                    <Bookmark size={10} /> Bookmarks
+                  </button>
+                </div>
+
+                {/* TOC Panel */}
+                {leftTab === "toc" && (
+                  currentNote.toc.length > 0 ? (
+                    <div className="space-y-0 font-hand">
+                      {currentNote.toc.map((item) => {
+                        const isChapter = item.level === 1;
+                        return (
+                          <button
+                            key={item.id}
+                            onClick={() => handleAnchorClick(item.id)}
+                            className="w-full flex items-center text-left py-0 transition-all duration-150 border-b border-transparent group animate-fade-in"
+                            style={{ height: '28px', lineHeight: '28px' }}
+                          >
+                            {isChapter ? (
+                              <span className="font-daughter font-bold text-xs md:text-sm text-indigo-900 truncate">
+                                {item.text}
+                              </span>
+                            ) : (
+                              <div className="w-full flex items-center justify-between pl-4 text-slate-700 font-hand text-[11px] md:text-xs">
+                                <span className="truncate flex-1 group-hover:text-indigo-600 transition-colors">{item.text}</span>
+                                <ChevronRight size={10} className="text-slate-400 shrink-0 mr-2 group-hover:text-indigo-600 transition-colors" />
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <p className="text-xs text-slate-400 font-medium font-hand">No sections outlined for this note.</p>
+                  )
+                )}
+
+                {/* Bookmarks Panel */}
+                {leftTab === "bookmarks" && (
+                  <BookmarksPanel
+                    onSelectBookmark={(slug, headingId) => {
+                      if (slug !== activeSubject) {
+                        handleSubjectChange(slug);
+                        setTimeout(() => handleAnchorClick(headingId), 300);
+                      } else {
+                        handleAnchorClick(headingId);
+                      }
+                    }}
+                  />
                 )}
               </div>
 
@@ -394,7 +437,11 @@ export default function App() {
                 >
                   {activeMode === "notes" && (
                     <div className="select-text">
-                      <MarkdownRenderer content={currentNote.content} />
+                      <MarkdownRenderer
+                        content={currentNote.content}
+                        subjectSlug={currentNote.metadata.slug}
+                        subjectName={currentNote.metadata.subject}
+                      />
                     </div>
                   )}
 
