@@ -38,8 +38,7 @@ export interface RevisionConcept {
 // 1. Vite eager glob imports for raw plain text content from text_semester folder
 // Last updated: 2026-06-17 (forces Vite HMR rebundle to pick up .txt file changes)
 const rawNotes = import.meta.glob("../../text_semester/*.txt", {
-  query: "?raw",
-  import: "default",
+  as: "raw",
   eager: true,
 }) as Record<string, string>;
 

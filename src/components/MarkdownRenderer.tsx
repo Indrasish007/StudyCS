@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bookmark, BookmarkCheck } from "lucide-react";
 import { slugify } from "../lib/notes";
 import { saveBookmark, removeBookmark, getBookmarks } from "./BookmarksPanel";
@@ -7,14 +7,23 @@ interface MarkdownRendererProps {
   content: string;
   subjectSlug?: string;
   subjectName?: string;
+  searchTerm?: string;
+  searchIndex?: number;
+  onSearchMatchCount?: (count: number) => void;
+  scrollContainer?: React.RefObject<HTMLDivElement>;
 }
 
 export default function MarkdownRenderer({
   content,
   subjectSlug = "",
   subjectName = "",
+  searchTerm = "",
+  searchIndex = 0,
+  onSearchMatchCount,
+  scrollContainer,
 }: MarkdownRendererProps) {
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
+  const containerRef = useRef<HTMLDivElement>(null);
 
   // Load current bookmarks on mount and keep in sync
   const refreshBookmarks = () => {
@@ -28,6 +37,100 @@ export default function MarkdownRenderer({
     return () => window.removeEventListener("bookmarks_updated", refreshBookmarks);
   }, []);
 
+  // Highlight search matches after render
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    // Remove all previous highlights
+    const existing = containerRef.current.querySelectorAll("mark.note-search-mark");
+    existing.forEach((el) => {
+      const parent = el.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(el.textContent || ""), el);
+        parent.normalize();
+      }
+    });
+
+    const term = searchTerm.trim();
+    if (!term || term.length < 2) {
+      onSearchMatchCount?.(0);
+      return;
+    }
+
+    const regex = new RegExp(`(${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
+
+    // Walk all text nodes and wrap matches
+    const walker = document.createTreeWalker(
+      containerRef.current,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_REJECT;
+          if (["SCRIPT", "STYLE", "MARK"].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      }
+    );
+
+    const nodesToReplace: Text[] = [];
+    let node: Text | null;
+    while ((node = walker.nextNode() as Text | null)) {
+      if (regex.test(node.textContent || "")) {
+        nodesToReplace.push(node);
+      }
+      regex.lastIndex = 0;
+    }
+
+    let totalMatches = 0;
+    nodesToReplace.forEach((textNode) => {
+      const frag = document.createDocumentFragment();
+      const parts = (textNode.textContent || "").split(regex);
+      parts.forEach((part) => {
+        if (regex.test(part)) {
+          totalMatches++;
+          const mark = document.createElement("mark");
+          mark.className = "note-search-mark";
+          mark.dataset.matchIndex = String(totalMatches - 1);
+          mark.textContent = part;
+          mark.style.cssText =
+            "background:#fde047;color:#1e1b4b;border-radius:2px;padding:0 2px;font-weight:700;";
+          frag.appendChild(mark);
+        } else {
+          frag.appendChild(document.createTextNode(part));
+        }
+        regex.lastIndex = 0;
+      });
+      textNode.parentNode?.replaceChild(frag, textNode);
+    });
+
+    onSearchMatchCount?.(totalMatches);
+
+    // Scroll to active match and highlight it differently
+    if (totalMatches > 0) {
+      const clampedIndex = ((searchIndex % totalMatches) + totalMatches) % totalMatches;
+      const marks = containerRef.current.querySelectorAll<HTMLElement>("mark.note-search-mark");
+      marks.forEach((m, i) => {
+        if (i === clampedIndex) {
+          m.style.background = "#f97316";
+          m.style.color = "#fff";
+          const container = scrollContainer?.current;
+          if (container) {
+            const markTop = m.getBoundingClientRect().top;
+            const containerTop = container.getBoundingClientRect().top;
+            const offset = markTop - containerTop + container.scrollTop - 80;
+            container.scrollTo({ top: offset, behavior: "smooth" });
+          } else {
+            m.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        } else {
+          m.style.background = "#fde047";
+          m.style.color = "#1e1b4b";
+        }
+      });
+    }
+  }, [searchTerm, searchIndex, content]);
+
   const toggleBookmark = (headingId: string, headingText: string) => {
     const id = `${subjectSlug}-${headingId}`;
     if (bookmarkedIds.has(id)) {
@@ -35,7 +138,6 @@ export default function MarkdownRenderer({
     } else {
       saveBookmark(subjectSlug, subjectName, headingId, headingText);
     }
-    // Notify all listeners (BookmarksPanel + this component)
     window.dispatchEvent(new Event("bookmarks_updated"));
   };
 
@@ -331,7 +433,7 @@ export default function MarkdownRenderer({
   };
 
   return (
-    <div className="notebook-page-content font-hand text-slate-800 select-text">
+    <div ref={containerRef} className="notebook-page-content font-hand text-slate-800 select-text">
       {blocks.map((block, idx) => renderBlock(block, idx))}
     </div>
   );

@@ -100,13 +100,13 @@ export default function BookmarksPanel({ onSelectBookmark }: BookmarksPanelProps
             <div
               key={b.id}
               onClick={() => onSelectBookmark(b.subjectSlug, b.headingId)}
-              className="flex items-center justify-between p-2 rounded-lg border border-white/5 bg-[#121A2B]/20 hover:bg-[#121A2B]/50 cursor-pointer transition group"
+              className="flex items-center justify-between p-2.5 rounded-lg border border-indigo-500/30 bg-slate-900/90 hover:bg-slate-800 hover:border-indigo-400/50 cursor-pointer transition group shadow-sm"
             >
               <div className="flex flex-col min-w-0 pr-2">
-                <span className="text-xs font-semibold text-slate-200 truncate leading-snug group-hover:text-white transition">
+                <span className="text-xs font-bold text-white truncate leading-snug group-hover:text-indigo-200 transition">
                   {b.headingText}
                 </span>
-                <span className="text-[8.5px] text-[#7C5CFF] font-bold uppercase tracking-wider mt-0.5">
+                <span className="text-[8.5px] text-indigo-400 font-bold uppercase tracking-wider mt-0.5">
                   {b.subjectName}
                 </span>
               </div>
@@ -114,13 +114,13 @@ export default function BookmarksPanel({ onSelectBookmark }: BookmarksPanelProps
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
                   onClick={(e) => handleDelete(b.id, e)}
-                  className="p-1 rounded text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition md:opacity-0 group-hover:opacity-100"
+                  className="p-1 rounded text-slate-400 hover:text-red-400 hover:bg-red-500/15 transition md:opacity-0 group-hover:opacity-100"
                   title="Remove Bookmark"
                 >
                   <Trash2 size={11} />
                 </button>
-                <div className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#7C5CFF] group-hover:border-[#7C5CFF] transition duration-150">
-                  <ArrowRight size={8} className="text-slate-500 group-hover:text-white" />
+                <div className="w-5 h-5 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center group-hover:bg-indigo-500 group-hover:border-indigo-400 transition duration-150">
+                  <ArrowRight size={8} className="text-indigo-300 group-hover:text-white" />
                 </div>
               </div>
             </div>

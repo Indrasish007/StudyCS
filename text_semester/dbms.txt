@@ -1,6 +1,6 @@
 Database Management Systems (DBMS) — Complete Semester Exam Notes
 
-Source: Based on the high-yield "Complete DBMS in One Shot | Semester Exam" One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+
 
 
 Course Outline & Timestamps
@@ -328,7 +328,7 @@ The attribute closure of X, written X+, is the complete set of all attributes de
   Primary Key (chosen from candidate keys, cannot be NULL)
 
 
-3.5 Cheat Code: Finding Candidate Keys Instantly (Sanchit Sir Method)
+3.5 Finding Candidate Keys Instantly
 
                     +------------------------------+
                     |     Check FD list for:       |

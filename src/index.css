@@ -4,8 +4,54 @@
 
 @layer base {
   body {
-    @apply bg-[#0c0914] text-slate-800 antialiased font-sans overflow-x-hidden;
+    @apply bg-slate-50 dark:bg-[#0c0914] text-slate-800 dark:text-slate-100 antialiased font-sans overflow-x-hidden transition-colors duration-300;
   }
+}
+
+/* Background noise utility */
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Dark mode notebook overrides */
+.dark .notebook-page {
+  background-color: #120f1e;
+  background-image: 
+    radial-gradient(ellipse at 15% 80%, rgba(30, 27, 75, 0.45) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 20%, rgba(49, 46, 129, 0.35) 0%, transparent 60%);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+}
+
+.dark .ruled-content {
+  background-image: linear-gradient(rgba(129, 140, 248, 0.12) 1px, transparent 1px);
+}
+
+.dark .hand-h2 {
+  color: #a5b4fc;
+  border-bottom: 2px dashed rgba(129, 140, 248, 0.3);
+}
+
+.dark .hand-h3 {
+  color: #2dd4bf;
+}
+
+.dark .margin-line-left {
+  background-color: #ef4444;
+  opacity: 0.25;
+}
+
+.dark .margin-line-right {
+  background-color: #ef4444;
+  opacity: 0.12;
+}
+
+.dark .notebook-page-content p,
+.dark .notebook-page-content li {
+  color: #cbd5e1 !important;
+}
+
+.dark .notebook-page-content strong {
+  color: #f1f5f9 !important;
 }
 
 /* Notebook Rules and Margins */

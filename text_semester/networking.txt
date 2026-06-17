@@ -1,7 +1,6 @@
 Computer Networks (CN) — Complete Semester Exam Notes
 
-Source: Based on the high-yield "Computer Networks | CN in one shot | Complete GATE Course"
-One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+
 
 
 Course Outline & Timestamps

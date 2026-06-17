@@ -1,7 +1,6 @@
 Data Structures & Algorithms (DSA) — Complete Semester Exam Notes
 
-Source: Based on the high-yield "Complete DS Data Structure in one shot | Semester Exam | Hindi"
-One-Shot Lecture by Sanchit Sir (KnowledgeGATE).
+
 
 
 Course Outline & Timestamps
