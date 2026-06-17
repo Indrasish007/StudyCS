@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { 
   BookOpen, Compass, Search, 
-  ChevronRight, Menu, X, ArrowLeft, Clock, Award
+  ChevronRight, Menu, X, ArrowLeft
 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -12,26 +12,38 @@ import RevisionView from "./components/RevisionView";
 import SearchModal from "./components/SearchModal";
 import Dashboard from "./components/Dashboard";
 
-// Metallic spiral ring component
+// Glossy black spiral ring component
 function SpiralRings() {
-  const ringCount = 18;
+  const ringCount = 14;
   return (
     <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-8 flex flex-col justify-around py-8 z-30 pointer-events-none">
       {Array.from({ length: ringCount }).map((_, i) => (
-        <div key={i} className="relative w-8 h-5 flex items-center justify-center">
+        <div key={i} className="relative w-8 h-8 flex items-center justify-center">
+          {/* Left Hole */}
+          <div className="absolute left-[-2px] w-2 h-4 bg-[#0a0715] rounded-full border border-black/40 shadow-inner" />
+          {/* Right Hole */}
+          <div className="absolute right-[-2px] w-2 h-4 bg-[#0a0715] rounded-full border border-black/40 shadow-inner" />
           {/* Ring shadow */}
-          <div className="absolute top-1 w-7 h-2.5 bg-black/35 rounded-full blur-[1px]" />
-          {/* Metal Ring Loop */}
-          <div className="w-6 h-3.5 border-[3px] border-slate-600 bg-gradient-to-r from-slate-400 via-slate-700 to-slate-500 rounded-full shadow-inner" />
-          {/* Hole punch simulation left */}
-          <div className="absolute left-0.5 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-950" />
-          {/* Hole punch simulation right */}
-          <div className="absolute right-0.5 w-1.5 h-1.5 bg-slate-900 rounded-full border border-slate-950" />
+          <div className="absolute top-1.5 w-7 h-2 bg-black/45 rounded-full blur-[1.5px]" />
+          {/* Glossy Black Loop */}
+          <div className="relative w-7 h-3 bg-gradient-to-r from-neutral-850 via-neutral-950 to-neutral-900 rounded-full border-[2px] border-neutral-900 shadow-md">
+            {/* White sheen highlight */}
+            <div className="absolute top-0.5 left-1 right-1 h-[0.5px] bg-white/20 rounded-full" />
+          </div>
         </div>
       ))}
     </div>
   );
 }
+
+const subjectTabLabels: Record<string, string> = {
+  dsa: "DATA",
+  dbms: "DATABASE",
+  networking: "COMPUTER",
+  ai: "ARTIFICIAL",
+  machine_learning: "MACHINE",
+  "machine-learning": "MACHINE"
+};
 
 export default function App() {
   const [allNotes, setAllNotes] = useState<NoteData[]>([]);
@@ -169,80 +181,44 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#0a0715] via-[#120e24] to-[#080510] text-slate-800 p-2 md:p-6 lg:p-8 flex flex-col justify-between selection:bg-yellow-300 selection:text-slate-900">
+    <div className="min-h-screen bg-gradient-to-tr from-[#0a0715] via-[#120e24] to-[#080510] text-slate-800 p-2 md:p-4 lg:p-6 flex flex-col gap-3 selection:bg-yellow-300 selection:text-slate-900">
       
-      {/* Top Header Controls */}
-      <header className="max-w-7xl mx-auto w-full flex items-center justify-between mb-4 px-2">
-        <div className="flex items-center gap-3">
-          {/* Universal Hamburger Menu Button */}
+      {/* Slim floating top bar */}
+      <header className="max-w-7xl mx-auto w-full flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setIsSubjectDrawerOpen(true)}
             className="p-2 rounded-xl border border-slate-800 bg-slate-950/40 text-slate-400 hover:text-white hover:border-slate-700 transition duration-150"
-            title="Browse Subjects Menu"
+            title="Browse Subjects"
           >
-            <Menu size={18} />
+            <Menu size={16} />
           </button>
-          
-          <div 
-            className="flex items-center gap-2 cursor-pointer hover:opacity-85 transition duration-150" 
-            title="Return to Dashboard"
+          <div
+            className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition duration-150"
             onClick={() => setShowDashboard(true)}
+            title="Return to Dashboard"
           >
-            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-indigo-600/20">
-              A
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 via-violet-500 to-pink-500 text-white flex items-center justify-center font-black text-xs shadow-md shadow-indigo-600/25 font-hand">
+               S
             </div>
-            <div>
-              <h1 className="text-sm md:text-base font-extrabold tracking-tight text-white font-sans flex items-center gap-1.5">
-                AuraNotes <span className="text-[9px] px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-400 font-bold uppercase tracking-wider">Semester Prep</span>
-              </h1>
-              <p className="text-[10px] text-slate-400 font-medium">Cursive Study Lecture Notebooks</p>
+            <div className="hidden sm:block">
+               <span className="text-base font-bold tracking-tight font-hand bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-400 bg-clip-text text-transparent drop-shadow-sm">StudyCS</span>
+               <span className="text-[9px] ml-1.5 px-1.5 py-0.5 rounded bg-pink-500/20 text-pink-400 font-bold uppercase tracking-wider">Semester Prep</span>
             </div>
           </div>
         </div>
 
-        {/* Desktop Quick Nav Mode Bar */}
-        <div className="hidden md:flex items-center gap-2 bg-slate-950/40 p-1 rounded-xl border border-slate-800">
-          {[
-            { id: "notes", label: "Lecture Notes", icon: BookOpen },
-            { id: "revision", label: "Revision Deck", icon: Compass },
-          ].map((mode) => {
-            const Icon = mode.icon;
-            const isActive = activeMode === mode.id;
-            return (
-              <button
-                key={mode.id}
-                onClick={() => handleModeChange(mode.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition ${
-                  isActive 
-                    ? `${currentThemeColor.bg} text-white shadow-sm` 
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                <Icon size={12} />
-                {mode.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Dashboard Shortcut & Search trigger */}
-        <div className="flex items-center gap-2.5">
-          <button 
-            onClick={() => setShowDashboard(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-900/40 hover:border-slate-700 text-slate-355 text-xs font-bold transition duration-150"
-            title="Return to Dashboard"
-          >
-            <span className="text-indigo-400 font-bold text-sm">🏠</span>
-            <span className="hidden sm:inline">Dashboard</span>
-          </button>
-
-          <button 
+        <div className="flex items-center gap-2">
+          <span className="hidden md:block text-[10px] font-bold text-slate-500 font-daughter uppercase tracking-widest">
+            {currentNote.metadata.subject}
+          </span>
+          <button
             onClick={() => setIsSearchOpen(true)}
             className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-950/40 hover:bg-slate-900/40 hover:border-slate-700 text-slate-400 text-xs transition duration-150"
           >
             <Search size={13} />
-            <span className="hidden sm:inline">Search Notes</span>
-            <kbd className="hidden sm:inline-block text-[9px] px-1 py-0.2 bg-slate-800 rounded font-sans text-slate-500 border border-slate-700">Ctrl+K</kbd>
+            <span className="hidden sm:inline text-slate-400">Search</span>
+            <kbd className="hidden sm:inline-block text-[9px] px-1 bg-slate-800 rounded font-sans text-slate-500 border border-slate-700">Ctrl+K</kbd>
           </button>
         </div>
       </header>
@@ -256,6 +232,7 @@ export default function App() {
             const slug = note.metadata.slug;
             const isSelected = activeSubject === slug;
             const colorConfig = tabColorClasses[note.metadata.color] || tabColorClasses.indigo;
+            const tabLabel = subjectTabLabels[slug] || note.metadata.title.split(" ")[0].toUpperCase();
             
             return (
               <button
@@ -270,7 +247,7 @@ export default function App() {
                   writingMode: "vertical-rl",
                 }}
               >
-                {note.metadata.title.split(" ")[0]}
+                {tabLabel}
               </button>
             );
           })}
@@ -294,7 +271,7 @@ export default function App() {
             <div className="margin-line-left" />
             <div className="margin-line-right" />
 
-            <div className="pl-6 md:pl-10 pr-2 md:pr-10 overflow-y-auto flex-1 notebook-scroll z-10 relative h-[520px] flex flex-col justify-between">
+            <div className="pl-6 md:pl-10 pr-2 md:pr-10 overflow-y-auto flex-1 ruled-content notebook-scroll z-10 relative h-[520px] flex flex-col justify-between">
               
               <div>
                 {/* Back button for mobile when right page is shown */}
@@ -307,70 +284,35 @@ export default function App() {
                   </button>
                 )}
 
-                {/* Subject Header */}
-                <div className="mb-6">
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] uppercase font-bold text-slate-500 tracking-wider font-daughter">
-                      Notebook #{currentNote.metadata.difficulty}
-                    </span>
-                  </div>
-                  <h2 className="text-xl md:text-3xl font-extrabold hand-h1 mt-1 font-daughter">
-                    {currentNote.metadata.title}
-                  </h2>
-                  <p className="text-[11px] text-slate-500 font-medium font-hand mt-1">
-                    Complete Exam Outlines & Active Recall Hub
-                  </p>
-                </div>
-
-                {/* Subject Quick Stats */}
-                <div className="grid grid-cols-3 gap-2 p-2 rounded-xl bg-slate-900/5 border border-slate-300 mb-6 font-hand">
-                  <div className="text-center">
-                    <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-daughter">Read Time</span>
-                    <strong className="text-xs text-slate-800 flex items-center justify-center gap-1 mt-1">
-                      <Clock size={11} className="text-indigo-600" />
-                      {currentNote.metadata.readingTime} min
-                    </strong>
-                  </div>
-                  <div className="text-center border-x border-slate-300">
-                    <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-daughter">Total Words</span>
-                    <strong className="text-xs text-slate-800 mt-1 block">
-                      {currentNote.metadata.wordCount}
-                    </strong>
-                  </div>
-                  <div className="text-center">
-                    <span className="text-[9px] uppercase tracking-wider text-slate-500 block leading-none font-daughter">Chapters</span>
-                    <strong className="text-xs text-slate-800 flex items-center justify-center gap-1 mt-1">
-                      <Award size={11} className="text-emerald-600" />
-                      {currentNote.metadata.topicsCount} Sections
-                    </strong>
-                  </div>
-                </div>
-
                 {/* Section Content Outline (TOC) */}
-                <div className="mb-6">
-                  <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest block font-daughter border-b border-slate-300 pb-1 mb-2.5">
-                    📖 Table of Contents
-                  </h3>
-                  
-                  {currentNote.toc.length > 0 ? (
-                    <div className="space-y-1 pr-1 font-hand">
-                      {currentNote.toc.map((item) => (
+                {currentNote.toc.length > 0 ? (
+                  <div className="space-y-0 font-hand">
+                    {currentNote.toc.map((item) => {
+                      const isChapter = item.level === 1;
+                      return (
                         <button
                           key={item.id}
                           onClick={() => handleAnchorClick(item.id)}
-                          className={`w-full flex items-center text-left text-xs text-slate-700 hover:text-indigo-600 py-1 transition-all duration-150 ${
-                            item.level === 1 ? "font-bold border-l-2 border-indigo-500/30 pl-2" : "pl-4 text-slate-600"
-                          }`}
+                          className="w-full flex items-center text-left py-0 transition-all duration-150 border-b border-transparent group animate-fade-in"
+                          style={{ height: '28px', lineHeight: '28px' }}
                         >
-                          <span className="truncate flex-1">{item.text}</span>
-                          <ChevronRight size={10} className="text-slate-400 shrink-0" />
+                          {isChapter ? (
+                            <span className="font-daughter font-bold text-xs md:text-sm text-indigo-900 truncate">
+                              {item.text}
+                            </span>
+                          ) : (
+                            <div className="w-full flex items-center justify-between pl-4 text-slate-700 font-hand text-[11px] md:text-xs">
+                              <span className="truncate flex-1 group-hover:text-indigo-600 transition-colors">{item.text}</span>
+                              <ChevronRight size={10} className="text-slate-400 shrink-0 mr-2 group-hover:text-indigo-600 transition-colors" />
+                            </div>
+                          )}
                         </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-xs text-slate-400 font-medium font-hand">No sections outlined for this note.</p>
-                  )}
-                </div>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-xs text-slate-400 font-medium font-hand">No sections outlined for this note.</p>
+                )}
               </div>
 
               {/* Mode Controls Widget at Left bottom (Sticky notes look) */}
@@ -379,16 +321,23 @@ export default function App() {
                   WIDGETS
                 </div>
                 <h4 className="text-xs font-bold text-indigo-700 font-daughter mb-2">Notebook Functions</h4>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {[
-                    { id: "notes", label: "Notes", color: "hover:bg-slate-200" },
-                    { id: "revision", label: "Revision", color: "hover:bg-slate-200" },
+                    { id: "notes", label: "Notes" },
+                    { id: "revision", label: "Revision" },
+                    { id: "dashboard", label: "Dashboard" },
                   ].map((mode) => {
-                    const isActive = activeMode === mode.id;
+                    const isActive = mode.id === "dashboard" ? false : activeMode === mode.id;
                     return (
                       <button
                         key={mode.id}
-                        onClick={() => handleModeChange(mode.id as any)}
+                        onClick={() => {
+                          if (mode.id === "dashboard") {
+                            setShowDashboard(true);
+                          } else {
+                            handleModeChange(mode.id as any);
+                          }
+                        }}
                         className={`text-center p-1.5 border border-slate-300 rounded-lg text-xs transition-colors duration-150 ${
                           isActive 
                             ? "bg-indigo-600 text-white border-indigo-600 font-bold" 
@@ -460,11 +409,6 @@ export default function App() {
         </div>
       </main>
 
-      {/* Footer copyright */}
-      <footer className="max-w-7xl mx-auto w-full text-center mt-4 text-[10px] text-slate-500 font-medium px-2">
-        <p>&copy; {new Date().getFullYear()} AuraNotes. Styled after real handwritten university lecture diaries.</p>
-      </footer>
-
       {/* Global Interactive Command Search Palette */}
       <SearchModal
         isOpen={isSearchOpen}
@@ -495,7 +439,7 @@ export default function App() {
               <div className="space-y-5 flex-1 flex flex-col overflow-hidden">
                 <div className="flex justify-between items-center pb-3 border-b border-slate-800">
                   <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest font-daughter">AuraNotes Menu</h3>
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest font-daughter">StudyCS Menu</h3>
                     <p className="text-[10px] text-slate-500 font-medium">Quick Workspace Navigation</p>
                   </div>
                   <button 
@@ -516,13 +460,13 @@ export default function App() {
                       setShowDashboard(true);
                       setIsSubjectDrawerOpen(false);
                     }}
-                    className="w-full flex items-center justify-between p-2.5 rounded-xl border border-slate-800 bg-slate-950/40 text-slate-350 hover:text-white hover:bg-indigo-950/20 hover:border-indigo-800/30 transition duration-150 group"
+                    className="w-full flex items-center justify-between p-3 rounded-xl border border-indigo-500/60 bg-gradient-to-r from-indigo-600/90 to-violet-600/80 text-white hover:from-indigo-500 hover:to-violet-500 hover:border-indigo-400/80 hover:shadow-lg hover:shadow-indigo-500/30 active:scale-[0.98] transition-all duration-200 group shadow-md shadow-indigo-900/40"
                   >
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-indigo-400 group-hover:scale-110 transition-transform">🏠</span>
-                      <span className="text-[11px] font-bold font-sans">Return to Dashboard</span>
+                    <div className="flex items-center gap-2.5">
+                      <span className="text-base group-hover:scale-110 transition-transform drop-shadow">🏠</span>
+                      <span className="text-[12px] font-extrabold font-sans tracking-wide drop-shadow">Return to Dashboard</span>
                     </div>
-                    <ChevronRight size={11} className="text-slate-500" />
+                    <ChevronRight size={13} className="text-indigo-200 group-hover:translate-x-0.5 transition-transform" />
                   </button>
                 </div>
 
@@ -603,7 +547,7 @@ export default function App() {
               </div>
 
               <div className="pt-3 border-t border-slate-800 text-[9px] text-slate-500 font-medium text-center">
-                AuraNotes &bull; Cursive Study Notebooks
+                <span className="font-hand bg-gradient-to-r from-indigo-400 via-violet-400 to-pink-400 bg-clip-text text-transparent font-bold text-[10px]">StudyCS</span> &bull; Cursive Study Notebooks
               </div>
             </motion.div>
           </>

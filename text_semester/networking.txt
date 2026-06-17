@@ -1,294 +1,1100 @@
-Computer Networks (CN) — Ultimate Revision Notes
+Computer Networks (CN) — Complete Semester Exam Notes
 
-Source: Based on the high-yield "Computer Networks | CN in one shot | Complete GATE Course" One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+Source: Based on the high-yield "Computer Networks | CN in one shot | Complete GATE Course"
+One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+
 
 Course Outline & Timestamps
-- 00:00 - 02:29 | Chapter 0: Introduction
-- 02:29 - 55:25 | Chapter 1: Network Fundamentals & Reference Models
-- 55:25 - 02:55:54 | Chapter 2: Data Link Layer & Physical Layer
-- 02:55:54 - 04:53:21 | Chapter 3: Network Layer — Addressing & Routing
-- 04:53:21 - 05:44:48 | Chapter 4: Transport Layer & Cryptography
-- 05:44:48 - End | Chapter 5: Application Layer & Network Devices
+- Chapter 0: Introduction
+- Chapter 1: Network Fundamentals & Reference Models
+- Chapter 2: Data Link Layer & Physical Layer
+- Chapter 3: Network Layer — Addressing & Routing
+- Chapter 4: Transport Layer & Cryptography
+- Chapter 5: Application Layer & Network Devices
 
 
 Chapter 0: Introduction
-- Computer Network: A system of interconnected computers and devices that can communicate with each other and share resources (data, hardware, software).
-- Goals of Computer Networks:
-  - Resource Sharing: Accessing programs, equipment, and data regardless of location.
-  - High Reliability: Replicating files across multiple machines to prevent data loss.
-  - Cost Reduction: Using smaller, cheaper computers instead of mainframes.
-  - Scalability: Increasing performance incrementally by adding processors.
+
+Computer Network: A system of INTERCONNECTED computers and devices that can communicate
+with each other and share resources (data, hardware, software).
+
+Goals of Computer Networks:
+- Resource Sharing: Accessing programs, equipment (printers, scanners), and data REGARDLESS
+  of physical location.
+- High Reliability: Replicating files across multiple machines to PREVENT DATA LOSS due to
+  hardware failure.
+- Cost Reduction: Using smaller, cheaper computers instead of mainframes by distributing workload.
+- Scalability: Increasing system performance INCREMENTALLY by adding more processors or storage.
 
 
 Chapter 1: Network Fundamentals & Reference Models
 
 1.1 Data Communication Components
-Data communication is the exchange of data between two devices via a transmission medium:
 
-                        MESSAGE
-           ┌────────────────────────────────┐
-           │                                │
-           ▼                                │
-     SENDER DEVICE    Transmission Medium   RECEIVER DEVICE
-  ─────────────────── ───────────────────► ─────────────────
-      [Protocol]                              [Protocol]
+Data communication is the EXCHANGE of data between two devices via some form of transmission medium.
+It consists of FIVE core components:
 
-1. Message: The information (data) to be communicated (text, numbers, audio, video).
-2. Sender: The device that sends the data message (computer, handphone, camera).
-3. Receiver: The device that receives the message.
-4. Transmission Medium: The physical path by which a message travels (twisted-pair, coaxial, fiber-optic, radio waves).
-5. Protocol: A set of rules that govern data communication.
+  +--------------------------------------+
+  |              MESSAGE                 |
+  +--------------------------------------+
+         |                        ^
+         v                        |
+  +-----------+  Transmission   +-----------+
+  |  SENDER   |  ============>  |  RECEIVER |
+  |  DEVICE   |     MEDIUM      |  DEVICE   |
+  +-----------+                 +-----------+
+   [Protocol]                    [Protocol]
+
+  1. Message: The information (data) to be communicated.
+     Types: text, numbers, pictures, audio, video.
+
+  2. Sender: The device that SENDS the data message.
+     Examples: computer, workstation, telephone handset, video camera.
+
+  3. Receiver: The device that RECEIVES the message.
+     Examples: computer, printer, smartphone.
+
+  4. Transmission Medium: The PHYSICAL PATH by which message travels from sender to receiver.
+     Types: twisted-pair cable, coaxial cable, fiber-optic cable, radio waves.
+
+  5. Protocol: A set of RULES that govern data communication.
+     Represents an agreement between the communicating devices about format, timing, sequencing, and error control.
 
 
 1.2 Transmission Modes
-- Simplex: Unidirectional (one way only). Only one device transmits; the other receives. Uses entire channel. (e.g., Keyboard to Monitor).
-- Half-Duplex: Bidirectional, but not simultaneous. Both devices can transmit and receive, but one at a time. (e.g., Walkie-Talkie).
-- Full-Duplex: Bidirectional and simultaneous. Both devices transmit and receive at the same time. (e.g., Mobile conversation).
+
+Transmission mode defines the DIRECTION of signal flow between two connected devices.
+
+  +------------------+------------------------------+-------------------------------+----------------------------+
+  | Mode             | Data Flow Direction          | Capability                    | Example                    |
+  +------------------+------------------------------+-------------------------------+----------------------------+
+  | Simplex          | Unidirectional (ONE WAY only)| Only sender sends. Receiver   | Keyboard to monitor,       |
+  |                  |                              | can ONLY receive. Full channel | Radio broadcast            |
+  |                  |                              | capacity used in one direction.|                            |
+  +------------------+------------------------------+-------------------------------+----------------------------+
+  | Half-Duplex      | Bidirectional, NOT           | Both devices can transmit and  | Walkie-Talkie              |
+  |                  | simultaneous (one at a time) | receive, but NOT AT SAME TIME. |                            |
+  |                  |                              | Channel capacity SHARED.       |                            |
+  +------------------+------------------------------+-------------------------------+----------------------------+
+  | Full-Duplex      | Bidirectional AND            | Both devices transmit AND      | Mobile phone conversation, |
+  |                  | simultaneous                 | receive at the SAME TIME.      | Telephone network          |
+  |                  |                              | Signals share capacity in both |                            |
+  |                  |                              | directions simultaneously.     |                            |
+  +------------------+------------------------------+-------------------------------+----------------------------+
 
 
 1.3 Network Topologies
-Network topology refers to the structural layout of a network.
 
-1. Mesh Topology:
-   - Every node is connected to every other node via dedicated point-to-point links.
-   - Formulas (for N devices): Links L = N * (N - 1) / 2. Ports per device P = N - 1.
-   - Pros: Highly reliable, robust, secure, easy troubleshooting.
-   - Cons: Very high cable cost, complex installation, high port count.
-2. Star Topology:
-   - Each device has a dedicated point-to-point link to a central Hub or Switch.
-   - Pros: Cheap compared to mesh, easy to install, low cabling, robust (single node failure doesn't crash net).
-   - Cons: Central point of failure (if Hub/Switch dies, entire net goes down).
-3. Bus Topology:
-   - A single shared main cable (backbone) connects all devices via drop lines. Terminating resistors prevent signal reflection.
-   - Pros: Very easy to install, low cabling requirements.
-   - Cons: Limit on length and nodes, cable break crashes whole network, difficult troubleshooting.
-4. Ring Topology:
-   - Each device is connected to adjacent devices, forming a circular ring. Uses tokens for traffic.
-   - Pros: Easy to install/reconfigure, no collisions.
-   - Cons: Unidirectional traffic means a single break disables the entire network.
-5. Hybrid Topology:
-   - A combination of two or more topologies (e.g., Star-Bus).
+Network topology is the STRUCTURAL LAYOUT defining how nodes (devices) are physically or logically connected.
+
+--- 1. Mesh Topology ---
+  Every node is connected to EVERY OTHER node via dedicated point-to-point links.
+
+  Formulas (for N devices):
+    Number of duplex links: L = N*(N-1) / 2
+    Number of ports per device: P = N - 1
+
+  Example: 4 nodes --> L = 4*3/2 = 6 links, P = 3 ports per node.
+
+  Pros:
+  - HIGHLY RELIABLE and robust (link failure doesn't affect others).
+  - SECURE (dedicated links, no shared channels).
+  - Easy troubleshooting (fault isolation is easy).
+
+  Cons:
+  - Very HIGH CABLE COST (N*(N-1)/2 cables needed).
+  - COMPLEX installation due to high port count.
+
+--- 2. Star Topology ---
+  Each device has a dedicated point-to-point link to a CENTRAL CONTROLLER (Hub or Switch).
+
+  Pros:
+  - CHEAP compared to mesh (only N cables for N devices).
+  - EASY to install and configure.
+  - ROBUST: Single node failure doesn't crash the network.
+
+  Cons:
+  - CENTRAL POINT OF FAILURE: If Hub/Switch dies, entire network goes down.
+
+--- 3. Bus Topology ---
+  A single SHARED MAIN CABLE (backbone/bus) connects all devices via drop lines and taps.
+  TERMINATING RESISTORS at both ends prevent signal reflection.
+
+  Pros:
+  - Very EASY TO INSTALL.
+  - LOW CABLING requirements (just one main cable).
+
+  Cons:
+  - LIMIT on bus length and number of nodes.
+  - Cable BREAK crashes the ENTIRE network.
+  - DIFFICULT TROUBLESHOOTING (hard to locate faults).
+
+--- 4. Ring Topology ---
+  Each device is connected to TWO ADJACENT devices forming a circular ring.
+  Data travels in ONE direction (unidirectional) or BOTH (bidirectional using tokens).
+
+  Pros:
+  - EASY to install and reconfigure.
+  - NO COLLISIONS (token-based access control).
+
+  Cons:
+  - Unidirectional traffic: Single break CAN DISABLE the entire network.
+
+--- 5. Hybrid Topology ---
+  A combination of two or more topologies.
+  Examples: Star-Bus, Star-Ring.
+  Most modern enterprise networks use hybrid topologies.
 
 
-1.4 Categories of Networks
-- LAN (Local Area Network): Privately owned network covering a home, office, or building. High data rate, low delay.
-- MAN (Metropolitan Area Network): Covers a larger area such as a city (e.g., cable TV).
-- WAN (Wide Area Network): Spans a large geographical area, country, or globe (e.g., Internet).
+1.4 Categories of Networks (LAN, MAN, WAN)
+
+  +-------+-------------------+----------------------------------+----------------------------------+
+  | Type  | Stands For        | Coverage Area                    | Examples                         |
+  +-------+-------------------+----------------------------------+----------------------------------+
+  | LAN   | Local Area Network| Single office, home, building,   | Office Ethernet, Wi-Fi,           |
+  |       |                   | or campus (up to few km).        | University intranet               |
+  |       |                   | HIGH data rates, LOW delay.      |                                  |
+  | MAN   | Metropolitan Area | Covers a city or large campus.   | Cable TV network, City Wi-Fi      |
+  |       | Network           | (up to ~50 km)                   | mesh networks                    |
+  | WAN   | Wide Area Network | Country, continent, or entire    | The Internet, satellite links,   |
+  |       |                   | globe.                           | leased fiber optic lines          |
+  |       |                   | Uses satellite or leased fibers. |                                  |
+  +-------+-------------------+----------------------------------+----------------------------------+
 
 
-1.5 OSI Reference Model
-OSI model is a conceptual 7-layer framework developed by ISO:
+1.5 OSI Reference Model (7-Layer Model)
 
-                     7. Application Layer (DNS, HTTP, SMTP)
-                                   │
-                                   ▼
-                     6. Presentation Layer (Encryption, Syntax)
-                                   │
-                                   ▼
-                     5. Session Layer (Dialogs, Sync)
-                                   │
-                                   ▼
-                     4. Transport Layer (TCP, UDP - End-to-End)
-                                   │
-                                   ▼
-                     3. Network Layer (IP, Routing, Logical Address)
-                                   │
-                                   ▼
-                     2. Data Link Layer (Frames, Flow/Error Control, MAC)
-                                   │
-                                   ▼
-                     1. Physical Layer (Bits, Cables, Signals)
+The Open Systems Interconnection (OSI) model is a CONCEPTUAL 7-LAYER FRAMEWORK developed by ISO
+to STANDARDIZE network communication between different systems.
 
-Layer-by-Layer Responsibilities:
-- 7. Application Layer: Provides interfaces to applications. (HTTP, FTP, SMTP, DNS).
-- 6. Presentation Layer: Syntax and semantics. (Translation, Encryption, Compression).
-- 5. Session Layer: Establishes, maintains, and synchronizes sessions. (Dialog control).
-- 4. Transport Layer: Process-to-Process (End-to-End) delivery of message. Port Addressing, Segmenting, Flow/Error control. (TCP, UDP).
-- 3. Network Layer: Source-to-destination (Host-to-Host) delivery of packets. Logical Addressing (IP), Routing. (IPv4, IPv6, ARP, ICMP).
-- 2. Data Link Layer (DLL): Hop-to-Hop (Node-to-Node) delivery of frames. Framing, Physical Addressing (MAC), Flow/Error control, Access control.
-- 1. Physical Layer: Transmitting individual bits over physical media. Mechanical/electrical interfaces, encoding, bit synchronization, topology.
+  OSI Model Layers (from top to bottom):
+
+  +----------------------------------+
+  | 7. APPLICATION LAYER             |  <-- User-facing layer (HTTP, FTP, SMTP, DNS)
+  +----------------------------------+
+  | 6. PRESENTATION LAYER            |  <-- Syntax, encryption, compression
+  +----------------------------------+
+  | 5. SESSION LAYER                 |  <-- Dialog control, synchronization
+  +----------------------------------+
+  | 4. TRANSPORT LAYER               |  <-- End-to-end delivery (TCP, UDP)
+  +----------------------------------+
+  | 3. NETWORK LAYER                 |  <-- Logical addressing, routing (IP)
+  +----------------------------------+
+  | 2. DATA LINK LAYER               |  <-- Node-to-node delivery, MAC, framing
+  +----------------------------------+
+  | 1. PHYSICAL LAYER                |  <-- Bits over physical media (cables, signals)
+  +----------------------------------+
+
+  Data Units (Protocol Data Units - PDU):
+  Layer 7-5: Data/Message
+  Layer 4:   Segment (TCP) / Datagram (UDP)
+  Layer 3:   Packet
+  Layer 2:   Frame
+  Layer 1:   Bits
+
+Detailed Layer-by-Layer Responsibilities:
+
+  7. APPLICATION LAYER:
+     - Provides INTERFACES to applications to access network services.
+     - Functions: Resource sharing, network virtual terminal, mail services, directory services.
+     - Protocols: HTTP (web), FTP (file transfer), SMTP (email), DNS (domain names), DHCP (IP assignment).
+
+  6. PRESENTATION LAYER:
+     - Deals with SYNTAX and SEMANTICS of information exchanged.
+     - Functions:
+       * Translation: ASCII <--> EBCDIC format conversion.
+       * Encryption/Decryption: Security for sensitive data.
+       * Compression: Reduces data size for efficient transmission.
+
+  5. SESSION LAYER:
+     - Establishes, MAINTAINS, and SYNCHRONIZES sessions between interacting applications.
+     - Functions:
+       * Dialog Control: Manages half-duplex or full-duplex communication.
+       * Synchronization: Inserts CHECKPOINTS (sync points) in long data streams.
+         If connection fails, retransmission resumes from last checkpoint (not from scratch).
+
+  4. TRANSPORT LAYER:
+     - Ensures PROCESS-TO-PROCESS (End-to-End) delivery of the entire message.
+     - Functions: Port Addressing, Segmentation and Reassembly, Flow Control, Error Control, Connection Control.
+     - Protocols: TCP (connection-oriented, reliable), UDP (connectionless, unreliable).
+
+  3. NETWORK LAYER:
+     - Responsible for SOURCE-TO-DESTINATION (HOST-TO-HOST) delivery across multiple networks.
+     - Functions: Logical Addressing (IP addresses), Routing (finding best paths through networks).
+     - Protocols: IPv4, IPv6, ARP, ICMP, OSPF, BGP.
+
+  2. DATA LINK LAYER (DLL):
+     - Responsible for HOP-TO-HOP (NODE-TO-NODE) delivery of frames.
+     - Two sublayers:
+       * LLC (Logical Link Control): Error control, flow control.
+       * MAC (Medium Access Control): Physical addressing, access control.
+     - Functions: Framing, Physical Addressing (MAC address), Flow Control, Error Control, Access Control.
+
+  1. PHYSICAL LAYER:
+     - Responsible for transmitting individual BITS over physical media.
+     - Functions: Physical characteristics of interfaces, Bit representation (encoding), Data rate,
+       Bit synchronization, Line configuration, Physical topology, Transmission mode.
+
+  OSI vs. TCP/IP Model Comparison:
+  +------------------+-------------------+
+  | OSI Model        | TCP/IP Model      |
+  +------------------+-------------------+
+  | Application (7)  |                   |
+  | Presentation (6) | Application       |
+  | Session (5)      |                   |
+  +------------------+-------------------+
+  | Transport (4)    | Transport         |
+  +------------------+-------------------+
+  | Network (3)      | Internet (IP)     |
+  +------------------+-------------------+
+  | Data Link (2)    |                   |
+  | Physical (1)     | Network Access    |
+  +------------------+-------------------+
 
 
 1.6 Transmission Media
-- Guided Media (Wired):
-  - Twisted-Pair Cable: Copper wires twisted together. Used in telephone nets and Ethernet LANs.
-  - Coaxial Cable: Copper core with shield. Used in cable TV.
-  - Fiber-Optic Cable: Transmits light pulses through glass/plastic. Highest bandwidth, immune to EMI, low attenuation.
-- Unguided Media (Wireless):
-  - Radio Waves: Omnidirectional. Can penetrate walls. Used for FM, TV.
-  - Microwaves: Unidirectional, line-of-sight. Used for satellites, cell networks.
-  - Infrared: Short-range, line-of-sight. Remote controls.
+
+Guided Media (Wired):
+  - Twisted-Pair Cable:
+    * Two INSULATED COPPER WIRES twisted together to reduce electromagnetic interference.
+    * STP (Shielded Twisted Pair): Has metallic foil shield. Better noise immunity.
+    * UTP (Unshielded Twisted Pair): No shield. Cheaper. Most common (Cat 5e, Cat 6 Ethernet).
+    * Used in: Telephone networks, Ethernet LANs.
+
+  - Coaxial Cable:
+    * Copper CORE surrounded by insulation, metallic braided shield, and plastic jacket.
+    * Higher bandwidth than twisted pair. Good noise immunity.
+    * Used in: Cable TV (CATV), older Ethernet (10BASE5, 10BASE2).
+
+  - Fiber-Optic Cable:
+    * Transmits data as LIGHT PULSES through glass or plastic fibers.
+    * Highest bandwidth available.
+    * IMMUNE to electromagnetic interference (EMI).
+    * Very LOW ATTENUATION (signal loss over long distances is minimal).
+    * Two types: Single-mode (long distance), Multi-mode (shorter distance, cheaper).
+    * Used in: Backbone networks, ocean-crossing cables, high-speed internet.
+
+Unguided Media (Wireless):
+  - Radio Waves (3 Hz - 1 GHz):
+    * OMNIDIRECTIONAL (propagate in all directions).
+    * Can PENETRATE walls and obstacles.
+    * Used in: FM radio, television, Wi-Fi (2.4 GHz, 5 GHz), Bluetooth.
+
+  - Microwaves (1 GHz - 300 GHz):
+    * UNIDIRECTIONAL (focused beam, line-of-sight propagation).
+    * Suitable for long-distance, high-bandwidth point-to-point communication.
+    * Used in: Satellite communication, cellular networks (4G/5G), microwave ovens.
+
+  - Infrared:
+    * SHORT-RANGE signals. CANNOT PENETRATE walls.
+    * Line-of-sight communication.
+    * Used in: TV remote controls, IrDA (Infrared Data Association) short-range device communication.
 
 
 1.7 Switching Techniques
-- Circuit Switching: Dedicated physical path established before communication (e.g., telephone net). Guaranteed bandwidth, high setup delay, inefficient resources.
-- Packet Switching: Data broken into packets; routed independently.
-  - Datagram: Packets routed independently; may arrive out of order (connectionless).
-  - Virtual Circuit: Logical path established beforehand; packets follow in order.
+
+Switching is used to CONNECT multiple nodes and route data dynamically.
+
+--- 1. Circuit Switching ---
+  A DEDICATED PHYSICAL PATH is established between sender and receiver BEFORE communication begins.
+  Example: Traditional telephone network (PSTN).
+
+  Three Phases:
+  1. Connection Setup: Reserve physical path (may take seconds).
+  2. Data Transfer: Full bandwidth dedicated to the connection.
+  3. Connection Teardown: Release the reserved path.
+
+  Features:
+  - GUARANTEED BANDWIDTH (full channel reserved for duration).
+  - NO CONGESTION during data phase (dedicated link).
+  - HIGH SETUP DELAY (reservation takes time before data can flow).
+  - INEFFICIENT resource utilization (bandwidth wasted when idle).
+
+--- 2. Packet Switching ---
+  Data is broken into small blocks called PACKETS. Each packet is routed INDEPENDENTLY.
+  Example: The Internet, modern data networks.
+
+  Types:
+  a) Datagram Approach (Connectionless):
+     - Each packet is treated INDEPENDENTLY.
+     - Packets may take DIFFERENT PATHS and arrive OUT OF ORDER.
+     - No connection setup needed.
+     - More resilient to link failures (packets re-route around failure).
+     - Used in: Internet (IP packets).
+
+  b) Virtual Circuit Approach (Connection-Oriented):
+     - A LOGICAL PATH is established BEFOREHAND.
+     - All packets travel along this path IN ORDER.
+     - Combines reliability of circuit switching with efficiency of packet switching.
+     - Used in: ATM (Asynchronous Transfer Mode), MPLS.
+
+  Circuit vs. Packet Switching Comparison:
+  +------------------+------------------+------------------+
+  | Feature          | Circuit Switching | Packet Switching |
+  +------------------+------------------+------------------+
+  | Connection       | Required first   | Not required     |
+  | Bandwidth        | Dedicated        | Shared           |
+  | Delay            | Low (once setup) | Variable         |
+  | Resource Waste   | High (idle)      | Low (on demand)  |
+  | Failure Recovery | Poor             | Excellent        |
+  +------------------+------------------+------------------+
 
 
 Chapter 2: Data Link Layer & Physical Layer
 
+The Data Link Layer is divided into two sublayers:
+  - LLC (Logical Link Control): Upper sublayer -- error control, flow control.
+  - MAC (Medium Access Control): Lower sublayer -- physical addressing, media access.
+
 2.1 Framing
-Framing is breaking a stream of bits into data units called frames.
-- Character/Byte Count: Header specifies character count. Corrupting count loses all boundaries.
-- Character/Byte Stuffing: Flag bytes added at boundaries. ESC stuffed before flags in payload.
-- Bit Stuffing: Flag bit pattern 01111110 marks boundaries. Sender stuffs 0 after five consecutive 1s in payload. Receiver unstuffs it.
+
+Framing is the process of breaking a STREAM OF BITS from the physical layer into manageable data units called FRAMES.
+
+Methods:
+  1. Character/Byte Count:
+     A FIELD in the header specifies the number of characters in the frame.
+     PROBLEM: If the count gets CORRUPTED, all subsequent frame boundaries are LOST (framing error).
+
+  2. Character/Byte Stuffing:
+     Special characters called FLAG BYTES mark the beginning and end of a frame.
+     If the flag byte pattern appears in the PAYLOAD: An ESCAPE CHARACTER (ESC) is stuffed before it.
+     Receiver: Remove the ESC to recover the original data.
+
+  3. Bit Stuffing (used in HDLC, PPP):
+     Flag bit pattern '01111110' marks frame boundaries.
+     SENDER: After five consecutive '1's in data, automatically INSERT a '0' bit.
+     RECEIVER: After five consecutive '1's, automatically REMOVE the following '0' bit.
+     This ensures the flag pattern can NEVER appear naturally in the payload.
+
+     Example:
+     Original data: 011111101 (contains the flag pattern 01111110!)
+     After bit stuffing: 01111100 1 (a '0' is inserted after five 1's)
+     Receiver removes the stuffed '0': Recovers original 011111101.
 
 
 2.2 Flow Control Protocols
-Flow control prevents a fast sender from overwhelming a slow receiver.
 
-- Stop-and-Wait Protocol: Sender sends one frame, waits for ACK.
-  - Transmission Delay: Tx = L / B (L = frame size, B = bandwidth)
-  - Propagation Delay: Tp = D / V (D = distance, V = speed)
-  - Total Time: Ttotal = Tx + 2*Tp
-  - Efficiency: eta = 1 / (1 + 2*a)  where a = Tp / Tx
-  - Throughput: Frame Size / Ttotal
-- Sliding Window Protocols (SWP): Sends multiple frames before waiting for ACK. Limit is Sender Window Size (Ws).
-  - Max Efficiency Ws = 1 + 2*a
-  - Efficiency: Ws / (1 + 2*a)
+Flow control prevents a FAST SENDER from overwhelming a SLOW RECEIVER.
 
-Comparison of ARQ Protocols:
-- Go-Back-N (GBN) ARQ:
-  - Ws = 2^k - 1 | Wr = 1 | Ws + Wr <= 2^k
-  - Out-of-order: Discarded (receiver only accepts next expected).
-  - Retransmission: Retransmits lost frame and all subsequent frames in window.
-  - Complexity: Low.
-- Selective Repeat (SR) ARQ:
-  - Ws = 2^(k-1) | Wr = 2^(k-1) | Ws + Wr <= 2^k
-  - Out-of-order: Buffered until missing frames arrive.
-  - Retransmission: Retransmits only the specific lost/damaged frame.
-  - Complexity: High.
+  Flow Control Protocols
+         |
+         +-----> Stop-and-Wait
+         |
+         +-----> Sliding Window
+                    |
+                    +-----> Go-Back-N (GBN) ARQ
+                    +-----> Selective Repeat (SR) ARQ
+
+--- Stop-and-Wait Protocol ---
+  Sender sends ONE frame and WAITS for an ACK before sending the next frame.
+
+  Calculations:
+    Transmission Delay:   Tx = L / B     (L = frame size in bits, B = bandwidth in bps)
+    Propagation Delay:    Tp = D / V     (D = distance, V = speed of signal in medium)
+    Total time per frame: T_total = Tx + 2*Tp
+
+    Efficiency (eta) = Tx / (Tx + 2*Tp) = 1 / (1 + 2a)     where a = Tp / Tx
+
+    Throughput = eta * Bandwidth = Frame Size / (Tx + 2*Tp)
+
+  Example:
+    Frame size L = 1000 bits, Bandwidth B = 1 Mbps, Distance D = 5000 km, V = 2*10^8 m/s
+    Tx = 1000 / 10^6 = 1 ms
+    Tp = 5*10^6 / (2*10^8) = 25 ms
+    a = 25 / 1 = 25
+    eta = 1 / (1 + 2*25) = 1/51 ≈ 1.96%  [Very inefficient for high-delay links!]
+
+--- Sliding Window Protocols (SWP) ---
+  Allows sending MULTIPLE FRAMES before waiting for an ACK.
+  Maximum outstanding unacknowledged frames = SENDER WINDOW SIZE (Ws).
+
+  Optimal Window Size for maximum efficiency (eta = 1):
+    Ws = 1 + 2a
+
+  Efficiency of Sliding Window:
+    eta = Ws / (1 + 2a)  if Ws < 1 + 2a
+    eta = 1              if Ws >= 1 + 2a
+
+  Go-Back-N (GBN) vs. Selective Repeat (SR) Comparison:
+  +-------------------------------+----------------------------+----------------------------+
+  | Parameter                     | Go-Back-N (GBN) ARQ        | Selective Repeat (SR) ARQ  |
+  +-------------------------------+----------------------------+----------------------------+
+  | Sender Window Size (Ws)       | 2^k - 1                    | 2^(k-1)                    |
+  | Receiver Window Size (Wr)     | 1                          | 2^(k-1)  [Ws = Wr]         |
+  | Window Size Relation          | Ws + Wr <= 2^k             | Ws + Wr <= 2^k             |
+  | Out-of-order frames           | DISCARDED -- receiver only | BUFFERED -- stored until   |
+  |                               | accepts next expected frame| missing frames arrive      |
+  | Retransmission on Error       | Retransmit lost frame AND  | Retransmit ONLY the         |
+  |                               | ALL SUBSEQUENT frames      | specific lost/damaged frame |
+  | Receiver Complexity           | LOW (simple receiver)      | HIGH (timers, buffers)     |
+  | Bandwidth Efficiency          | Less efficient on errors   | More efficient on errors   |
+  +-------------------------------+----------------------------+----------------------------+
+
+  SR is better when BIT ERROR RATE is high.
+  GBN is simpler to implement when errors are rare.
 
 
-2.3 Error Control
-- Single Parity Bit: Appends a bit to make total 1s count even or odd. Detects single-bit errors.
-- Two-Dimensional Parity: Row/column parity. Detects burst errors and corrects single-bit errors.
-- Checksum: Sender sums data segments, complements result to get checksum. Receiver sums segments including checksum; checks if result is all 1s.
-- Cyclic Redundancy Check (CRC): Modulo-2 binary division using generator polynomial G(X).
-  - Sender: Appends r zeros (r = degree of G(X)) to data, divides by G(X) using XOR. Appends remainder to data.
-  - Receiver: Divides received frame by G(X). Remainder 0 means no error.
-- Hamming Code: Error correcting code.
-  - Redundant bits: 2^r >= m + r + 1.
-  - Placed at positions that are powers of 2.
+2.3 Error Control (Error Detection & Correction)
+
+Errors occur due to NOISE, attenuation, and interference. Error control uses REDUNDANT BITS.
+
+--- 1. Parity Checking ---
+  Single Parity Bit:
+    Appends a single '1' or '0' to make total count of '1's EVEN (Even Parity) or ODD (Odd Parity).
+    Can DETECT single-bit errors.
+    CANNOT DETECT: Two-bit errors (they cancel out), burst errors.
+
+  Two-Dimensional Parity:
+    Arrange data in a GRID. Calculate parity for each ROW and each COLUMN.
+    Can DETECT burst errors up to the frame size.
+    Can LOCATE and CORRECT a single-bit error (intersection of failed row and column parity).
+
+--- 2. Checksum ---
+  Used in IP, TCP, and UDP for error detection.
+
+  Sender Algorithm:
+  1. Divide data into K segments of M bits each.
+  2. Add all segments using 1's COMPLEMENT arithmetic.
+  3. COMPLEMENT (invert) the sum to get the CHECKSUM.
+  4. Append checksum to the packet.
+
+  Receiver Algorithm:
+  1. Add all received segments INCLUDING the checksum.
+  2. If sum = all 1's (or 0 when complemented): Data is ERROR-FREE.
+  3. If sum != all 1's: An ERROR has occurred.
+
+--- 3. Cyclic Redundancy Check (CRC) ---
+  Based on BINARY POLYNOMIAL DIVISION using a generator polynomial G(X).
+  MORE POWERFUL than parity or checksum for detecting burst errors.
+
+  Sender Algorithm:
+  1. Data block has m bits. Divisor polynomial G(X) has degree r.
+  2. Append r ZEROS to the right of the data bits.
+  3. Perform MODULO-2 BINARY DIVISION (XOR operations) on padded data using G(X) as divisor.
+  4. The REMAINDER of this division (exactly r bits) is the CRC checksum.
+  5. Replace the appended r zeros with this remainder. TRANSMIT data + CRC.
+
+  Receiver Algorithm:
+  1. Divide received frame by G(X) using modulo-2 binary division.
+  2. If REMAINDER = 0: No error. Accept frame.
+  3. If REMAINDER != 0: Error detected. REJECT frame (request retransmission).
+
+  CRC Example:
+    Data: 100100 (m = 6 bits)
+    Divisor G(X) = X^3 + X^2 + 1  -->  Binary: 1101 (degree r = 3)
+    Step 1: Append 3 zeros: 100100 000
+    Step 2: Modulo-2 division of 100100000 by 1101:
+            100100000
+            1101
+            --------
+            0110 00000
+             1101
+             ------
+              011 0000
+               1101
+               -----
+                010 00
+                 ...
+            Remainder = 001
+    Step 3: Transmitted frame = 100100 001 (data + 3-bit CRC)
+
+  CRC Detection Capabilities:
+  - Detects ALL single-bit errors.
+  - Detects ALL double-bit errors (if G(X) has at least 3 terms).
+  - Detects ALL odd numbers of errors (if G(X) has (1+X) as factor).
+  - Detects ALL burst errors of length <= r.
+  - Detects most burst errors of length > r.
+
+--- 4. Hamming Code (Error Correction) ---
+  An error-CORRECTING code that can DETECT up to two-bit errors and CORRECT single-bit errors.
+
+  Redundant Bits Calculation:
+    If data has m bits, we need r redundant bits such that: 2^r >= m + r + 1
+
+  Position Table:
+    Parity bits are placed at positions that are POWERS OF 2: positions 1, 2, 4, 8, 16, ...
+    All other positions hold DATA bits.
+
+  Example: m = 4 data bits (d4, d3, d2, d1)
+    Find r: 2^r >= 4 + r + 1
+    r = 3: 2^3 = 8 >= 4+3+1 = 8. YES! (r = 3 sufficient)
+    Total bits = m + r = 4 + 3 = 7 bits.
+    Positions: 1(P1), 2(P2), 3(d1), 4(P3), 5(d2), 6(d3), 7(d4)
+
+  Parity bit P_i covers all positions whose binary expansion has a '1' in position i:
+    P1 (position 1 = 001): covers positions 1, 3, 5, 7 (all positions with bit 0 = 1)
+    P2 (position 2 = 010): covers positions 2, 3, 6, 7 (all positions with bit 1 = 1)
+    P3 (position 4 = 100): covers positions 4, 5, 6, 7 (all positions with bit 2 = 1)
+
+  Error Detection/Correction:
+  - Calculate syndrome = XOR of all parity checks.
+  - Syndrome = 0: No error.
+  - Syndrome != 0: The DECIMAL VALUE of syndrome gives the POSITION of the single-bit error.
+  - Flip the bit at that position to CORRECT the error.
 
 
 2.4 Physical Layer Line Coding
-- Manchester Encoding: Transition at the middle of each bit period. '0' is High-to-Low, '1' is Low-to-High. Self-synchronizing, no DC wandering.
-- Differential Manchester: Transition at middle for clocking. Presence/absence of transition at beginning indicates data.
+
+Line coding converts DIGITAL DATA into DIGITAL SIGNALS suitable for transmission.
+
+--- Manchester Encoding ---
+  A transition occurs in the MIDDLE of each bit period (always).
+  - '0' bit: HIGH-to-LOW transition at middle of bit period.
+  - '1' bit: LOW-to-HIGH transition at middle of bit period.
+
+  Signal:
+  Bit:  1    0    1    1    0
+        +--+ +--+ +--+ +--+ +--+
+        |  | |  | |  | |  | |  |
+     ___   | | _   _   |   _
+           |_|/ |_| |_|  |_|
+
+  Pros:
+  - SELF-SYNCHRONIZING: Receiver extracts clock from the guaranteed mid-bit transition.
+  - No DC baseline wandering.
+  Cons: Requires DOUBLE the bandwidth compared to simple NRZ encoding.
+
+--- Differential Manchester ---
+  Transition at MIDDLE of bit: Used for CLOCKING (always present).
+  Transition at BEGINNING of bit: Indicates DATA.
+  - '0' bit: TRANSITION at beginning of bit period.
+  - '1' bit: NO transition at beginning of bit period.
+  Used in: Token Ring networks.
 
 
 Chapter 3: Network Layer — Addressing & Routing
 
+The Network Layer handles PATH DETERMINATION (routing) and LOGICAL ADDRESSING (IP addresses).
+
 3.1 IPv4 Header Format
-Header size ranges from 20 bytes (minimum) to 60 bytes (maximum).
-- Version (4 bits): Identifies version (4 for IPv4).
-- IHL (4 bits): Header length in 32-bit words (5 to 15).
-- Total Length (16 bits): Header + Data in bytes (Max 65,535).
-- Identification, Flags, Fragment Offset: Used for fragmentation.
-  - Flags: DF (Don't Fragment), MF (More Fragments).
-  - Fragment Offset: Position in original packet in 8-byte units.
-- TTL (8 bits): Hop counter to prevent loops.
-- Protocol (8 bits): Higher-layer target (TCP = 6, UDP = 17, ICMP = 1).
+
+An IPv4 datagram header ranges from 20 bytes (minimum, no options) to 60 bytes (maximum, with options).
+
+  0         1         2         3
+  01234567890123456789012345678901
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |Version|  IHL  |Type of Service|          Total Length         |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |         Identification        |Flags|      Fragment Offset    |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |  Time to Live |    Protocol   |        Header Checksum        |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                         Source IP Address                     |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                      Destination IP Address                   |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |                    Options (0-40 bytes) if any                |
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Key Field Descriptions:
+  1. Version (4 bits): IP version. '0100' = IPv4.
+  2. IHL / Header Length (4 bits): Header length in 32-bit words.
+     Range: 5 to 15. (5 x 4 = 20 bytes minimum, 15 x 4 = 60 bytes maximum).
+  3. Total Length (16 bits): Total datagram size (header + data) in bytes.
+     Maximum datagram size: 2^16 - 1 = 65,535 bytes.
+  4. Identification (16 bits): Unique ID for each datagram (for reassembly of fragments).
+  5. Flags (3 bits):
+     - Bit 0: Reserved (always 0).
+     - Bit 1: DF (Don't Fragment). If 1, router MUST NOT fragment this packet.
+     - Bit 2: MF (More Fragments). If 1, more fragments follow. If 0, this is the last/only fragment.
+  6. Fragment Offset (13 bits): Position of fragment in original datagram. Units: 8-byte blocks.
+  7. TTL / Time to Live (8 bits): HOP COUNTER to prevent routing loops.
+     Decremented by 1 at each router. Packet is DROPPED if TTL reaches 0.
+     Router sends ICMP "Time Exceeded" message to source.
+  8. Protocol (8 bits): Indicates which upper-layer protocol receives the payload.
+     TCP = 6, UDP = 17, ICMP = 1.
 
 
 3.2 IP Addressing (IPv4)
-An IPv4 address is 32 bits long.
 
-Classful Addressing:
-- Class A: First bits 0 | Range: 1-126 | 8 NetID, 24 HostID | Net Count: 126 | Hosts: 16,777,214 | Mask: 255.0.0.0
-- Class B: First bits 10 | Range: 128-191 | 16 NetID, 16 HostID | Net Count: 16,384 | Hosts: 65,534 | Mask: 255.255.0.0
-- Class C: First bits 110 | Range: 192-223 | 24 NetID, 8 HostID | Net Count: 2,097,152 | Hosts: 254 | Mask: 255.255.255.0
-- Class D: First bits 1110 | Range: 224-239 | Multicast Addressing
-- Class E: First bits 1111 | Range: 240-255 | Experimental / Research
+An IPv4 address is 32 BITS (4 bytes) long, written as 4 decimal octets separated by dots.
+Example: 192.168.1.100
 
-Private IP Ranges:
-- Class A: 10.0.0.0 to 10.255.255.255
-- Class B: 172.16.0.0 to 172.31.255.255
-- Class C: 192.168.0.0 to 192.168.255.255
+--- Classful Addressing ---
+  Addresses are divided into five classes based on the FIRST OCTET value:
 
-Subnetting:
-- Borrow bits from HostID to create SubnetID.
-- Network Address = IP address AND subnet mask.
-- Directed Broadcast Address (DBA) = Set all HostID bits to 1.
-- Total Hosts in Subnet = 2^(zeros in mask) - 2.
+  +-------+---------------+---------------------+------------------+------------------+------------------+-----------------+
+  | Class | Leading Bits  | First Octet Range   | NetID / HostID  | Number of Nets   | Hosts per Net    | Default Mask    |
+  +-------+---------------+---------------------+------------------+------------------+------------------+-----------------+
+  |   A   | 0             | 1 - 126             | 8 / 24 bits     | 2^7 - 2 = 126    | 2^24 - 2 = 16M  | 255.0.0.0       |
+  |   B   | 10            | 128 - 191           | 16 / 16 bits    | 2^14 = 16,384    | 2^16-2 = 65,534 | 255.255.0.0     |
+  |   C   | 110           | 192 - 223           | 24 / 8 bits     | 2^21 = 2,097,152 | 2^8 - 2 = 254   | 255.255.255.0   |
+  |   D   | 1110          | 224 - 239           | Multicast only  | N/A              | N/A             | N/A             |
+  |   E   | 1111          | 240 - 255           | Experimental    | N/A              | N/A             | N/A             |
+  +-------+---------------+---------------------+------------------+------------------+------------------+-----------------+
 
-Classless Inter-Domain Routing (CIDR):
-Replaces classes with IP/n notation. Contiguous blocks, size power of 2, first address divisible by block size.
+  Notes on Class A:
+    127.0.0.0 - 127.255.255.255: Reserved for LOOPBACK TESTING (127.0.0.1 = localhost).
+    0.0.0.0: Represents "this host on this network" (special use).
+
+  Private IP Ranges (Non-routable on public Internet - used in intranets):
+    Class A: 10.0.0.0 - 10.255.255.255       (10.0.0.0/8)
+    Class B: 172.16.0.0 - 172.31.255.255     (172.16.0.0/12)
+    Class C: 192.168.0.0 - 192.168.255.255   (192.168.0.0/16)
+
+--- Subnetting ---
+  Subnetting divides a large network into smaller, logical SUBNETWORKS.
+  Concept: BORROW bits from the HostID portion to create a SubnetID.
+
+  Subnet Mask: A sequence of consecutive '1's followed by consecutive '0's.
+    '1's represent: Network + Subnet portion.
+    '0's represent: Host portion within the subnet.
+
+  Subnetting Calculation Checklist:
+  - Network Address:          Bitwise AND of (IP address) AND (subnet mask).
+  - Directed Broadcast (DBA): Set ALL HostID bits to '1' in the network address.
+  - First Host IP:            Network Address + 1.
+  - Last Host IP:             Directed Broadcast Address - 1.
+  - Total Usable Hosts:       2^(number of 0-bits in mask) - 2.
+
+  Example:
+    IP: 192.168.1.100, Mask: 255.255.255.240 (/28)
+    Host bits: 4 (last 4 bits of mask are 0)
+    Network Address: 192.168.1.96  (100 AND 240 = 96 in last octet)
+    Broadcast:       192.168.1.111 (set all 4 host bits to 1: 96 + 15 = 111)
+    First Host:      192.168.1.97
+    Last Host:       192.168.1.110
+    Usable Hosts:    2^4 - 2 = 14 hosts
+
+--- Classless Inter-Domain Routing (CIDR) ---
+  CIDR replaces classful addressing with a FLEXIBLE PREFIX LENGTH notation.
+  Notation: IP/n (where n = number of prefix/network bits).
+  Example: 192.168.1.0/24 (24 bits for network, 8 bits for hosts).
+
+  Rules for CIDR Block Assignment:
+  1. Addresses in a block must be CONTIGUOUS.
+  2. Block size must be a POWER OF 2 (2^x).
+  3. First address must be EVENLY DIVISIBLE by block size.
+
+  CIDR allows efficient allocation of IP address space (replaces wasteful classful boundaries).
 
 
 3.3 Routing Protocols & Algorithms
-- Distance Vector Routing (DVR): Uses Bellman-Ford. Routers share complete tables periodically with direct neighbors.
-  - Count-to-Infinity loop: Solved via Split Horizon (do not advertise route back out the same interface) and Route Poisoning (advertise cost infinity). Protocol: RIP.
-- Link State Routing (LSR): Uses Dijkstra. LSPs are flooded to all routers. Protocol: OSPF.
-- Path Vector Routing (PVR): Used for Inter-Domain. Protocol: BGP.
+
+  Routing Protocols
+        |
+        +----> Intra-Domain (IGP - Interior Gateway Protocol)
+        |           |
+        |           +----> Distance Vector Routing (RIP - Bellman-Ford)
+        |           +----> Link State Routing (OSPF - Dijkstra's)
+        |
+        +----> Inter-Domain (EGP - Exterior Gateway Protocol)
+                    |
+                    +----> Path Vector Routing (BGP - Border Gateway Protocol)
+
+--- 1. Distance Vector Routing (DVR) ---
+  Algorithm: BELLMAN-FORD equation.
+  Each router maintains a ROUTING TABLE of distances to all destinations.
+
+  How it Works:
+  - Each router shares its COMPLETE routing table only with DIRECT NEIGHBORS.
+  - Routers exchange tables PERIODICALLY (every 30 seconds in RIP).
+  - Routers update their tables based on NEIGHBORS' information.
+  - Update formula: D(X, Y) = min over all neighbors N of [D(X, N) + D(N, Y)]
+
+  Count-to-Infinity Problem:
+  - Routing LOOP occurs when a link breaks.
+  - Routers keep updating metrics based on OUTDATED data, incrementing cost toward infinity.
+  - Example: Router A says it can reach D in cost 3 via B. B's link to D breaks.
+    B sees A can reach D in 3 (outdated!), so B updates cost to D as 3+1=4.
+    A then updates to 4+1=5. B updates to 5+1=6. Continues to infinity.
+
+  Solutions to Count-to-Infinity:
+  1. Split Horizon: Router should NOT advertise a route BACK out the same interface it learned it from.
+  2. Route Poisoning: Immediately set the metric of a broken link to INFINITY (=16 in RIP) and advertise.
+  3. Hold-down Timers: Ignore updates about a route for a period after it fails.
+
+--- 2. Link State Routing (LSR) ---
+  Algorithm: DIJKSTRA'S SHORTEST PATH algorithm.
+  Protocol: OSPF (Open Shortest Path First).
+
+  How it Works:
+  1. Each router DISCOVERS its neighbors and measures link COSTS to each neighbor.
+  2. Each router creates a LINK STATE PACKET (LSP) describing its local topology.
+  3. LSPs are FLOODED to ALL routers in the network (every router sends, every router forwards once).
+  4. Each router builds a COMPLETE MAP of the entire network topology.
+  5. Dijkstra's algorithm computes SHORTEST PATHS from this map.
+
+  Advantages over DVR:
+  - NO Count-to-Infinity problem.
+  - Converges FASTER after topology changes.
+  - More accurate (complete view of network).
+
+  Disadvantages:
+  - Higher MEMORY requirement (store entire network map).
+  - Higher PROCESSING requirement (run Dijkstra's on each topology change).
+  - More TRAFFIC during updates (flooding LSPs to all routers).
 
 
 3.4 Auxiliary Network Protocols
-- ARP (Address Resolution Protocol): IP -> MAC.
-- ICMP (Internet Control Message Protocol): Sends error reports and queries (Ping).
+
+- ARP (Address Resolution Protocol):
+  Resolves a known LOGICAL IP address to a PHYSICAL MAC address.
+  Process: Host broadcasts "Who has IP 192.168.1.5?". Host with that IP replies with its MAC address.
+
+- RARP (Reverse ARP):
+  Resolves physical MAC address to LOGICAL IP address.
+  NOW OBSOLETE -- Replaced by DHCP (Dynamic Host Configuration Protocol).
+
+- DHCP (Dynamic Host Configuration Protocol):
+  Automatically assigns IP addresses, subnet masks, default gateway, and DNS server to clients.
+  Process: DORA -- Discover, Offer, Request, Acknowledge.
+
+- ICMP (Internet Control Message Protocol):
+  Used by hosts and routers to send ERROR REPORTS and QUERY messages.
+  Examples:
+  - Error: "Destination Unreachable", "Time Exceeded" (TTL = 0), "Redirect".
+  - Query: Ping (Echo Request/Reply).
+  ICMP operates at Layer 3 (Network Layer).
+
+- IGMP (Internet Group Management Protocol):
+  Manages MULTICAST group memberships for IPv4 hosts.
+  Allows routers to learn which multicast groups have active members.
 
 
 Chapter 4: Transport Layer & Cryptography
 
+The Transport Layer is responsible for PROCESS-TO-PROCESS delivery, connection management,
+flow control, and congestion control.
+
 4.1 Transport Layer Fundamentals
-- Port Numbers (16-bit): Processes target (0 to 65535). Well-known: 0-1023 (HTTP = 80, SSH = 22).
-- Socket Address: IP + Port (e.g. 192.168.1.1:80).
+
+Port Numbers: 16-bit identifier (0 to 65,535) targeting specific PROCESSES on a host.
+  - Well-known ports: 0 - 1023 (reserved for standard services).
+    HTTP = 80, HTTPS = 443, FTP = 21, SSH = 22, DNS = 53, SMTP = 25, POP3 = 110, IMAP = 143.
+  - Registered ports: 1024 - 49151 (registered for specific applications).
+  - Dynamic/Ephemeral ports: 49152 - 65535 (temporary ports assigned by OS to client processes).
+
+Socket Address: Combines IP address + Port number.
+  Example: 192.168.1.1:80 (IP 192.168.1.1, port 80 -- HTTP)
+  Uniquely identifies an endpoint of a network connection.
 
 
 4.2 UDP (User Datagram Protocol)
-- Connectionless, unreliable, best-effort, message-oriented.
-- Header size: Fixed at 8 bytes (Source Port, Destination Port, Length, Checksum).
+
+Features:
+- CONNECTIONLESS: No connection setup needed. Just send data.
+- UNRELIABLE: No guarantee of delivery, ordering, or error recovery.
+- BEST-EFFORT DELIVERY: Packets may be lost, duplicated, or reordered.
+- MESSAGE-ORIENTED: Preserves message boundaries.
+- FAST (low overhead): No handshaking, acknowledgments, or retransmission.
+
+UDP Header (Fixed 8 bytes):
+  0         1         2         3
+  01234567890123456789012345678901
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |       Source Port             |  <-- 16 bits: Sender's port number
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |      Destination Port         |  <-- 16 bits: Receiver's port number
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           Length              |  <-- 16 bits: Length of UDP segment (header + data)
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  |           Checksum            |  <-- 16 bits: Error detection (optional in IPv4, mandatory in IPv6)
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+
+Applications that prefer UDP: DNS lookups, Streaming video/audio, Online gaming, VoIP, DHCP.
 
 
 4.3 TCP (Transmission Control Protocol)
-- Connection-oriented, reliable, byte-stream, full-duplex, implements flow/congestion control.
-- Header size: 20 to 60 bytes. Contains Sequence Number (32-bit), Acknowledgment Number (32-bit cumulative), Header Length, Flags (SYN, ACK, FIN, RST, PSH, URG), and Window Size.
+
+Features:
+- CONNECTION-ORIENTED: Requires 3-way handshake to establish connection.
+- RELIABLE: Guarantees delivery and ordering using sequence numbers and acknowledgments.
+- BYTE-STREAM DELIVERY: Treats data as a continuous stream of bytes (no message boundaries).
+- FULL-DUPLEX: Both parties can send and receive simultaneously.
+- IMPLEMENTS FLOW CONTROL and CONGESTION CONTROL.
+
+TCP Header (20 to 60 bytes, depending on Options):
+  Key Fields:
+  - Source Port (16 bits) / Destination Port (16 bits): Identify sending and receiving processes.
+  - Sequence Number (32 bits): Byte stream tracking number of the first data byte in this segment.
+  - Acknowledgment Number (32 bits): NEXT byte sequence number the receiver EXPECTS.
+    CUMULATIVE acknowledgment (acknowledges all bytes up to this number).
+  - Header Length / Data Offset (4 bits): Length of TCP header in 32-bit words.
+  - Control Flags (6 bits):
+    * URG: Urgent pointer is valid. Data should be processed immediately.
+    * ACK: Acknowledgment field is valid.
+    * PSH: Push data directly to application (bypass receive buffer).
+    * RST: RESET the connection abruptly.
+    * SYN: SYNCHRONIZE sequence numbers (used in connection establishment).
+    * FIN: FINISH -- terminate connection gracefully.
+  - Window Size (16 bits): RECEIVER FLOW CONTROL. Tells sender how many bytes receiver can accept.
 
 
-4.4 TCP 3-Way Handshake
-Establishes connection:
-1. Client sends SYN (Seq = X).
-2. Server responds with SYN-ACK (Seq = Y, Ack = X + 1).
-3. Client sends ACK (Seq = X + 1, Ack = Y + 1).
-- Connection termination: 4-way exchange (FIN -> ACK -> FIN -> ACK).
+4.4 TCP 3-Way Handshake (Connection Establishment)
+
+  CLIENT                              SERVER
+    |                                    |
+    |    SYN, Seq = x                    |
+    |----------------------------------->|  (Server: LISTEN state)
+    |                                    |
+    |    SYN-ACK, Seq = y, Ack = x+1    |
+    |<-----------------------------------|  (Server: SYN_RECEIVED state)
+    |                                    |
+    |    ACK, Seq = x+1, Ack = y+1      |
+    |----------------------------------->|  (Both: ESTABLISHED state)
+    |                                    |
+    |         DATA TRANSFER              |
+    |<---------------------------------->|
+    |                                    |
+
+  Step 1: SYN -- Client sends SYN with its Initial Sequence Number (ISN = x).
+  Step 2: SYN-ACK -- Server acknowledges (Ack = x+1) and sends its own ISN (Seq = y).
+  Step 3: ACK -- Client acknowledges server's ISN (Ack = y+1).
+
+  Why 3-way? Need to exchange BOTH sides' ISNs and have them both acknowledged.
+
+Connection Termination (4-Way Handshake):
+  TCP supports HALF-CLOSED connections (one side can stop sending while still receiving).
+    Client sends FIN --> Server sends ACK --> Server sends FIN --> Client sends ACK.
+
+  TIME_WAIT State: Client waits 2*MSL (Maximum Segment Lifetime ≈ 60 seconds) before fully closing.
+  Ensures the final ACK reaches the server (and handles duplicate packets from old connections).
 
 
 4.5 TCP Congestion Control
-Congestion Window (Cwnd) controls rate: Limit = min(Cwnd, Receiver Window).
-1. Slow Start: Cwnd starts at 1, doubles every RTT (exponential growth) until ssthresh.
-2. Congestion Avoidance: Growth switches to additive (increases by 1 per RTT).
-3. Packet Loss:
-   - Timeout (Severe): ssthresh = Cwnd / 2; Cwnd = 1; restart Slow Start.
-   - Three Dup ACKs (Mild): ssthresh = Cwnd / 2; Cwnd = ssthresh; enter Fast Recovery (additive increase).
+
+To prevent NETWORK COLLAPSE, TCP controls sending rate using a CONGESTION WINDOW (Cwnd).
+The sender's effective transmission limit:
+  Effective Window = min(Cwnd, Receiver's Window Size)
+
+Congestion Control Phases:
+
+  1. SLOW START PHASE:
+     Start with Cwnd = 1 MSS (Maximum Segment Size, typically 1460 bytes).
+     For every ACK received: Cwnd increases by 1 MSS.
+     Result: Cwnd DOUBLES every RTT (exponential growth).
+     Continue until Cwnd reaches Ssthresh (Slow Start Threshold).
+
+  2. CONGESTION AVOIDANCE PHASE:
+     Once Cwnd >= Ssthresh: Switch to ADDITIVE INCREASE.
+     For every RTT (full window of ACKs received): Cwnd increases by 1 MSS.
+     Result: Linear (additive) growth. More conservative than slow start.
+
+  3. HANDLING PACKET LOSS (CONGESTION SIGNALS):
+     Case A -- TIMEOUT (severe congestion):
+       * Ssthresh = Cwnd / 2   (halve the threshold)
+       * Cwnd = 1 MSS          (reset to 1)
+       * Return to SLOW START phase.
+
+     Case B -- THREE DUPLICATE ACKs (mild congestion - fast retransmit):
+       * Ssthresh = Cwnd / 2   (halve the threshold)
+       * Cwnd = Ssthresh       (or Ssthresh + 3 in TCP Reno)
+       * Enter FAST RECOVERY phase (linear increase from Ssthresh).
+       * RETRANSMIT the lost segment immediately (don't wait for timeout).
+
+  Congestion Window Over Time:
+  Cwnd
+    |                         /|
+    |                      /  |
+    |                   /    |
+    |      Ssthresh ........  |   / (Timeout --> restart)
+    |       /          \/    |
+    |      /            \   /
+    |     / (SS)    (CA) \_/
+    +--------------------------------> Time
+   SS = Slow Start (exponential), CA = Congestion Avoidance (linear)
 
 
 4.6 Cryptography Basics
-- Symmetric Key: Same key for encryption/decryption. (e.g., DES, AES).
-- Asymmetric Key: Public key for encryption, Private key for decryption. (e.g., RSA).
 
-RSA Steps:
-1. Select primes p, q. Compute n = p*q and phi(n) = (p-1)*(q-1).
-2. Choose e co-prime to phi(n).
-3. Compute d such that d*e = 1 mod phi(n).
-4. Encrypt: C = M^e mod n. Decrypt: M = C^d mod n.
+Cryptography ensures SECURITY, INTEGRITY, and AUTHENTICITY across networks.
+
+--- Symmetric Key (Private Key) Cryptography ---
+  The SAME KEY is used for BOTH encryption and decryption.
+  Features:
+  - Very FAST (computationally efficient).
+  - PROBLEM: How to SECURELY EXCHANGE the key? (key distribution problem).
+  Examples:
+  - DES (Data Encryption Standard): 56-bit key. Now considered INSECURE (too short).
+  - 3DES: Applies DES three times. Stronger but slow.
+  - AES (Advanced Encryption Standard): 128, 192, or 256-bit keys. CURRENT STANDARD. Very secure & fast.
+
+--- Asymmetric Key (Public Key) Cryptography ---
+  Uses a PAIR of keys:
+  - PUBLIC KEY: Can be freely shared with anyone. Used for ENCRYPTION.
+  - PRIVATE KEY: Kept secret. Used for DECRYPTION.
+
+  Key property: What is encrypted with the public key can ONLY be decrypted with the private key.
+
+  Examples: RSA, ECC (Elliptic Curve Cryptography), Diffie-Hellman.
+
+  RSA Mathematical Framework:
+  1. Select two large PRIME NUMBERS p and q (keep secret).
+  2. Calculate: n = p x q  (public modulus)
+     and: phi(n) = (p-1)(q-1)
+  3. Choose public exponent e such that: 1 < e < phi(n) and GCD(e, phi(n)) = 1.
+     Common choice: e = 65537.
+  4. Calculate private exponent d such that: (d x e) mod phi(n) = 1.
+  5. Public Key = (e, n). Private Key = (d, n). p, q, phi(n) are DESTROYED.
+
+  Encryption: C = M^e mod n  (Ciphertext = Plaintext raised to e, mod n)
+  Decryption: M = C^d mod n  (Plaintext recovered by using private key d)
+
+  Security: Based on the difficulty of FACTORING n into p and q (computationally infeasible for large n).
+
+  Symmetric vs. Asymmetric Comparison:
+  +--------------------+------------------+------------------+
+  | Feature            | Symmetric        | Asymmetric (PKI) |
+  +--------------------+------------------+------------------+
+  | Keys               | 1 shared key     | Public + Private |
+  | Speed              | FAST             | SLOW             |
+  | Key Distribution   | Difficult        | Easy (public key)|
+  | Use case           | Data encryption  | Key exchange,    |
+  |                    |                  | digital signing  |
+  | Examples           | AES, DES, 3DES   | RSA, ECC, DH     |
+  +--------------------+------------------+------------------+
+
+  In practice: HYBRID approach -- Asymmetric used to exchange session key, then Symmetric used for data.
 
 
 Chapter 5: Application Layer & Network Devices
 
 5.1 Application Layer Protocols
-- DNS (Domain Name System): Translates names to IPs. UDP Port 53. Resolution: Recursive or Iterative.
-- E-Mail: SMTP (Port 25) to push. POP3 (Port 110) or IMAP4 (Port 143) to pull. MIME allows attachments.
-- FTP (File Transfer Protocol): Port 21 (Control connection), Port 20 (Data connection). Out-of-band control.
-- HTTP (HyperText Transfer Protocol): Web content. Port 80 (HTTPS = 443). HTTP/1.1 uses persistent connections. Status: 200 OK, 301 Moved, 404 Not Found, 500 Server Error.
+
+--- 1. Domain Name System (DNS) ---
+  Translates HUMAN-READABLE domain names (e.g., google.com) to IP addresses.
+  Runs on UDP Port 53 (TCP for zone transfers).
+
+  DNS Hierarchy:
+  . (Root) --> .com --> google.com --> www.google.com
+  Managed by Root Name Servers (13 root server clusters worldwide).
+
+  Resolution Modes:
+  - RECURSIVE Query: Client asks local DNS server. Local DNS does ALL the work and returns the final IP.
+  - ITERATIVE Query: DNS server points client to other nameservers.
+    Client queries: Root --> TLD --> Authoritative DNS. Client does the recursion.
+
+  DNS Caching: Responses are cached for TTL duration to reduce lookup latency.
+
+--- 2. Email Architecture ---
+  SMTP (Simple Mail Transfer Protocol):
+  - PUSHES emails from client to mail server and between mail servers.
+  - Uses TCP Port 25 (Port 587 for submission).
+
+  POP3 (Post Office Protocol 3):
+  - PULLS emails from server to client.
+  - TCP Port 110.
+  - Downloads and DELETES from server (no synchronization).
+
+  IMAP4 (Internet Message Access Protocol):
+  - Also pulls emails but KEEPS them on server.
+  - TCP Port 143.
+  - Supports FOLDER SYNCHRONIZATION, message flags, and partial download.
+  - Multiple device access without losing messages.
+
+  MIME (Multipurpose Internet Mail Extensions):
+  - EXTENDS SMTP to allow non-ASCII data: attachments, HTML, images, audio, video.
+
+  Email Flow:
+  [Sender's MUA] --SMTP--> [Sender's MTA] --SMTP--> [Recipient's MTA] --POP3/IMAP--> [Recipient's MUA]
+
+--- 3. FTP (File Transfer Protocol) ---
+  Uses TWO SEPARATE TCP CONNECTIONS (out-of-band control):
+  - Port 21: CONTROL CONNECTION (handles commands/responses; stays OPEN throughout session).
+  - Port 20: DATA CONNECTION (opens/closes DYNAMICALLY for each individual file transfer).
+
+  SFTP (SSH File Transfer Protocol) / FTPS (FTP over SSL): Secure variants used in production.
+
+--- 4. HTTP (HyperText Transfer Protocol) ---
+  Used to access WEB CONTENT.
+  Port 80 for HTTP. Port 443 for HTTPS (HTTP over SSL/TLS encrypted).
+
+  HTTP Versions:
+  - HTTP/1.0 (Non-Persistent): Opens a SEPARATE TCP connection for EVERY object/file requested.
+    Example: Web page with 10 images = 11 TCP connections = high latency.
+  - HTTP/1.1 (Persistent): Keeps TCP connection OPEN for MULTIPLE requests (pipelining).
+    Significantly reduces latency.
+  - HTTP/2: Multiplexed streams, header compression, server push. Major performance improvements.
+  - HTTP/3: Uses QUIC protocol (UDP-based). Even lower latency.
+
+  HTTP Status Codes:
+  +----------+------------------+---------------------------------------------+
+  | Range    | Category         | Examples                                    |
+  +----------+------------------+---------------------------------------------+
+  | 1xx      | Informational    | 100 Continue, 101 Switching Protocols       |
+  | 2xx      | SUCCESS          | 200 OK, 201 Created, 204 No Content         |
+  | 3xx      | Redirection      | 301 Moved Permanently, 302 Found, 304 Not Modified |
+  | 4xx      | Client Error     | 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found |
+  | 5xx      | Server Error     | 500 Internal Server Error, 503 Service Unavailable |
+  +----------+------------------+---------------------------------------------+
 
 
 5.2 Network Interconnection Devices
-- Repeater (Layer 1): Regenerates signals. No filtering.
-- Hub (Layer 1): Multi-port repeater. Broadcasts to all ports.
-- Bridge (Layer 2): Connects segments. Filters via MAC table.
-- Switch (Layer 2): Multi-port bridge. Forwards selectively via MAC.
-- Router (Layer 3): Interconnects logical networks. Forwards via IP.
-- Gateway (Layers 1-7): Protocol translator.
-- Firewall: Filters traffic based on security policies.
+
+Devices function at DIFFERENT LAYERS of the OSI stack, processing specific data structures:
+
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Device           | OSI Layer         | Data Unit         | Key Feature / Functionality                      |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Repeater         | Physical (Layer 1)| Bits              | Regenerates weak electrical/optical signals      |
+  |                  |                   |                   | to extend transmission distance.                 |
+  |                  |                   |                   | Does NOT filter or understand data.              |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Hub              | Physical (Layer 1)| Bits              | Multi-port repeater. Broadcasts incoming         |
+  |                  |                   |                   | data to ALL output ports.                        |
+  |                  |                   |                   | HIGH collision rate (shared medium).             |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Bridge           | Data Link (Layer 2)| Frames           | Connects two LAN segments. Filters and           |
+  |                  |                   |                   | forwards frames using MAC address table.         |
+  |                  |                   |                   | Reduces collision domain.                        |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Switch           | Data Link (Layer 2)| Frames           | Multi-port bridge. Learns MAC addresses          |
+  |                  |                   |                   | dynamically. Forwards packets SELECTIVELY        |
+  |                  |                   |                   | (only to destination port). Eliminates           |
+  |                  |                   |                   | collisions per port. Full-duplex support.        |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Router           | Network (Layer 3) | Packets           | Interconnects DIFFERENT logical networks.        |
+  |                  |                   |                   | Selects optimal paths using routing tables       |
+  |                  |                   |                   | and IP addresses. Separates broadcast domains.   |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Gateway          | All Layers (1-7)  | Any               | Protocol translator between INCOMPATIBLE         |
+  |                  |                   |                   | networks. Can translate between different         |
+  |                  |                   |                   | architectures and protocols.                     |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+  | Firewall         | Network/Transport | Packets/Sessions  | Inspects packets and FILTERS TRAFFIC based       |
+  |                  | /Application      |                   | on pre-defined security policies (ports,         |
+  |                  |                   |                   | IPs, protocols, application signatures).         |
+  +------------------+-------------------+-------------------+--------------------------------------------------+
+
+  Key Concept -- Broadcast vs. Collision Domains:
+  - Collision Domain: Network segment where only ONE device can transmit at a time.
+    Hub: ONE collision domain. Switch: Separate collision domain PER PORT.
+  - Broadcast Domain: Network segment where ALL devices receive broadcast messages.
+    Switch: ONE broadcast domain. Router: Separates broadcast domains.
+
+
+Quick Revision: High-Yield Summary
+
+OSI Model Mnemonic:
+  "Please Do Not Throw Sausage Pizza Away" (Physical, Data Link, Network, Transport, Session, Presentation, Application)
+  Or reversed: "All People Seem To Need Data Processing"
+
+Common Port Numbers:
+  HTTP = 80, HTTPS = 443, FTP Control = 21, FTP Data = 20, SSH = 22
+  Telnet = 23, SMTP = 25, DNS = 53, DHCP = 67/68
+  POP3 = 110, IMAP = 143, SNMP = 161
+
+IPv4 Classes Summary:
+  Class A: 1-126 first octet. /8 default. Large networks (16M hosts).
+  Class B: 128-191. /16 default. Medium networks (65K hosts).
+  Class C: 192-223. /24 default. Small networks (254 hosts).
+
+Sliding Window Protocol Formulas:
+  GBN: Sender window = 2^k - 1, Receiver window = 1
+  SR:  Sender window = 2^(k-1), Receiver window = 2^(k-1)
+  Efficiency = Ws / (1 + 2a) if Ws < 1+2a, else 1
+
+TCP Congestion Control Summary:
+  Slow Start: Cwnd doubles every RTT (exponential) until Ssthresh.
+  Congestion Avoidance: Cwnd += 1 per RTT (linear) after Ssthresh.
+  Timeout: Ssthresh = Cwnd/2, Cwnd = 1 (restart from scratch).
+  3 Dup ACKs: Ssthresh = Cwnd/2, Cwnd = Ssthresh (fast recovery).
+
+Hamming Code:
+  Redundant bits r: 2^r >= m + r + 1
+  Parity bits at positions: 1, 2, 4, 8, 16, ... (powers of 2)
+
+Subnetting Quick Formula:
+  For /n mask: Host bits = 32 - n. Usable hosts = 2^(32-n) - 2.
+  Network Address = IP AND Mask. Broadcast = Network + (2^host_bits - 1).

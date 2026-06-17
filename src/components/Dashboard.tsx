@@ -167,8 +167,9 @@ export default function Dashboard({
                 Workspace Active
               </span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent font-sans">
-              AuraNotes Study Hub
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight font-sans">
+              <span className="font-hand bg-gradient-to-r from-indigo-400 via-violet-400 via-40% to-pink-400 bg-clip-text text-transparent drop-shadow-sm">StudyCS</span>
+              <span className="ml-2 bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">Study Hub</span>
             </h1>
             <p className="text-sm text-slate-400 font-medium">
               Handwritten-styled lecture diaries and active-recall exam revision.

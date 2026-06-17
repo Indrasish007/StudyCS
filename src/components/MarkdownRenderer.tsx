@@ -39,6 +39,15 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const trimmed = block.trim();
     if (!trimmed) return null;
 
+    // First block is the main note title
+    if (index === 0) {
+      return (
+        <h1 key={index} className="text-xl md:text-2xl font-extrabold hand-h1 mb-6 mt-2 pb-2 border-b-2 border-dashed border-indigo-300/60 font-daughter" style={{ lineHeight: '36px' }}>
+          {trimmed}
+        </h1>
+      );
+    }
+
     // 1. Check if it's a heading matching "Chapter X: ..." or numbered section "X.Y ..."
     const headingMatch = trimmed.match(/^(Chapter\s+\d+|[0-9]+(?:\.[0-9]+)+)[:.]?\s+(.+)$/i);
     if (headingMatch) {
@@ -79,7 +88,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
       return (
         <pre 
           key={index} 
-          className="my-3 overflow-x-auto p-3.5 rounded-xl border border-slate-300 bg-slate-900 text-yellow-300 font-mono text-[10px] md:text-xs leading-relaxed select-text shadow-sm"
+          className="my-4 overflow-x-auto p-4 rounded-xl border border-white/5 bg-[#0d1220] text-yellow-300 font-mono text-[10px] md:text-xs leading-relaxed select-text shadow-lg"
         >
           <code>{trimmed}</code>
         </pre>
@@ -88,33 +97,78 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     // 3. Check if it is a list (lines start with bullet markers)
     const lines = trimmed.split("\n");
-    const isList = lines.every(line => {
-      const l = line.trim();
-      return l.startsWith("- ") || l.startsWith("* ") || l.startsWith("🕒 ") || /^\d+\.\s+/.test(l);
+    
+    // Check if it looks like a list block: all lines are bullets OR it has a header + bullets
+    const bulletLines = lines.filter(l => {
+      const t = l.trim();
+      return t.startsWith("- ") || t.startsWith("* ") || t.startsWith("🕒 ") || /^\d+\.\s+/.test(t);
     });
+    const nonBulletLines = lines.filter(l => {
+      const t = l.trim();
+      return t.length > 0 && !t.startsWith("- ") && !t.startsWith("* ") && !t.startsWith("🕒 ") && !/^\d+\.\s+/.test(t);
+    });
+    
+    // Pure list: all lines are bullets, OR has 1 non-bullet header + rest are bullets
+    const isList = bulletLines.length > 0 && nonBulletLines.length <= 1;
+    const listHeaderLine = nonBulletLines.length === 1 ? nonBulletLines[0] : null;
 
-    if (isList && lines.length > 1) {
+    if (isList) {
+      const bulletOnlyLines = lines.filter(l => {
+        const t = l.trim();
+        return t.startsWith("- ") || t.startsWith("* ") || t.startsWith("🕒 ") || /^\d+\.\s+/.test(t);
+      });
       return (
-        <ul key={index} className="list-none pl-3 space-y-1 mb-3">
-          {lines.map((line, lIdx) => {
-            const itemText = line.trim().replace(/^[-*🕒]\s+/, "").replace(/^\d+\.\s+/, "");
-            // Check if it has a colon prefix like "Term: Definition"
-            const boldMatch = itemText.match(/^([^:]+):(.+)$/);
-            
-            return (
-              <li key={lIdx} className="hand-bullet leading-relaxed text-slate-700 text-xs md:text-sm">
-                {boldMatch ? (
-                  <>
-                    <strong className="text-indigo-900 font-bold bg-yellow-100 px-1 py-0.5 rounded shadow-sm">{boldMatch[1]}:</strong>
-                    <span>{renderHighlightedText(boldMatch[2])}</span>
-                  </>
-                ) : (
-                  <span>{renderHighlightedText(itemText)}</span>
-                )}
-              </li>
-            );
-          })}
-        </ul>
+        <div key={index} className="mb-3">
+          {listHeaderLine && (
+            <p className="text-slate-700 text-xs md:text-sm font-bold font-daughter mb-0" style={{ lineHeight: '28px' }}>
+              {listHeaderLine.trim()}
+            </p>
+          )}
+          <ul className="list-none pl-1 space-y-0">
+            {bulletOnlyLines.map((line, lIdx) => {
+              const rawLine = line;
+              const trimmedLine = line.trim();
+              
+              // Check if it's a numbered item
+              const numberMatch = trimmedLine.match(/^(\d+)\.\s+(.+)$/);
+              if (numberMatch) {
+                const num = numberMatch[1];
+                const text = numberMatch[2];
+                return (
+                  <li key={lIdx} className="text-slate-700 text-xs md:text-sm pl-2 font-bold font-daughter" style={{ lineHeight: '28px' }}>
+                    {num}. {renderHighlightedText(text)}
+                  </li>
+                );
+              }
+
+              // Standard bullet item
+              const itemText = trimmedLine.replace(/^[-*🕒]\s+/, "");
+              const boldMatch = itemText.match(/^([^:]+):(.+)$/);
+              
+              // If it has a colon, render with 👉 bullet and styled term inline
+              if (boldMatch) {
+                return (
+                  <li key={lIdx} className="text-slate-700 text-xs md:text-sm flex items-start gap-1.5 pl-2" style={{ lineHeight: '28px' }}>
+                    <span className="shrink-0">👉</span>
+                    <div>
+                      <strong className="text-indigo-900 font-bold font-daughter mr-1">{boldMatch[1]}:</strong>
+                      <span>{renderHighlightedText(boldMatch[2])}</span>
+                    </div>
+                  </li>
+                );
+              } else {
+                // No colon, check if indented
+                const isIndented = rawLine.startsWith("  ") || rawLine.startsWith("\t");
+                return (
+                  <li key={lIdx} className={`text-slate-700 text-xs md:text-sm flex items-start gap-1.5 ${isIndented ? "pl-6" : "pl-2"}`} style={{ lineHeight: '28px' }}>
+                    <span className="shrink-0 text-slate-400 font-bold">-</span>
+                    <span>{renderHighlightedText(itemText)}</span>
+                  </li>
+                );
+              }
+            })}
+          </ul>
+        </div>
       );
     }
 
@@ -128,7 +182,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           <span className="text-[10px] font-bold text-rose-600 tracking-wider uppercase block mb-1">
             ⚠️ High Yield Warning
           </span>
-          <p className="leading-relaxed pr-14 text-slate-700 text-xs md:text-sm">{renderHighlightedText(trimmed.substring(9).trim())}</p>
+          <p className="pr-14 text-slate-700 text-xs md:text-sm" style={{ lineHeight: '28px' }}>{renderHighlightedText(trimmed.substring(9).trim())}</p>
         </div>
       );
     }
@@ -139,14 +193,14 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
           <span className="text-[10px] font-bold text-emerald-600 tracking-wider uppercase block mb-0.5">
             💡 Study Tip
           </span>
-          <p className="leading-relaxed mt-0.5 text-slate-700">{renderHighlightedText(trimmed.substring(5).trim())}</p>
+          <p className="mt-0.5 text-slate-700" style={{ lineHeight: '28px' }}>{renderHighlightedText(trimmed.substring(5).trim())}</p>
         </div>
       );
     }
 
     // 5. Default paragraph
     return (
-      <p key={index} className="mb-3 leading-relaxed text-slate-700 text-xs md:text-sm">
+      <p key={index} className="mb-3 text-slate-700 text-xs md:text-sm" style={{ lineHeight: '28px' }}>
         {renderHighlightedText(trimmed)}
       </p>
     );

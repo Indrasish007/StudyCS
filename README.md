@@ -1,6 +1,6 @@
-# AuraNotes - Handwritten Styled Semester Hub
+# StudyCS - Handwritten Styled Semester Hub
 
-AuraNotes is an immersive, interactive semester notes platform designed for computer science subjects. It is built using **React + Vite + TypeScript + Tailwind CSS**, compiled to run fully client-side. 
+StudyCS is an immersive, interactive semester notes platform designed for computer science subjects. It is built using **React + Vite + TypeScript + Tailwind CSS**, compiled to run fully client-side. 
 
 The application is styled like a physical double-page opened school notebook featuring ruled paper lines, red margins, handwritten fonts, highlighter strokes, and binder rings.
 

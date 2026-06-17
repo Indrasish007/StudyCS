@@ -1,441 +1,855 @@
-Data Structures & Algorithms (DSA) — Ultimate Revision Notes
+Data Structures & Algorithms (DSA) — Complete Semester Exam Notes
 
-Source: Based on the high-yield "Complete DS Data Structure in one shot | Semester Exam | Hindi" One-Shot Lecture by Sanchit Sir (KnowledgeGATE).
+Source: Based on the high-yield "Complete DS Data Structure in one shot | Semester Exam | Hindi"
+One-Shot Lecture by Sanchit Sir (KnowledgeGATE).
+
 
 Course Outline & Timestamps
-- 00:00 - 30:30 | Introduction to Data Structures & ADT
-- 30:30 - 01:40:36 | Chapter 1: Arrays (1D, 2D, 3D & Addressing Formulas)
-- 01:40:36 - 04:12:19 | Chapter 2: Stacks & Expression Transformations
-- 04:12:19 - 05:36:25 | Chapter 3: Queues (Linear, Circular, Deque & Priority)
-- 05:36:25 - 07:14:34 | Chapter 4: Linked Lists (Singly, Doubly, Circular)
-- 07:14:34 - 10:20:46 | Chapter 5: Trees (BST, AVL, Threaded, Huffman, Heaps, B-Trees)
-- 10:20:46 - 11:05:24 | Chapter 6: Graphs (Representations & Traversals)
-- 11:05:24 - End | Chapter 7: Hashing & Collision Resolution
+- Introduction to Data Structures & Abstract Data Types (ADT)
+- Chapter 1: Arrays (1D, 2D, 3D & Addressing Formulas)
+- Chapter 2: Stacks & Expression Transformations
+- Chapter 3: Queues (Linear, Circular, Deque & Priority)
+- Chapter 4: Linked Lists (Singly, Doubly, Circular)
+- Chapter 5: Trees (BST, AVL, Threaded, Huffman, Heaps, B-Trees)
+- Chapter 6: Graphs (Representations & Traversals)
+- Chapter 7: Hashing & Collision Resolution
 
 
 Introduction to Data Structures & Abstract Data Types (ADT)
 
-A Data Structure is a structured way of organizing, storing, and manipulating data in a computer's memory so that operations can be performed efficiently. 
+A Data Structure is a structured way of ORGANIZING, STORING, and MANIPULATING data in memory
+so that operations can be performed efficiently.
 
-Classification Matrix
+Classification of Data Structures:
 
-- Linear: Elements form a sequential sequence. Each element has a unique predecessor and successor (except first and last). Examples: Arrays, Stacks, Queues, Linked Lists.
-- Non-Linear: Elements are arranged hierarchically or in interconnected networks. Examples: Trees, Graphs.
-- Static: Memory size is allocated at compile-time and remains fixed. Examples: Arrays.
-- Dynamic: Memory size grows or shrinks dynamically at run-time. Examples: Linked Lists, Stacks, Queues.
-- Homogeneous: Stored elements are of the exact same data type. Examples: Arrays.
-- Heterogeneous: Stored elements can be different data types. Examples: Structures in C, Classes.
+  Data Structures
+       |
+       +------> Linear Data Structures
+       |           |
+       |           +------> Static:   Arrays
+       |           +------> Dynamic:  Stacks, Queues, Linked Lists
+       |
+       +------> Non-Linear Data Structures
+                   |
+                   +------> Trees:   BST, AVL, Heaps, B-Trees
+                   +------> Graphs:  Directed, Undirected
 
-Abstract Data Type (ADT)
-An Abstract Data Type (ADT) is a mathematical model for data types where the data type is defined by its behavior (operations and values) from the user's point of view, completely independent of its implementation details.
-- Interface (What it does): Defines the signature of operations (e.g., Push(), Pop() for Stack).
-- Implementation (How it does it): The actual code written using arrays, pointers, or list nodes.
+  Classification Matrix:
+  +----------------+---------------------------------------------------+----------------------------------+
+  | Category       | Description                                       | Examples                         |
+  +----------------+---------------------------------------------------+----------------------------------+
+  | Linear         | Elements form a sequential sequence. Each has     | Arrays, Stacks, Queues,          |
+  |                | unique predecessor & successor (except ends).     | Linked Lists                     |
+  | Non-Linear     | Elements arranged hierarchically or in networks.  | Trees, Graphs                    |
+  | Static         | Memory size fixed at compile-time.                | Arrays                           |
+  | Dynamic        | Memory grows or shrinks at run-time.              | Linked Lists, Stacks, Queues     |
+  | Homogeneous    | Stored elements are of the SAME data type.        | Arrays                           |
+  | Heterogeneous  | Stored elements can be of DIFFERENT data types.   | Structures in C, Classes         |
+  +----------------+---------------------------------------------------+----------------------------------+
+
+Abstract Data Type (ADT):
+An ADT is a mathematical model for data types defined by its BEHAVIOR (operations and values)
+from the user's perspective, INDEPENDENT of implementation details.
+
+- Interface (WHAT it does): Defines the signature of operations. Example: Push(), Pop() for Stack.
+- Implementation (HOW it does it): Actual code using arrays, pointers, or list nodes.
+
+Key Distinction:
+  ADT = Interface (contract of operations)
+  Data Structure = Concrete implementation of an ADT
 
 
 Chapter 1: Arrays
 
-An Array is a collection of homogeneous elements stored in contiguous memory locations.
+An Array is a collection of HOMOGENEOUS elements stored in CONTIGUOUS memory locations.
 
-Array indices:     [0]     [1]     [2]     [3]     [4]
-                ┌───────┬───────┬───────┬───────┬───────┐
-Elements:       │   10  │   20  │   30  │   40  │   50  │
-                └───────┴───────┴───────┴───────┴───────┘
-Address:          1000    1004    1008    1012    1016   (assuming W = 4 bytes)
+  Array indices:     [0]     [1]     [2]     [3]     [4]
+                  +-------+-------+-------+-------+-------+
+  Elements:       |  10   |  20   |  30   |  40   |  50   |
+                  +-------+-------+-------+-------+-------+
+  Address:          1000    1004    1008    1012    1016     (assuming W = 4 bytes per element)
+
 
 1.1 One-Dimensional (1D) Array Addressing
-To find the physical memory address of any element A[i] in a 1D array:
-Address(A[i]) = BA + (i - L) * W
+
+Formula to find the physical memory address of element A[i]:
+  Address(A[i]) = BA + (i - L) x W
 
 Where:
-- BA = Base Address (address of the first element).
-- L = Lower Bound of index (usually 0 or 1).
-- W = Width/size of each element in bytes (e.g., 4 bytes for int, 1 byte for char).
+  BA = Base Address (address of the very first element in memory)
+  L  = Lower Bound of index (usually 0 or 1, as declared)
+  W  = Width/size of each element in bytes (4 bytes for int, 1 byte for char, 8 bytes for double)
+
+Example:
+  Array A[1..5], BA = 1000, W = 4 bytes
+  Address(A[3]) = 1000 + (3 - 1) x 4 = 1000 + 8 = 1008
 
 
 1.2 Two-Dimensional (2D) Array Addressing
-For a 2D array declared with index ranges L1 <= i <= U1 and L2 <= j <= U2:
-- Number of Rows (R) = U1 - L1 + 1
-- Number of Columns (C) = U2 - L2 + 1
 
-Memory is physically 1D. Therefore, 2D arrays are mapped to 1D using two primary schemes:
+For a 2D array A[L1..U1][L2..U2]:
+  Number of Rows    R = U1 - L1 + 1
+  Number of Columns C = U2 - L2 + 1
 
-Row Major Order (RMO)
-Elements are stored row-by-row. To locate A[i][j]:
-Address(A[i][j]) = BA + ((i - L1) * C + (j - L2)) * W
+Physical memory is 1D, so 2D arrays are MAPPED to 1D using two storage schemes:
 
-Column Major Order (CMO)
-Elements are stored column-by-column. To locate A[i][j]:
-Address(A[i][j]) = BA + ((j - L2) * R + (i - L1)) * W
+--- Row Major Order (RMO) ---
+  Elements are stored ROW by ROW. All elements of row 0 first, then row 1, etc.
+  Formula for A[i][j]:
+    Address(A[i][j]) = BA + ((i - L1) x C + (j - L2)) x W
+
+--- Column Major Order (CMO) ---
+  Elements are stored COLUMN by COLUMN. All elements of column 0 first, then column 1, etc.
+  Formula for A[i][j]:
+    Address(A[i][j]) = BA + ((j - L2) x R + (i - L1)) x W
+
+  Example:
+    Array A[1..3][1..4], BA = 2000, W = 2 bytes
+    R = 3, C = 4
+    RMO: Address(A[2][3]) = 2000 + ((2-1) x 4 + (3-1)) x 2 = 2000 + (4+2) x 2 = 2000 + 12 = 2012
+    CMO: Address(A[2][3]) = 2000 + ((3-1) x 3 + (2-1)) x 2 = 2000 + (6+1) x 2 = 2000 + 14 = 2014
 
 
 1.3 Three-Dimensional (3D) Array Addressing
+
 For a 3D array A[L1..U1][L2..U2][L3..U3]:
-- Size of dimension 1 (E1) = U1 - L1 + 1
-- Size of dimension 2 (E2) = U2 - L2 + 1
-- Size of dimension 3 (E3) = U3 - L3 + 1
+  E1 = U1 - L1 + 1  (size of dimension 1)
+  E2 = U2 - L2 + 1  (size of dimension 2)
+  E3 = U3 - L3 + 1  (size of dimension 3)
 
-Row Major Order (RMO)
-Address(A[i][j][k]) = BA + (((i - L1) * E2 + (j - L2)) * E3 + (k - L3)) * W
+--- Row Major Order (RMO) for 3D ---
+  Address(A[i][j][k]) = BA + (((i - L1) x E2 + (j - L2)) x E3 + (k - L3)) x W
 
-Column Major Order (CMO)
-Address(A[i][j][k]) = BA + (((k - L3) * E2 + (j - L2)) * E1 + (i - L1)) * W
+--- Column Major Order (CMO) for 3D ---
+  Address(A[i][j][k]) = BA + (((k - L3) x E2 + (j - L2)) x E1 + (i - L1)) x W
+
+  Memory pattern for RMO 3D: Think of it as "books on a shelf":
+  - Pages within a book (innermost: k-dimension)
+  - Books (middle: j-dimension)
+  - Shelves (outermost: i-dimension)
 
 
 Chapter 2: Stacks
 
-A Stack is a linear data structure that follows the Last In First Out (LIFO) principle. All insertions and deletions take place at a single end called the top.
+A Stack is a linear data structure that follows the LAST IN FIRST OUT (LIFO) principle.
+ALL insertions and deletions take place at a single end called the TOP.
 
-           Stack (LIFO)
-      ┌──────────────────┐
-      │     Element 4    │  ◄── top
-      ├──────────────────┤
-      │     Element 3    │
-      ├──────────────────┤
-      │     Element 2    │
-      ├──────────────────┤
-      │     Element 1    │
-      └──────────────────┘
+  Stack (LIFO):
+  +------------------+
+  |    Element 4     |  <-- top (most recently pushed)
+  +------------------+
+  |    Element 3     |
+  +------------------+
+  |    Element 2     |
+  +------------------+
+  |    Element 1     |  <-- bottom (first pushed, last out)
+  +------------------+
+
 
 2.1 Basic Operations & Boundary Conditions
+
 - Push(element): Inserts an element onto the stack.
-  - Overflow Condition: Checked before pushing. If top == MAX - 1 (for 0-indexed array), the stack is full.
-- Pop(): Removes and returns the top element of the stack.
-  - Underflow Condition: Checked before popping. If top == -1, the stack is empty.
-- Peek() / Top(): Returns the top element without removing it.
+  OVERFLOW CHECK (before pushing): if top == MAX - 1, stack is FULL. Cannot push.
+  Process: Increment top by 1, then store element at A[top].
+
+- Pop(): Removes and returns the top element.
+  UNDERFLOW CHECK (before popping): if top == -1, stack is EMPTY. Cannot pop.
+  Process: Fetch A[top], then decrement top by 1.
+
+- Peek() / Top(): Returns the top element WITHOUT removing it.
+  UNDERFLOW CHECK: if top == -1, stack is empty.
+
+  State Table:
+  +------------------+-------------------+------------------+
+  | Stack State      | top value         | Condition        |
+  +------------------+-------------------+------------------+
+  | Empty Stack      | top == -1         | Underflow guard  |
+  | Full Stack       | top == MAX - 1    | Overflow guard   |
+  | Normal Stack     | -1 < top < MAX-1  | Push/Pop valid   |
+  +------------------+-------------------+------------------+
 
 
 2.2 Algebraic Expression Formats
-- Infix Notation: The operator is written between operands. e.g., A + B.
-- Prefix Notation (Polish Notation): The operator is written before operands. e.g., + A B.
-- Postfix Notation (Reverse Polish Notation - RPN): The operator is written after operands. e.g., A B +.
 
-Precedence and Associativity Table
-- Parentheses (), []: Highest Precedence, Left to Right
-- Exponentiation ^ / $: High Precedence, Right to Left
-- Multiplication *, Division /: Medium Precedence, Left to Right
-- Addition +, Subtraction -: Lowest Precedence, Left to Right
+- Infix Notation: Operator is between operands. Example: A + B, (A + B) * C
+- Prefix Notation (Polish Notation): Operator is BEFORE operands. Example: + A B, * + A B C
+- Postfix Notation (Reverse Polish Notation - RPN): Operator is AFTER operands. Example: A B +, A B + C *
+
+  Operator Precedence and Associativity Table:
+  +----------------------------------+------------+------------------+
+  | Operator                         | Precedence | Associativity    |
+  +----------------------------------+------------+------------------+
+  | Parentheses ()  [ ]              | Highest    | Left to Right    |
+  | Exponentiation ^ or $            | High       | RIGHT to Left    |
+  | Multiplication *, Division /     | Medium     | Left to Right    |
+  | Addition +, Subtraction -        | Lowest     | Left to Right    |
+  +----------------------------------+------------+------------------+
+
+  IMPORTANT: Exponentiation is RIGHT-to-Left associative!
+  Example: 2^3^2 = 2^(3^2) = 2^9 = 512, NOT (2^3)^2 = 8^2 = 64.
 
 
 2.3 Stack Algorithms
 
-Infix to Postfix Conversion
-Algorithm:
-1. Initialize an empty stack and an empty output string/list.
-2. Scan the Infix expression from left to right.
-3. If the scanned character is an operand, append it to the output.
-4. If it is an open parenthesis (, push it onto the stack.
-5. If it is a close parenthesis ), pop from the stack and append to the output until an open parenthesis ( is encountered. Pop and discard the (.
-6. If it is an operator:
-   - Pop from stack and append to output all operators that have greater or equal precedence than the scanned operator.
-   - Push the scanned operator onto the stack.
-7. Pop and append any remaining operators in the stack to the output.
+--- Algorithm: Infix to Postfix Conversion ---
+  1. Initialize an empty STACK and an empty OUTPUT string.
+  2. Scan the Infix expression from LEFT to RIGHT.
+  3. If the token is an OPERAND (variable or number): Append it to OUTPUT.
+  4. If the token is an OPEN PARENTHESIS '(': Push it onto the STACK.
+  5. If the token is a CLOSE PARENTHESIS ')':
+     Pop from STACK and append to OUTPUT until '(' is encountered.
+     Pop and DISCARD the '(' (do not add to output).
+  6. If the token is an OPERATOR:
+     Pop from STACK and append to OUTPUT all operators with GREATER OR EQUAL PRECEDENCE.
+     Then push the current operator onto STACK.
+  7. After scanning entire expression: Pop and append ALL remaining operators from STACK to OUTPUT.
 
-Postfix Evaluation
-Algorithm:
-1. Scan the Postfix expression from left to right.
-2. If the character is an operand, push it onto the stack.
-3. If it is an operator, pop two elements from the stack:
-   - First pop: Right Operand (op2)
-   - Second pop: Left Operand (op1)
-4. Evaluate the operator: Result = op1 [operator] op2.
-5. Push the Result back onto the stack.
-6. The final element left in the stack is the evaluation result.
+  Example: Convert A + B * C - D to Postfix
+    Token A: Output = A         Stack = []
+    Token +: Output = A         Stack = [+]
+    Token B: Output = AB        Stack = [+]
+    Token *: Output = AB        Stack = [+, *]  (* has higher precedence than +)
+    Token C: Output = ABC       Stack = [+, *]
+    Token -: Pop * (+>=-, so pop + too): Output = ABC*+   Stack = [-]
+    Token D: Output = ABC*+D    Stack = [-]
+    End: Pop -: Output = ABC*+D-
+    RESULT: A B C * + D -
+
+--- Algorithm: Postfix Evaluation ---
+  1. Scan the Postfix expression from LEFT to RIGHT.
+  2. If the token is an OPERAND: Push it onto the STACK.
+  3. If the token is an OPERATOR:
+     Pop TWO elements: First pop = Right Operand (op2), Second pop = Left Operand (op1).
+     Evaluate: Result = op1 [operator] op2
+     Push RESULT back onto the STACK.
+  4. After scanning entire expression: The SINGLE remaining element in STACK is the final result.
+
+  Example: Evaluate 5 3 2 * + (which is 5 + 3 * 2)
+    Token 5: Stack = [5]
+    Token 3: Stack = [5, 3]
+    Token 2: Stack = [5, 3, 2]
+    Token *: Pop 2 and 3 --> 3 * 2 = 6. Stack = [5, 6]
+    Token +: Pop 6 and 5 --> 5 + 6 = 11. Stack = [11]
+    RESULT = 11 (which equals 5 + 3*2 = 5 + 6 = 11)
 
 
 2.4 Recursion and the Call Stack
-- Recursion is implemented using the system Call Stack.
-- Each recursive call creates an Activation Record (Stack Frame) containing function parameters, local variables, and the return address.
-- Tower of Hanoi:
-  - Recurrence relation: T(n) = 2T(n-1) + 1
-  - Time Complexity: O(2^n)
-  - Space Complexity: O(n) (maximum depth of call stack).
+
+- Recursion is implemented using the system CALL STACK.
+- Each recursive call creates an ACTIVATION RECORD (Stack Frame) containing:
+  * Function parameters
+  * Local variables
+  * Return address (where to go back after function completes)
+
+Tower of Hanoi:
+  Problem: Move n disks from Peg A to Peg C, using Peg B as auxiliary.
+  Rules: Move only one disk at a time. Never place a larger disk on a smaller one.
+  Recurrence Relation: T(n) = 2T(n-1) + 1
+  Solution: T(n) = 2^n - 1 moves
+  Time Complexity: O(2^n) -- exponential!
+  Space Complexity: O(n) -- maximum depth of call stack.
 
 
 Chapter 3: Queues
 
-A Queue is a linear data structure that follows the First In First Out (FIFO) principle. Insertions are done at the Rear end, and deletions are done at the Front end.
+A Queue is a linear data structure that follows FIRST IN FIRST OUT (FIFO) principle.
+Insertions are done at the REAR end. Deletions are done at the FRONT end.
 
-                    Queue (FIFO)
-             ┌───┬───┬───┬───┬───┬───┐
-      Out ◄──│ 1 │ 2 │ 3 │ 4 │ 5 │   │ ◄── In
-             └───┴───┴───┴───┴───┴───┘
-             ▲                       ▲
-           front                   rear
+  Queue (FIFO):
+  +---+---+---+---+---+
+  | 1 | 2 | 3 | 4 | 5 |  <-- Inserted from right (rear)
+  +---+---+---+---+---+
+  ^                   ^
+  front               rear
+  (Dequeue here)      (Enqueue here)
 
-3.1 Linear Queue implementation using Arrays
-Initially, front = -1 and rear = -1.
 
-- Enqueue(element):
-  - If rear == MAX - 1 -> Queue Overflow.
-  - If queue is empty (front == -1), set front = 0, rear = 0.
-  - Else, increment rear and insert A[rear] = element.
-- Dequeue():
-  - If front == -1 -> Queue Underflow.
+3.1 Linear Queue Implementation Using Arrays
+
+Initial state: front = -1, rear = -1
+
+Enqueue(element):
+  - If rear == MAX - 1: OVERFLOW (queue full).
+  - If queue is EMPTY (front == -1): Set front = 0, rear = 0. Store element.
+  - Else: Increment rear by 1. Store element at A[rear].
+
+Dequeue():
+  - If front == -1: UNDERFLOW (queue empty).
   - Fetch element = A[front].
-  - If it was the last element (front == rear), reset front = -1 and rear = -1.
-  - Else, increment front.
+  - If it was the LAST element (front == rear): Reset front = -1, rear = -1.
+  - Else: Increment front by 1.
 
-Warning - Drawback of Linear Queue: If elements are dequeued, the empty slots at the beginning cannot be reused because rear remains at MAX - 1, causing false overflow errors.
+  DRAWBACK of Linear Queue:
+  If elements are dequeued, the empty slots at the FRONT cannot be REUSED because rear
+  remains at MAX-1. This causes FALSE OVERFLOW errors!
+  Solution: Use CIRCULAR QUEUE.
 
 
 3.2 Circular Queue
-To reuse the freed spaces, we connect the last position back to the first position.
 
-               [0]
-             /     \
-          [7]       [1]
-          /           \
-        [6]           [2]
-          \           /
-          [5]       [3]
-             \     /
-               [4]
+To reuse freed spaces, CONNECT the last position back to the first position.
+
+  Circular Queue visualized (MAX = 8):
+         [0]
+        /   \
+      [7]   [1]
+      /         \
+    [6]         [2]
+      \         /
+      [5]   [3]
+        \   /
+         [4]
+
+All operations use MODULAR ARITHMETIC: index = (index + 1) % MAX
 
 Boundary Conditions:
-- Overflow: (rear + 1) % MAX == front
-- Underflow: front == -1
+  Overflow: (rear + 1) % MAX == front  (queue is FULL)
+  Underflow: front == -1               (queue is EMPTY)
 
-Operations:
-- Enqueue:
-  - Check Overflow.
-  - If empty: front = 0, rear = 0.
-  - Else: rear = (rear + 1) % MAX.
-  - A[rear] = element.
-- Dequeue:
-  - Check Underflow.
-  - element = A[front].
-  - If single element (front == rear): reset front = -1, rear = -1.
-  - Else: front = (front + 1) % MAX.
+Enqueue(element):
+  1. Check Overflow: if (rear + 1) % MAX == front --> ERROR.
+  2. If Empty: front = 0, rear = 0.
+  3. Else: rear = (rear + 1) % MAX.
+  4. Store: A[rear] = element.
+
+Dequeue():
+  1. Check Underflow: if front == -1 --> ERROR.
+  2. Fetch: element = A[front].
+  3. If single element (front == rear): Reset front = -1, rear = -1.
+  4. Else: front = (front + 1) % MAX.
 
 
 3.3 Double-Ended Queue (Deque)
-A Deque (pronounced 'deck') allows insertions and deletions at both ends (Front and Rear).
-- Input-Restricted Deque: Insertions are allowed at only one end (Rear), while deletions can be made at both ends (Front & Rear).
-- Output-Restricted Deque: Deletions are allowed at only one end (Front), while insertions can be made at both ends (Front & Rear).
+
+A Deque (pronounced 'deck') allows insertions AND deletions at BOTH ENDS (Front and Rear).
+
+Types:
+- Input-Restricted Deque: Insertions at ONLY ONE end (Rear). Deletions at BOTH ends.
+- Output-Restricted Deque: Deletions at ONLY ONE end (Front). Insertions at BOTH ends.
+
 
 3.4 Priority Queue
-A queue where each element has a priority associated with it.
-- Elements are inserted in any order, but deletion/processing is done according to priority:
-  - Highest priority elements are processed first.
-  - Elements with the same priority are processed in FIFO order.
-- Implementations:
-  - Unordered Array: Enqueue O(1), Dequeue O(n).
-  - Ordered Array: Enqueue O(n), Dequeue O(1).
-  - Binary Heap (Optimal): Enqueue O(log n), Dequeue O(log n).
+
+A queue where each element has a PRIORITY associated with it.
+- Elements are inserted in any order.
+- Deletion/processing order is based on PRIORITY (highest priority first).
+- Elements with EQUAL priority are processed in FIFO order.
+
+Implementation Comparison:
+  +--------------------+--------------------+--------------------+
+  | Implementation     | Enqueue (Insert)   | Dequeue (Remove)   |
+  +--------------------+--------------------+--------------------+
+  | Unordered Array    | O(1) -- just append| O(n) -- scan all   |
+  | Ordered Array      | O(n) -- find pos.  | O(1) -- take first |
+  | Binary Heap        | O(log n) -- optimal| O(log n) -- optimal|
+  +--------------------+--------------------+--------------------+
+
+  Binary Heap is the PREFERRED implementation for Priority Queues in practice.
 
 
 Chapter 4: Linked Lists
 
-A Linked List is a dynamic, non-contiguous linear data structure where elements (nodes) are allocated dynamically and linked using pointers.
+A Linked List is a DYNAMIC, NON-CONTIGUOUS linear data structure where elements (nodes) are
+allocated dynamically in memory and linked using POINTERS.
 
-Singly Linked List (SLL):
-[ Head ] ──► [ Data | * ] ──► [ Data | * ] ──► NULL
+  Singly Linked List (SLL):
+  [Head] --> [Data | *next] --> [Data | *next] --> [Data | NULL]
+               Node 1              Node 2              Node 3 (tail)
 
-4.1 Array vs. Linked List Matrix
-- Size: Array is Static (fixed at compile-time); Linked List is Dynamic (allocated at run-time).
-- Memory Allocation: Array is Contiguous; Linked List is Non-contiguous (scattered).
-- Access Time: Array is O(1) (Random access via indices); Linked List is O(n) (Sequential traversal).
-- Insertion/Deletion: Array is O(n) (Requires shifting elements); Linked List is O(1) (Only pointer manipulation).
-- Memory Overhead: Array is Nil; Linked List is High (Requires extra bytes for pointers).
+
+4.1 Array vs. Linked List Comparison Matrix
+
+  +----------------------+--------------------------------+----------------------------------+
+  | Criteria             | Array                          | Linked List                      |
+  +----------------------+--------------------------------+----------------------------------+
+  | Size                 | STATIC (fixed at compile-time) | DYNAMIC (allocated at run-time)  |
+  | Memory Allocation    | CONTIGUOUS (sequential blocks) | NON-CONTIGUOUS (scattered)       |
+  | Access Time          | O(1) - Random access via index | O(n) - Sequential traversal      |
+  | Insertion/Deletion   | O(n) - Requires shifting elems | O(1) - Only pointer manipulation |
+  | Memory Overhead      | NONE (no extra pointers)       | HIGH (extra bytes for pointers)  |
+  | Cache Performance    | EXCELLENT (spatial locality)   | POOR (non-contiguous in memory)  |
+  +----------------------+--------------------------------+----------------------------------+
+
+  When to use ARRAY: Frequent random access, known size, cache performance critical.
+  When to use LINKED LIST: Frequent insertions/deletions, unknown or dynamic size.
 
 
 4.2 Types of Linked Lists
 
-Singly Linked List (SLL)
-Each node contains a data field and a single next pointer pointing to the successor node. The last node's next pointer points to NULL.
+--- Singly Linked List (SLL) ---
+  Each node contains:
+    - data: The actual stored value.
+    - next: Pointer to the SUCCESSOR node (next node in sequence).
+  Last node's next pointer = NULL.
 
-Doubly Linked List (DLL)
-Each node contains three fields: prev pointer, data, and next pointer.
-- Allows bidirectional traversal.
-- Deletion of a given node is easier because predecessor pointer is readily available.
+  Diagram: [Head] --> [10|*] --> [20|*] --> [30|NULL]
 
-Doubly Linked List (DLL):
-[ Head ] ──► [ NULL | Data | * ] ◄──► [ * | Data | * ] ◄──► [ * | Data | NULL ]
+  Operations:
+  - Insertion at Head: O(1) -- create node, point to current head, update head.
+  - Insertion at Tail: O(n) -- traverse to last node, update its next pointer.
+  - Deletion of given node: O(n) -- find node's PREDECESSOR (no backward pointer), update.
+  - Search: O(n) -- sequential scan.
 
-Circular Linked List (CLL)
-The next pointer of the last node points back to the first node (Head).
-- No node points to NULL.
-- Can traverse the entire list starting from any node.
+--- Doubly Linked List (DLL) ---
+  Each node contains THREE fields: prev pointer, data, next pointer.
+  - Allows BIDIRECTIONAL TRAVERSAL.
+  - Deletion of a given node is O(1) if node pointer is given (predecessor is readily available).
+
+  Diagram: [Head] --> [NULL|10|*] <--> [*|20|*] <--> [*|30|NULL]
+
+  Advantages over SLL:
+  - Can traverse in BOTH directions.
+  - Deletion is O(1) with direct node access (no need to find predecessor).
+  - Can easily implement LRU Cache, browser back/forward navigation.
+
+--- Circular Linked List (CLL) ---
+  The last node's next pointer points back to the FIRST node (Head).
+  - NO node points to NULL.
+  - Can traverse the ENTIRE list starting from any node.
+  - Useful for: Round-robin scheduling, circular buffers.
+
+  Diagram: [Head] --> [10|*] --> [20|*] --> [30|*] --> (back to [10|*])
 
 
 Chapter 5: Trees
 
-A Tree is a non-linear, hierarchical data structure consisting of nodes connected by directed edges.
+A Tree is a NON-LINEAR, HIERARCHICAL data structure consisting of nodes connected by directed edges.
+Each node has exactly ONE parent (except the root, which has no parent).
 
-           Binary Tree Hierarchy
-               [A] (Root Node) - Level 0
+  Binary Tree Example:
+               [A]  (Root Node -- Level 0)
               /   \
-            [B]   [C]           - Level 1
-           /   \     \
-         [D]   [E]   [F] (Leaf) - Level 2
+           [B]    [C]              (Level 1)
+          /   \      \
+        [D]   [E]   [F]  (Leaf)   (Level 2)
+
 
 5.1 Basic Terminology
-- Root: The top node of a tree with no parent (e.g., A).
-- Leaf Node (External Node): A node with 0 children (e.g., D, E, F).
-- Degree of a Node: Total number of children of that node.
-- Height of a Node: The number of edges on the longest path from that node to a leaf.
-- Depth of a Node: The number of edges from the root to that node.
-- Height of a Tree: Height of the root node (longest path from root to any leaf).
+
+- Root: The TOP node of a tree with no parent. Example: A.
+- Leaf Node (External Node): A node with ZERO children. Examples: D, E, F.
+- Internal Node: A node with at least ONE child. Examples: A, B, C.
+- Degree of a Node: Total NUMBER OF CHILDREN of that node.
+- Height of a Node: Number of edges on the LONGEST PATH from that node to a LEAF.
+- Depth of a Node: Number of edges from the ROOT to that node.
+- Height of a Tree: Height of the ROOT node (longest path from root to any leaf).
+
+  Formula for Perfect Binary Tree:
+  - Total nodes at level i: 2^i
+  - Total nodes in tree of height h: N = 2^(h+1) - 1 (if root is at height h and level 0)
+  - Height of perfect binary tree with N nodes: h = log2(N+1) - 1
 
 
 5.2 Binary Trees
-A tree where every node can have at most 2 children (Left Child and Right Child).
 
-Special Binary Tree Classifications
-1. Full (Strict) Binary Tree: Every node has either 0 or 2 children. No node has 1 child.
-2. Complete Binary Tree: All levels are completely filled except possibly the last level, which must be filled from left to right.
-3. Perfect Binary Tree: All internal nodes have exactly 2 children, and all leaves are at the same level.
-   - Total nodes in perfect binary tree of height h: N = 2^(h+1) - 1 (if root height = 0).
-4. Balanced Binary Tree: The height difference between the left and right subtree of every node is at most 1.
+A tree where every node can have AT MOST 2 children (Left Child and Right Child).
 
-Memory Representations
-- Array (Sequential) Representation: Useful for Complete/Perfect Binary Trees. For a node at index i (0-indexed):
-  - Left Child index = 2i + 1
-  - Right Child index = 2i + 2
-  - Parent index = floor((i - 1) / 2)
-- Linked Representation: Each node contains a data field, a left child pointer, and a right child pointer.
+Special Binary Tree Classifications:
+1. Full (Strict) Binary Tree: Every node has EITHER 0 OR 2 children. NO node has exactly 1 child.
+   Property: If there are L leaf nodes, there are L-1 internal nodes. Total nodes = 2L - 1.
+
+2. Complete Binary Tree: All levels are COMPLETELY FILLED except possibly the LAST level,
+   which must be filled from LEFT TO RIGHT.
+   Used in: Binary Heaps (stored efficiently in arrays).
+
+3. Perfect Binary Tree: ALL internal nodes have EXACTLY 2 children, and ALL leaves are at the SAME LEVEL.
+   Total nodes = 2^(h+1) - 1, where h is the height of the tree.
+
+4. Balanced Binary Tree: Height difference between left and right subtree of EVERY NODE is at most 1.
+   Examples: AVL Trees, Red-Black Trees.
+
+Memory Representations:
+- Array (Sequential) Representation: Ideal for Complete/Perfect Binary Trees.
+  For a node at index i (0-indexed):
+    Left Child index   = 2*i + 1
+    Right Child index  = 2*i + 2
+    Parent index       = floor((i - 1) / 2)
+
+- Linked Representation: Each node contains data + left child pointer + right child pointer.
+  More flexible. Used for all types of binary trees.
 
 
 5.3 Tree Traversals
-Standard methods for visiting all nodes in a binary tree:
 
-          [Root]
-          /    \
-     [Left]    [Right]
+Standard methods for VISITING ALL NODES in a binary tree. Each visits every node EXACTLY ONCE.
 
-1. Preorder Traversal (Root -> Left -> Right): Visit Root, Traverse Left, Traverse Right.
-2. Inorder Traversal (Left -> Root -> Right): Traverse Left, Visit Root, Traverse Right.
-3. Postorder Traversal (Left -> Right -> Root): Traverse Left, Traverse Right, Visit Root.
-4. Level Order Traversal: Visits nodes level by level (from top to bottom, left to right). Implemented using a Queue.
+  Tree Structure:
+       [Root]
+       /    \
+  [Left]    [Right]
+
+1. Preorder Traversal (Root --> Left --> Right):
+   Visit Root FIRST, then traverse LEFT subtree, then traverse RIGHT subtree.
+   Example on [A, B, D, E, C, F]: A B D E C F
+
+2. Inorder Traversal (Left --> Root --> Right):
+   Traverse LEFT subtree, Visit Root, traverse RIGHT subtree.
+   IMPORTANT: Inorder traversal of a BST gives SORTED ORDER!
+   Example: D B E A C F
+
+3. Postorder Traversal (Left --> Right --> Root):
+   Traverse LEFT, traverse RIGHT, Visit Root LAST.
+   Used in: Expression tree evaluation, freeing tree memory.
+   Example: D E B F C A
+
+4. Level Order Traversal (BFS):
+   Visit nodes LEVEL by LEVEL from top to bottom, left to right.
+   Implementation: Uses a QUEUE.
+   Example: A B C D E F
 
 
 5.4 Binary Search Tree (BST)
-A Binary Tree that possesses the ordering property:
-- The value of all nodes in the left subtree must be less than the parent node's value.
-- The value of all nodes in the right subtree must be greater than the parent node's value.
 
-Tip - Crucial Property: The Inorder Traversal of a Binary Search Tree always outputs the node values in sorted (ascending) order.
+A Binary Tree possessing the BST ORDERING PROPERTY:
+- All values in the LEFT SUBTREE < parent node value.
+- All values in the RIGHT SUBTREE > parent node value.
+- This property holds RECURSIVELY for every node.
 
-Operations & Complexity
-- Search / Insert: O(h) where h is height of tree.
-  - Balanced BST: O(log n)
-  - Skewed BST (Worst Case): O(n)
-- Deletion Cases:
-  - Case 1: Node is a Leaf. Simply remove the node.
-  - Case 2: Node has One Child. Bypass the node by linking its parent directly to its child.
-  - Case 3: Node has Two Children. Replace the node's value with its Inorder Successor (smallest value in its right subtree) or Inorder Predecessor (largest value in its left subtree), then recursively delete that successor/predecessor node.
+CRUCIAL PROPERTY: Inorder Traversal of a BST ALWAYS outputs values in SORTED ASCENDING ORDER.
+
+Operations & Complexity:
+- Search / Insert: O(h) where h = height of tree.
+  * Balanced BST: O(log n)  -- ideal case
+  * Skewed BST (worst case): O(n)  -- when all nodes form a chain
+
+Deletion Cases:
+1. Case 1 - Node is a LEAF: Simply REMOVE the node (no children to worry about).
+
+2. Case 2 - Node has ONE CHILD: BYPASS the node by linking its parent directly to its child.
+   Parent --> deleted node --> Child  becomes  Parent --> Child
+
+3. Case 3 - Node has TWO CHILDREN: Replace node's value with INORDER SUCCESSOR or INORDER PREDECESSOR.
+   - Inorder Successor: SMALLEST value in the RIGHT subtree.
+   - Inorder Predecessor: LARGEST value in the LEFT subtree.
+   Then RECURSIVELY delete that successor/predecessor node (which has at most 1 child).
+
+  BST Example:
+        50
+       /  \
+      30   70
+     / \   / \
+    20 40 60  80
+
+  Inorder: 20 30 40 50 60 70 80 (sorted!)
+  Delete 50 (two children): Replace with Inorder Successor = 60. Delete 60 from right subtree.
 
 
 5.5 Threaded Binary Tree
-- In a normal binary tree of N nodes, there are N+1 null pointers.
-- A Threaded Binary Tree utilizes these null pointers to store pointers (threads) to the node's inorder predecessor (in left null pointer) and inorder successor (in right null pointer).
-- Advantage: Allows stack-less and recursion-less traversal of the tree.
+
+In a normal binary tree of N nodes, there are N+1 NULL POINTERS (wasted!).
+
+A Threaded Binary Tree utilizes these null pointers to store THREADS (pointers to in-order neighbors):
+- Left null pointer --> points to INORDER PREDECESSOR.
+- Right null pointer --> points to INORDER SUCCESSOR.
+
+Advantage: Allows STACK-LESS and RECURSION-LESS traversal of the tree.
+This makes traversal faster (no function call overhead) and uses less memory.
 
 
 5.6 Huffman Coding
-A greedy, variable-length prefix coding algorithm used for lossless data compression.
-1. Count the frequencies of all characters in the source text.
-2. Place all characters as leaf nodes in a priority queue sorted by frequency.
-3. Repeatedly extract the two nodes with the lowest frequencies, create a new internal node with a frequency equal to the sum of the two nodes, and insert it back into the queue.
-4. The remaining single node in the queue is the root of the Huffman Tree.
-5. Assign 0 to left edges and 1 to right edges. Read codes from root to leaf.
+
+A GREEDY, VARIABLE-LENGTH PREFIX coding algorithm used for LOSSLESS data compression.
+
+Properties:
+- Frequently occurring characters get SHORTER codes.
+- Less frequent characters get LONGER codes.
+- All codes are PREFIX-FREE (no code is a prefix of another code).
+
+Algorithm to Build Huffman Tree:
+1. Count the FREQUENCIES of all characters in the source text.
+2. Place all characters as LEAF NODES in a min-priority queue sorted by frequency.
+3. Repeatedly:
+   a. Extract the TWO LOWEST FREQUENCY nodes from the queue.
+   b. Create a new internal node with frequency = sum of the two nodes.
+   c. Insert the new node back into the priority queue.
+4. The remaining SINGLE NODE in the queue is the ROOT of the Huffman Tree.
+5. Assign '0' to LEFT edges, '1' to RIGHT edges.
+6. Read codes by tracing path from ROOT to each LEAF.
+
+Example:
+  Characters: a(45), b(13), c(12), d(16), e(9), f(5)
+  Most frequent 'a' gets shortest code: 0
+  Least frequent 'f' gets longest code: 1100
+
+Compression ratio: Huffman gives optimal prefix-free codes.
 
 
 5.7 Self-Balancing Trees
 
-AVL Trees (Adelson-Velsky and Landis)
-A self-balancing Binary Search Tree where the Balance Factor (BF) of every node is restricted to:
-BF(n) = Height(Left Subtree) - Height(Right Subtree) in {-1, 0, 1}
+--- AVL Trees (Adelson-Velsky and Landis, 1962) ---
+  A self-balancing Binary Search Tree where the BALANCE FACTOR (BF) of every node is restricted to {-1, 0, 1}.
 
-If insertion or deletion causes a node's BF to deviate from this range, one of four rotations is performed:
-- LL Rotation (Right Rotation)
-- RR Rotation (Left Rotation)
-- LR Rotation (Left then Right)
-- RL Rotation (Right then Left)
+  BF(node) = Height(Left Subtree) - Height(Right Subtree)
+  Valid values: -1 (right-heavy), 0 (balanced), +1 (left-heavy)
 
-B-Trees
-A self-balancing, multiway search tree designed for disk/file systems. A B-tree of order m satisfies:
-- Every node has at most m children.
-- Every internal node (except root) has at least ceil(m/2) children.
-- The root has at least 2 children if it is not a leaf.
-- All leaf nodes are at the same level.
-- An internal node with k children contains exactly k-1 keys.
+  If BF deviates outside {-1, 0, 1} after insertion/deletion, one of FOUR ROTATIONS is performed:
 
-Binary Heaps
-A complete binary tree that satisfies the Heap Property:
-- Max-Heap: The value of each node is >= the values of its children. (Root is maximum).
-- Min-Heap: The value of each node is <= the values of its children. (Root is minimum).
-- Complexity:
-  - Insertion: O(log n) (Insert at end, perform Up-Heapify).
-  - Delete Min/Max: O(log n) (Replace root with last element, perform Down-Heapify).
-  - Build Heap from unsorted array: O(n) time using Floyd's Algorithm.
+  Single Rotations:
+    - LL Rotation (Right Rotation): Applied when BF > 1 and left child is also left-heavy.
+    - RR Rotation (Left Rotation):  Applied when BF < -1 and right child is also right-heavy.
+
+  Double Rotations:
+    - LR Rotation (Left then Right): Applied when BF > 1 and left child is right-heavy.
+    - RL Rotation (Right then Left): Applied when BF < -1 and right child is left-heavy.
+
+  Guaranteed O(log n) for search, insert, and delete.
+
+--- B-Trees ---
+  A SELF-BALANCING, MULTIWAY search tree designed for DISK/FILE SYSTEMS.
+  Can store multiple keys per node, reducing disk I/O operations.
+
+  A B-tree of ORDER m satisfies:
+  1. Every node has AT MOST m children.
+  2. Every INTERNAL NODE (except root) has at least ceil(m/2) children.
+  3. Root has at least 2 children if it is NOT a leaf.
+  4. ALL LEAF NODES are at the SAME LEVEL.
+  5. An internal node with k children contains EXACTLY k-1 keys.
+
+  Difference from BST: Multiple keys per node. Designed for block-based storage (hard drives, SSDs).
+
+--- Binary Heaps ---
+  A COMPLETE BINARY TREE that satisfies the HEAP PROPERTY.
+
+  Max-Heap: Value of each node >= values of its children. ROOT is the MAXIMUM element.
+  Min-Heap: Value of each node <= values of its children. ROOT is the MINIMUM element.
+
+  Storage: Heaps are stored EFFICIENTLY as ARRAYS (complete binary tree property allows this).
+    For node at index i (0-indexed):
+      Left child: 2*i + 1
+      Right child: 2*i + 2
+      Parent: floor((i-1)/2)
+
+  Complexity:
+  +----------------------+---------------+----------------------------------------------+
+  | Operation            | Complexity    | Method                                       |
+  +----------------------+---------------+----------------------------------------------+
+  | Insertion            | O(log n)      | Insert at end, then UP-HEAPIFY (bubble up)   |
+  | Delete Min/Max       | O(log n)      | Remove root, put last elem at root, DOWN-HEAPIFY |
+  | Build Heap (n items) | O(n)          | Floyd's Algorithm (bottom-up heapification)  |
+  | Search               | O(n)          | No ordering property for non-root elements   |
+  +----------------------+---------------+----------------------------------------------+
+
+  Heap Sort: Build Max-Heap in O(n), then repeatedly extract max: O(n log n) total.
 
 
 Chapter 6: Graphs
 
-A Graph is a non-linear data structure defined as G = (V, E), consisting of a set of vertices (nodes) V and a set of edges E connecting these vertices.
+A Graph is a non-linear data structure defined as G = (V, E), consisting of:
+  V = Set of VERTICES (nodes)
+  E = Set of EDGES (connections between vertices)
 
-6.1 Representations
+  Types:
+  - Directed Graph (Digraph): Edges have direction. Edge (u, v) ≠ Edge (v, u).
+  - Undirected Graph: Edges have NO direction. Edge {u, v} = Edge {v, u}.
+  - Weighted Graph: Each edge has a numerical WEIGHT (cost, distance).
+  - Unweighted Graph: All edges have equal weight.
 
-Adjacency Matrix
-A 2D array of size V x V where A[i][j] = 1 if there is an edge between vi and vj, else 0.
-- Space Complexity: O(V^2)
-- Edge lookup (vi -> vj): O(1)
-- Best suited for dense graphs.
 
-Adjacency List
-An array of size V where each index i points to a linked list containing all neighbors of vertex vi.
-- Space Complexity: O(V + E) for directed, O(V + 2E) for undirected.
-- Best suited for sparse graphs.
+6.1 Graph Representations
+
+--- Adjacency Matrix ---
+  A 2D array of size V x V where A[i][j] = 1 if there is an edge from vertex i to vertex j, else 0.
+  For weighted graphs: A[i][j] = edge weight (or infinity if no edge).
+
+  Properties:
+  - Space Complexity: O(V^2) -- regardless of number of edges.
+  - Edge lookup (is there an edge vi --> vj?): O(1) -- direct array access.
+  - Finding all neighbors of a vertex: O(V) -- scan entire row.
+  - BEST FOR: DENSE GRAPHS where E is close to V^2.
+
+--- Adjacency List ---
+  An array of size V where each index i points to a LINKED LIST of all neighbors of vertex i.
+  For weighted graphs: Store (neighbor, weight) pairs in the list.
+
+  Properties:
+  - Space Complexity: O(V + E) for directed graphs, O(V + 2E) for undirected graphs.
+  - Edge lookup: O(degree(v)) -- scan neighbor list.
+  - Finding all neighbors: O(degree(v)) -- much better for sparse graphs.
+  - BEST FOR: SPARSE GRAPHS where E << V^2.
+
+  Comparison:
+  +------------------+-----------------+-----------------+
+  | Feature          | Adjacency Matrix | Adjacency List  |
+  +------------------+-----------------+-----------------+
+  | Space            | O(V^2)          | O(V + E)        |
+  | Edge lookup      | O(1)            | O(degree(v))    |
+  | All neighbors    | O(V)            | O(degree(v))    |
+  | Add vertex       | O(V^2)          | O(1)            |
+  | Best for         | Dense graphs    | Sparse graphs   |
+  +------------------+-----------------+-----------------+
 
 
 6.2 Graph Traversals
 
-Breadth First Search (BFS)
-- Strategy: Level-by-level exploration.
-- Data Structure: Queue.
-- Process: Start at source s, visit all neighbors of s, then visit all unvisited neighbors of neighbors.
-- Time Complexity: O(V + E)
-- Application: Shortest path in unweighted graphs.
+--- Breadth First Search (BFS) ---
+  Strategy: Level-by-level EXPLORATION.
+  Data Structure: QUEUE (FIFO).
 
-Depth First Search (DFS)
-- Strategy: Go as deep as possible down each path, backtrack when no unvisited vertices remain.
-- Data Structure: Stack (or recursion).
-- Time Complexity: O(V + E)
-- Application: Cycle detection, Topological Sort, Strongly Connected Components.
+  Algorithm:
+  1. Start at source vertex s. Mark s as VISITED. Enqueue s.
+  2. While queue is NOT EMPTY:
+     a. Dequeue vertex u.
+     b. For each UNVISITED neighbor v of u: Mark v as visited. Enqueue v.
+
+  Properties:
+  - Time Complexity: O(V + E) -- visits every vertex and edge exactly once.
+  - Space Complexity: O(V) for the queue.
+  - Applications:
+    * Shortest path in UNWEIGHTED graphs (BFS gives shortest path in terms of hops).
+    * Finding all reachable vertices from a source.
+    * Level-order tree traversal.
+
+--- Depth First Search (DFS) ---
+  Strategy: Go as DEEP as possible down each path. BACKTRACK when stuck.
+  Data Structure: STACK (LIFO) or RECURSION.
+
+  Algorithm:
+  1. Start at source vertex s. Mark s as VISITED.
+  2. For each UNVISITED neighbor v of s: Recursively DFS from v.
+  3. When all neighbors are visited: BACKTRACK.
+
+  Properties:
+  - Time Complexity: O(V + E).
+  - Space Complexity: O(V) for the recursion stack.
+  - Applications:
+    * Cycle detection in graphs.
+    * Topological Sort (DAG only): Run DFS, output nodes in REVERSE finishing order.
+    * Finding Strongly Connected Components (SCC) -- Kosaraju's or Tarjan's algorithm.
+    * Path finding (not necessarily shortest).
 
 
 Chapter 7: Hashing
 
-Hashing is a technique to map keys to specific index positions in a Hash Table of size m to achieve O(1) search, insertion, and deletion times.
+Hashing is a technique to MAP keys to specific index positions in a HASH TABLE of size m
+to achieve O(1) average case for search, insertion, and deletion.
+
+  Key Terminology:
+  - Hash Table: An array of fixed size m.
+  - Hash Function h(k): Maps key k to slot in [0, m-1].
+  - Collision: When two different keys map to the SAME slot: h(k1) = h(k2) for k1 != k2.
+  - Load Factor (alpha) = n / m, where n = number of stored keys.
+
 
 7.1 Hash Functions
-A hash function h(k) maps key k to a slot in [0, m-1]. Characteristics of a good hash function:
-- Computationally fast.
-- Distributes keys uniformly across the slots to minimize collisions.
+
+Characteristics of a GOOD hash function:
+- Computationally FAST (O(1) to compute).
+- Distributes keys UNIFORMLY across slots (minimizes collisions).
+- Deterministic (same key always maps to same slot).
 
 Common Hash Functions:
-1. Division Method: h(k) = k mod m (Usually m is chosen as a prime number).
-2. Mid-Square Method: Square the key k^2, and extract middle r digits as the index.
-3. Folding Method: Divide the key into equal parts, add the parts, and take the modulo m.
+1. Division Method: h(k) = k mod m
+   Best practice: m should be a PRIME NUMBER not close to a power of 2.
+
+2. Mid-Square Method:
+   Square the key: k^2. Extract r middle digits as the index.
+   Example: k = 3121, k^2 = 9,740,641. Middle digits: 406. h(k) = 406.
+
+3. Folding Method:
+   Divide key into EQUAL parts. Add the parts. Take modulo m.
+   Example: k = 123456789, m = 1000. Parts: 123, 456, 789. Sum = 1368. h(k) = 368.
 
 
 7.2 Collision Resolution Techniques
-A collision occurs when two different keys map to the same index: h(k1) = h(k2) for k1 != k2.
 
-Open Addressing (Closed Hashing)
-All elements are stored within the hash table itself. If a slot is occupied, search for another empty slot.
-- Linear Probing: Search slots sequentially.
-  h(k, i) = (h'(k) + i) mod m
-  - Drawback: Primary Clustering (long runs of occupied slots build up, slowing down search times).
-- Quadratic Probing: Search slots using a quadratic offset.
-  h(k, i) = (h'(k) + c1 * i + c2 * i^2) mod m
-  - Drawback: Secondary Clustering (keys with same initial hash follow same probe sequence).
-- Double Hashing: Search slots using a step size calculated by a second hash function h2(k).
-  h(k, i) = (h1(k) + i * h2(k)) mod m
-  - Advantage: Eliminates both primary and secondary clustering.
+A collision occurs when h(k1) = h(k2) for k1 != k2.
 
-Closed Addressing (Chaining)
-Each slot in the hash table points to a linked list of entries that hash to the same index.
-- Advantages: Simple to implement; Table never fills up (load factor alpha can exceed 1).
-- Disadvantage: Extra memory overhead for pointers.
+  Collision Resolution Methods:
+    Collision Resolution
+          |
+          +-------> Open Addressing (Closed Hashing)
+          |                 |
+          |                 +--> Linear Probing
+          |                 +--> Quadratic Probing
+          |                 +--> Double Hashing
+          |
+          +-------> Closed Addressing (Open Hashing / Chaining)
+
+--- Open Addressing (Closed Hashing) ---
+  ALL elements are stored WITHIN the hash table itself.
+  If a slot is occupied, search for another EMPTY SLOT using a probe sequence.
+
+  1. Linear Probing:
+     h(k, i) = (h'(k) + i) mod m, where i = 0, 1, 2, ...
+     Search slots SEQUENTIALLY (0, 1, 2, ...) until empty slot found.
+
+     DRAWBACK: PRIMARY CLUSTERING -- Long runs of occupied slots build up.
+     This slows down insertions and lookups dramatically as table fills up.
+
+  2. Quadratic Probing:
+     h(k, i) = (h'(k) + c1*i + c2*i^2) mod m
+     Search slots using a QUADRATIC OFFSET (0, c2, 4c2, 9c2, ...).
+
+     DRAWBACK: SECONDARY CLUSTERING -- Keys with same initial hash follow SAME probe sequence.
+
+  3. Double Hashing:
+     h(k, i) = (h1(k) + i * h2(k)) mod m
+     Use a SECOND HASH FUNCTION h2(k) to compute the probe step size.
+
+     ADVANTAGE: ELIMINATES both primary and secondary clustering.
+     Each key gets a UNIQUE probe sequence (with high probability).
+     BEST OPEN ADDRESSING TECHNIQUE in practice.
+
+--- Closed Addressing (Chaining) ---
+  Each SLOT in the hash table points to a LINKED LIST of entries that hash to the same index.
+  Multiple elements can coexist at the same slot.
+
+  Advantages:
+  - Simple to implement.
+  - Table NEVER FILLS UP (load factor alpha can exceed 1).
+  - Performance degrades GRACEFULLY as alpha increases.
+
+  Disadvantages:
+  - Extra memory overhead for POINTERS in linked list nodes.
+  - Poor cache performance (non-contiguous memory access).
+
+  Performance Analysis:
+  - Search (Successful): O(1 + alpha/2) average case.
+  - Search (Unsuccessful): O(1 + alpha) average case.
+  - For low load factor (alpha < 0.7): Near O(1) performance.
+
+  Open Addressing vs. Chaining Comparison:
+  +----------------------+---------------------------+----------------------------+
+  | Feature              | Open Addressing           | Chaining                   |
+  +----------------------+---------------------------+----------------------------+
+  | Storage              | Only within table         | External (linked lists)    |
+  | Max Load Factor      | < 1 (table can fill up)   | > 1 (no limit)             |
+  | Cache Performance    | Better (sequential)        | Worse (pointer chasing)    |
+  | Deletion             | Tricky (lazy deletion)    | Easy (remove from list)    |
+  | Best for             | Small, fixed sets         | Dynamic, unknown sizes     |
+  +----------------------+---------------------------+----------------------------+
+
+
+Quick Revision: High-Yield Summary
+
+Array Addressing Formulas:
+  1D: Address(A[i]) = BA + (i - L) x W
+  2D RMO: Address(A[i][j]) = BA + ((i - L1) x C + (j - L2)) x W
+  2D CMO: Address(A[i][j]) = BA + ((j - L2) x R + (i - L1)) x W
+
+Stack Boundary Conditions:
+  Empty: top == -1      (Underflow condition)
+  Full: top == MAX-1    (Overflow condition)
+  Operations: LIFO -- Last pushed is first popped.
+
+Queue Boundary Conditions:
+  Linear: Overflow when rear == MAX-1. False overflow problem.
+  Circular: Overflow when (rear+1)%MAX == front. Solves false overflow.
+
+BST Properties:
+  Inorder Traversal: Always gives SORTED order.
+  Best case height: O(log n) -- balanced tree.
+  Worst case height: O(n) -- skewed tree (all inserts in sorted order).
+
+Heap Properties:
+  Max-Heap: Every parent >= its children. Root = maximum.
+  Min-Heap: Every parent <= its children. Root = minimum.
+  Build Heap: O(n) using Floyd's bottom-up algorithm.
+
+Hash Table Collision Strategies:
+  Best Open Addressing: Double Hashing (no clustering).
+  Best Closed Addressing: Chaining (flexible, no overflow).
+
+AVL Tree: BF of every node must be in {-1, 0, 1}.
+B-Tree: All leaf nodes at same level. Order m: max m children per node.
+Huffman: Greedy. Most frequent character gets shortest prefix code.

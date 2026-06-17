@@ -1,6 +1,6 @@
 {
-  "name": "AuraNotes - Semester Notes Hub",
-  "short_name": "AuraNotes",
+  "name": "StudyCS - Semester Notes Hub",
+  "short_name": "StudyCS",
   "description": "Premium, interactive, search-driven educational platform for semester revision notes.",
   "start_url": "/",
   "display": "standalone",

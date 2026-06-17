@@ -1,140 +1,239 @@
-Database Management Systems (DBMS) — Ultimate Revision Notes
+Database Management Systems (DBMS) — Complete Semester Exam Notes
 
-Source: Based on the high-yield "DBMS in 100 Minutes | Complete Placement Revision" One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+Source: Based on the high-yield "Complete DBMS in One Shot | Semester Exam" One-Shot Lecture by Sanchit Jain (KnowledgeGate).
+
 
 Course Outline & Timestamps
-- 00:00 - 03:19 | Introduction
-- 03:19 - 15:13 | Chapter 1: Basics of DBMS
-- 15:13 - 25:28 | Chapter 2: Entity-Relationship (ER) Model
-- 25:28 - 41:43 | Chapter 3: Functional Dependencies (FDs) & Key Extraction
-- 41:43 - 53:55 | Chapter 4: Database Normalization
-- 53:55 - 01:08:36 | Chapter 5: Indexing Techniques
-- 01:08:36 - End | Chapter 6: Structured Query Language (SQL)
+- Chapter 0 | Introduction & Roadmap
+- Chapter 1 | Basics of DBMS
+- Chapter 2 | Entity-Relationship (ER) Model
+- Chapter 3 | Functional Dependencies (FDs) & Key Extraction
+- Chapter 4 | Database Normalization (1NF to BCNF to 4NF)
+- Chapter 5 | Indexing Techniques
+- Chapter 6 | Structured Query Language (SQL)
+- Chapter 7 | Relational Algebra & Relational Calculus
+- Chapter 8 | Transaction Management & ACID Properties
+- Chapter 9 | Concurrency Control
 
 
 Chapter 1: Basics of DBMS
 
 1.1 Fundamental Concepts
-- Data: Raw, unorganized, and unprocessed facts, observations, or figures (e.g., "101", "John", "50000").
-- Information: Data that has been processed, structured, formatted, or presented in a meaningful context (e.g., "Employee ID 101, named John, has a salary of $50,000").
+- Data: Raw, unorganized, and unprocessed facts, observations, or figures. Example: "101", "John", "50000".
+- Information: Data that has been processed and presented in a meaningful context. Example: "Employee ID 101, named John, has a salary of $50,000".
 - Database: A systematic, logically organized, and sharing-enabled collection of related data.
-- DBMS (Database Management System): A specialized software package designed to define, store, manipulate, retrieve, and manage databases efficiently and securely (e.g., MySQL, Oracle, PostgreSQL, SQL Server).
+- DBMS (Database Management System): A specialized software package to define, store, manipulate, retrieve, and manage databases efficiently and securely. Examples: MySQL, Oracle, PostgreSQL, SQL Server.
 
 
 1.2 File System vs. Database Management System
-Before DBMS, data was managed using traditional operating system files. This approach had severe limitations:
 
-- Data Redundancy & Inconsistency:
-  - File System: High. Multiple copies of same data are stored in different files, leading to storage waste and conflicting records.
-  - DBMS: Low. Centralized storage database architecture minimizes duplication; updates propagate automatically.
-- Data Access & Querying:
-  - File System: Difficult. Requires writing custom programs (e.g., in C/Java) to search, filter, or retrieve specific data.
-  - DBMS: Easy. Standardized, declarative querying languages (SQL) allow rapid data extraction.
-- Data Isolation:
-  - File System: High. Data is scattered in different files and formats, making integration highly complex.
-  - DBMS: Low. Integrated logical schema brings all data entities into a unified view.
-- Concurrent Access:
-  - File System: Unsafe. If two users edit the same file simultaneously, updates are overwritten (loss of data integrity).
-  - DBMS: Safe. Lock-based and time-stamp protocols manage concurrent operations safely.
-- Security & Authorization:
-  - File System: Basic. File-level access permissions are too coarse.
-  - DBMS: Granular. Column, table, and row-level access control based on user roles.
-- Crash Recovery:
-  - File System: Absent/Weak. If system crashes mid-write, files get corrupted.
-  - DBMS: Robust. Write-ahead logging (WAL) and recovery managers restore state using transaction logs.
+Before DBMS, data was managed using traditional OS files. This approach had severe limitations:
+
+  Comparison Table — File System vs DBMS:
+  +-------------------------------+-------------------------------------------+-------------------------------------------+
+  | Feature / Problem             | File System Approach                      | DBMS Approach                             |
+  +-------------------------------+-------------------------------------------+-------------------------------------------+
+  | Data Redundancy & Consistency | HIGH: Multiple copies in different files  | LOW: Centralized storage, auto-propagate  |
+  | Data Access & Querying        | HARD: Requires custom C/Java programs     | EASY: Declarative SQL queries             |
+  | Data Isolation                | HIGH: Scattered files, complex integration| LOW: Integrated logical schema            |
+  | Concurrent Access             | UNSAFE: Simultaneous edits overwrite data | SAFE: Lock-based & timestamp protocols    |
+  | Security & Authorization      | BASIC: File-level (Read/Write/Execute)    | GRANULAR: Row, column, table-level ACLs   |
+  | Crash Recovery                | WEAK: Files corrupted on mid-write crash  | ROBUST: Write-Ahead Logging (WAL), logs   |
+  +-------------------------------+-------------------------------------------+-------------------------------------------+
 
 
 1.3 Three-Schema Architecture (ANSI-SPARC)
+
 To hide complexity and provide logical/physical separation of data, DBMS uses a Three-Level Architecture:
 
-                    External Views (Student/Admin/Finance Portals)
-                                  │
-                                  ▼
-                     Conceptual / Logical Schema (Entities, Relations, Constraints)
-                                  │
-                                  ▼
-                     Internal / Physical Schema (Indexes, File Sizes, Blocks)
-                                  │
-                                  ▼
-                     Physical Storage (HDD/SSD/Cloud Files)
+  +----------------------------------------------+
+  |        External Level  (View Schema)         |
+  |   User A View  |  User B View  | User C View |
+  +----------------------------------------------+
+              |  [Logical Data Independence]
+  +----------------------------------------------+
+  |     Conceptual Level  (Logical Schema)       |
+  |  Tables, Entities, Relationships, Constraints|
+  +----------------------------------------------+
+              |  [Physical Data Independence]
+  +----------------------------------------------+
+  |      Internal Level  (Physical Schema)       |
+  |   Indexes, File Organization, Block Sizes    |
+  +----------------------------------------------+
 
-1. External Level (View Schema):
-   - The highest level of abstraction.
-   - Defines how end-users or application programs interact with the database.
-   - Allows different users to see custom, simplified views of the same database based on their roles.
-2. Conceptual Level (Logical Schema):
-   - The middle level of abstraction.
-   - Defines what data is stored in the database and what relationships exist among those data items.
-   - Contains tables, schemas, entities, data types, and integrity constraints without worrying about physical storage.
-3. Internal Level (Physical Schema):
-   - The lowest level of database design.
-   - Defines how the data is physically stored in the secondary storage devices.
-   - Describes block allocations, record sizes, index structures (B+ trees, hashing), and data compression techniques.
+- External Level (View Schema): Highest level of abstraction. Defines how end-users or application programs interact with the database. Each user sees only the data relevant to their role.
+- Conceptual Level (Logical Schema): Middle level. Defines WHAT data is stored and WHAT relationships exist. Contains tables, entities, data types, and integrity constraints. Does NOT care about physical storage.
+- Internal Level (Physical Schema): Lowest level. Defines HOW data is physically stored on secondary storage. Describes block allocations, record sizes, index structures (B+ trees, hashing), and data compression.
 
 
 1.4 Data Independence
-Data independence refers to the ability to modify schema definition at one level without affecting the schemas at higher levels.
 
-- Logical Data Independence:
-  - The ability to modify the conceptual schema (e.g., adding/deleting columns, split/merge tables) without changing the external schema or existing application programs.
-  - Example: If a new column DateOfBirth is added to a Student table, the existing queries that select only StudentID and StudentName do not break.
-- Physical Data Independence:
-  - The ability to modify the physical schema (e.g., changing index types, migrating from HDD to SSD, altering block size) without changing the conceptual/logical schema.
-  - Example: Creating a B+ Tree index on the Email column to speed up queries does not change the table design or SQL code structure.
+Data independence = ability to modify schema at one level WITHOUT affecting higher levels.
+
+  +----------------------------------------------+
+  |          External View / Schema              |
+  +----------------------------------------------+
+              ^
+              |   [Logical Data Independence]
+              v
+  +----------------------------------------------+
+  |        Conceptual / Logical Schema           |
+  +----------------------------------------------+
+              ^
+              |   [Physical Data Independence]
+              v
+  +----------------------------------------------+
+  |        Internal / Physical Schema            |
+  +----------------------------------------------+
+
+- Logical Data Independence: Modify the conceptual schema (add/delete columns, split/merge tables) WITHOUT changing external schema or application programs.
+  Example: Adding a new column DateOfBirth to Student table does NOT break existing queries that only select StudentID and StudentName.
+
+- Physical Data Independence: Modify the physical schema (change index types, migrate from HDD to SSD, alter block size) WITHOUT changing the logical schema.
+  Example: Creating a B+ Tree index on Email column to speed up queries does NOT change the table design or SQL code structure.
+
+
+1.5 OLTP vs. OLAP
+
+  +--------------------+------------------------------------------+------------------------------------------+
+  | Feature            | OLTP (Online Transaction Processing)     | OLAP (Online Analytical Processing)      |
+  +--------------------+------------------------------------------+------------------------------------------+
+  | Purpose            | Day-to-day operations (INSERT/UPDATE/DEL)| Business intelligence & reporting (SELECT)|
+  | Data Volume        | Small, frequent transactions             | Large, infrequent batch queries          |
+  | Database Size      | Relatively small (GBs)                   | Very large (TBs to PBs)                  |
+  | Users              | Many concurrent end-users                | Few analysts                             |
+  | Examples           | Banking, e-commerce, ticketing           | Data warehousing, business analytics     |
+  | Schema             | Highly normalized (3NF/BCNF)             | Denormalized (Star Schema, Snowflake)    |
+  +--------------------+------------------------------------------+------------------------------------------+
 
 
 Chapter 2: Entity-Relationship (ER) Model
 
-The Entity-Relationship (ER) model is a visual blueprint of a database representing real-world entities, attributes, and relationships. It is converted into physical relational tables during the implementation phase.
+The ER model is a visual blueprint of a database representing real-world entities, attributes, and relationships. It is converted into physical relational tables during implementation.
 
 2.1 Core Elements
-- Entity: A distinct, real-world object or event that is distinguishable from other objects (e.g., a specific Student, Course, Employee).
-- Entity Set: A collection of entities of the same type sharing similar properties (e.g., all Students in a university).
-- Attribute: Characteristics or properties that describe an entity (e.g., Name, RollNumber, Salary).
+- Entity: A distinct, real-world object distinguishable from other objects. Examples: Student, Course, Employee. Represented by: Rectangle.
+- Entity Set: A collection of entities of the same type sharing similar properties. Example: all Students in a university.
+- Attribute: Characteristics or properties that describe an entity. Examples: Name, RollNumber, Salary. Represented by: Oval (connected to entity).
 
 
 2.2 Classification of Attributes
-Understanding attribute types is essential for proper schema design:
+
+  Understanding attribute types is essential for proper schema design:
+
+                    +------------------------------+
+                    |         ATTRIBUTES           |
+                    +--------------+---------------+
+         +----------+---------+---+---------+----------+
+         v                    v             v           v
+   +-----------+        +-----------+  +-----------+  +-----------+
+   |  Simple   |        |Single-Val |  | Key Attr. |  |  Derived  |
+   |    vs.    |        |    vs.    |  |(Underline)|  | (Dashed   |
+   | Composite |        | Multi-Val |  +-----------+  |   Oval)   |
+   +-----------+        +-----------+                  +-----------+
 
 1. Simple vs. Composite:
-   - Simple Attributes: Atomic values that cannot be split further (e.g., RollNumber, Salary).
-   - Composite Attributes: Can be divided into smaller sub-parts to represent independent values (e.g., Name split into First_Name, Middle_Name, Last_Name).
+   - Simple Attributes: Atomic values that cannot be split further. Examples: RollNumber, Salary.
+   - Composite Attributes: Can be divided into sub-parts. Example: Name split into First_Name, Middle_Name, Last_Name.
+
 2. Single-valued vs. Multi-valued:
-   - Single-valued: Holds exactly one value for a given entity instance (e.g., DateOfBirth, AadhaarNumber).
-   - Multi-valued: Can hold multiple values for a single entity (e.g., Phone_Number (mobile and home), Skills).
+   - Single-valued: Holds exactly one value per entity instance. Examples: DateOfBirth, AadhaarNumber.
+   - Multi-valued: Can hold multiple values for a single entity. Examples: Phone_Number (mobile + home), Skills.
+     Representation: Double Oval.
+
 3. Derived Attributes:
-   - Values that are not stored directly in the database but calculated from other stored attributes.
-   - Example: Calculating Age dynamically using the current date and DateOfBirth.
+   - Values NOT stored directly but calculated from other stored attributes.
+   - Example: Age calculated dynamically from current date and DateOfBirth.
+   - Representation: Dashed Oval.
+
 4. Key Attribute:
-   - An attribute whose values uniquely identify each entity in an entity set (e.g., Roll_Number in Student).
+   - Attribute whose values uniquely identify each entity in an entity set.
+   - Example: Roll_Number in Student entity set.
+   - Representation: Oval with underlined text.
 
 
 2.3 Strong vs. Weak Entity Sets
-- Strong Entity Set: Has its own primary key (e.g., Emp_ID). Independent existence. Represented by a single Rectangle.
-- Weak Entity Set: Does not have a primary key. It relies on a strong entity. Uses a partial key / discriminator (dashed underline) to differentiate between weak entities sharing same owner. Existentially dependent. Represented by a Double Rectangle. Double Diamond for its identifying relationship.
-- Example: A Dependents table (child name, age) is a weak entity set dependent on the Employee strong entity. If the employee leaves the company, their dependents' records are deleted automatically.
+
+  +---------------------------+----------------------------+-----------------------------------+
+  | Characteristic            | Strong Entity Set          | Weak Entity Set                   |
+  +---------------------------+----------------------------+-----------------------------------+
+  | Primary Key               | Has its own primary key    | No primary key. Relies on strong  |
+  |                           | (e.g., Emp_ID)             | entity's key.                     |
+  | Discriminator             | Not required               | Uses partial key (discriminator)  |
+  |                           |                            | with dashed underline             |
+  | Dependency                | Independent existence      | Existentially depends on owner    |
+  | ER Representation         | Single Rectangle           | Double Rectangle                  |
+  | Relationship Notation     | Single Diamond             | Double Diamond (Identifying Rel.) |
+  +---------------------------+----------------------------+-----------------------------------+
+
+  Note: Example: A Dependents table (child name, age) is a weak entity set dependent on Employee.
+  If the employee leaves the company, their dependents' records are automatically deleted.
 
 
 2.4 Cardinality Constraints (Mapping Constraints)
-Cardinality defines the number of entity instances of one entity set that can be associated with entity instances of another set via a relationship.
-1. One-to-One (1:1): An instance in Entity Set A is associated with at most one instance in Entity Set B, and vice versa. (e.g., Citizen [Has] Passport).
-2. One-to-Many (1:N): An instance in A is associated with multiple instances in B, but an instance in B is associated with at most one instance in A. (e.g., Department [Employs] Employee).
-3. Many-to-One (N:1): Multiple instances in A are associated with at most one instance in B. (e.g., Employee [Works_In] Department).
-4. Many-to-Many (M:N): An instance in A is associated with multiple instances in B, and vice versa. (e.g., Student [Enroll] Course).
+
+Cardinality defines the number of entity instances that can be associated via a relationship.
+
+1. One-to-One (1:1): An instance in Entity Set A is associated with at most one instance in Entity Set B, and vice versa.
+   Example: Citizen -- (1) -- [Has] -- (1) -- Passport
+
+2. One-to-Many (1:N): An instance in A is associated with multiple instances in B, but instance in B maps to at most one instance in A.
+   Example: Department -- (1) -- [Employs] -- (N) -- Employee
+
+3. Many-to-One (N:1): Multiple instances in A are associated with at most one instance in B.
+   Example: Employee -- (N) -- [Works_In] -- (1) -- Department
+
+4. Many-to-Many (M:N): An instance in A maps to multiple instances in B, and vice versa.
+   Example: Student -- (M) -- [Enroll] -- (N) -- Course
 
 
 2.5 Participation Constraints
-- Total Participation: Every entity in the entity set must participate in at least one relationship instance (Double Line in ER). (e.g., Every Employee must work in a Department).
-- Partial Participation: Entities in the entity set may or may not participate in relationship instances (Single Line in ER). (e.g., Not every Employee is a manager of a Department).
+- Total Participation (Double Line): Every entity MUST participate in at least one relationship instance.
+  Example: Every Employee MUST work in a Department. (Double line between Employee and Works_In)
+
+- Partial Participation (Single Line): Entities MAY OR MAY NOT participate in relationship instances.
+  Example: Not every Employee is a manager of a Department.
 
 
-2.6 ER Diagram to Relational Tables Conversion Rules
-To translate a conceptual ER diagram into standard relational tables (RDBMS), follow these structural rules:
-1. Strong Entity Set: Map directly to a standalone table. All simple attributes become columns. Composite attributes are flattened (sub-parts become columns).
-2. Weak Entity Set: Map to a separate table. Columns include all attributes of the weak entity set + the primary key of the identifying strong entity set (acting as a Foreign Key). Primary key is a composite of the strong entity PK + weak entity discriminator.
-3. Relationship Sets (M:N): Must create a distinct table. Columns include primary keys of both participating entity sets + any descriptive attributes. Primary Key is a composite of both foreign keys.
-4. Relationship Sets (1:N / N:1): Do NOT create a separate table. Instead, take the primary key from the "One" side and add it as a Foreign Key in the "Many" side's table.
-5. Relationship Sets (1:1): No separate table. Put the primary key of either table into the other table as a foreign key. To prevent NULL values, choose the table with total participation to receive the foreign key.
+2.6 Generalization, Specialization & Aggregation
+
+- Generalization (Bottom-Up): Combining multiple lower-level entity sets into one higher-level entity set by extracting common attributes.
+  Example: Car and Truck ---> generalized into ---> Vehicle
+
+- Specialization (Top-Down): Defining sub-entity sets from a higher-level entity set by identifying distinguishing characteristics.
+  Example: Person ---> specialized into ---> Employee and Customer
+
+- Aggregation: Treating a relationship between entities as a single abstract entity, enabling it to participate in another relationship.
+  Example: Employee-[Works_On]-Project relationship itself treated as entity to model which Manager oversees it.
+
+
+2.7 ER Diagram to Relational Tables Conversion Rules
+
+To translate a conceptual ER diagram into relational tables, follow these rules:
+
+1. Strong Entity Set:
+   - Maps directly to a standalone table.
+   - All simple attributes become columns.
+   - Composite attributes are flattened (sub-parts become separate columns).
+
+2. Weak Entity Set:
+   - Maps to a separate table.
+   - Columns include: all attributes of weak entity + primary key of identifying strong entity (as Foreign Key).
+   - Primary Key of Weak Table = (Strong Entity PK + Weak Entity Discriminator) -- composite key.
+
+3. Relationship Sets (M:N):
+   - MUST create a distinct table.
+   - Columns: Primary keys of both participating entity sets + any descriptive relationship attributes.
+   - Primary Key = composite key of both foreign keys.
+
+4. Relationship Sets (1:N or N:1):
+   - Do NOT create a separate table.
+   - Take the primary key from the "One" side and add it as a Foreign Key in the "Many" side's table.
+
+5. Relationship Sets (1:1):
+   - No separate table.
+   - Add the primary key of either table into the other as a foreign key.
+   - To prevent NULL values: choose the table with TOTAL PARTICIPATION to receive the foreign key.
 
 
 Chapter 3: Functional Dependencies (FDs) & Key Extraction
@@ -142,71 +241,151 @@ Chapter 3: Functional Dependencies (FDs) & Key Extraction
 Functional Dependency is the formal mathematical foundation used to evaluate schema design, calculate keys, and eliminate data redundancy.
 
 3.1 Understanding Functional Dependency (FD)
-An FD is represented as X -> Y (Read: "X functionally determines Y").
-- Definition: If two tuples (rows) have identical values in attributes X, they must have identical values in attributes Y. If t1[X] = t2[X], then t1[Y] = t2[Y] must hold true.
-- Trivial Dependency: If the dependent (RHS) is a subset of the determinant (LHS). X -> Y is trivial if Y is subset of X (e.g., A, B -> A).
-- Non-Trivial Dependency: If the dependent is not a subset of the determinant. X -> Y is non-trivial if Y is not subset of X (e.g., RollNumber -> Name). It is completely non-trivial if X intersect Y is empty.
+
+An FD is written as: X --> Y (Read: "X functionally determines Y" or "Y is functionally dependent on X")
+
+- Definition: If two tuples (rows) have identical values in attributes X, they MUST have identical values in attributes Y.
+  Formally: if t1[X] = t2[X], then t1[Y] = t2[Y] must hold.
+
+- Trivial Dependency: If the dependent (RHS) is a SUBSET of the determinant (LHS).
+  X --> Y is trivial if Y is a subset of X.
+  Examples: {A, B} --> A, or {Id, Name} --> Id.
+
+- Non-Trivial Dependency: If the dependent is NOT a subset of the determinant.
+  Example: RollNumber --> Name (Name is not a subset of RollNumber).
+  Completely Non-Trivial: if X and Y share NO common attributes (X intersect Y = empty).
 
 
-3.2 Attribute Closure (X+)
-The attribute closure of a set of attributes X (denoted as X+) is the complete set of all attributes in a relation that can be determined logically using the given set of Functional Dependencies.
+3.2 Armstrong's Axioms (Inference Rules for FDs)
 
-Step-by-Step Closure Algorithm:
-1. Initialize X+ = X.
-2. Loop through the list of FDs: If the Left-Hand Side (LHS) of any FD A -> B is a subset of the current X+, add the Right-Hand Side (RHS) B to X+.
-3. Repeat this process until no new attributes can be added to X+.
+Armstrong's Axioms are the COMPLETE and SOUND set of inference rules to derive all possible FDs from a given set.
 
-Worked Example:
-Relation R(A, B, C, D, E) and FDs:
-1. A -> B
-2. B -> C
-3. C -> D
-4. E -> A
+Primary Axioms:
+1. Reflexivity (Trivial Rule): If Y is a subset of X, then X --> Y.
+   Example: {Name, Age} --> {Name} is always valid.
 
-Let's calculate the closure for {A}:
-- Step 1: A+ = {A}
-- Step 2: Check FDs.
-  - Using A -> B (since A is subset of A+): A+ = {A, B}
-  - Using B -> C (since B is subset of A+): A+ = {A, B, C}
-  - Using C -> D (since C is subset of A+): A+ = {A, B, C, D}
-  - E -> A cannot be used because E is not in A+.
-- Result: A+ = {A, B, C, D}. Since it does not contain E, A alone cannot be a candidate key.
+2. Augmentation: If X --> Y, then XZ --> YZ (add same attributes to both sides).
+   Example: If A --> B, then AC --> BC.
+
+3. Transitivity: If X --> Y and Y --> Z, then X --> Z.
+   Example: If RollNo --> Dept and Dept --> HOD, then RollNo --> HOD.
+
+Derived Rules (from the three axioms above):
+- Union Rule: If X --> Y and X --> Z, then X --> YZ.
+- Decomposition Rule: If X --> YZ, then X --> Y and X --> Z.
+- Pseudo-Transitivity: If X --> Y and WY --> Z, then WX --> Z.
 
 
-3.3 Keys in RDBMS
-- Super Key: A set of one or more attributes that can uniquely identify a row in a table. (X+ = R).
-- Candidate Key (CK): A minimal Super Key. No proper subset of a candidate key can be a super key. X is a CK if X+ = R, and for any attribute A in X, (X - {A})+ != R.
-- Primary Key (PK): A candidate key selected by the database designer to uniquely identify records. Cannot accept NULL values.
-- Prime Attribute: An attribute that is a member of any Candidate Key.
-- Non-Prime Attribute: An attribute that is not a part of any Candidate Key.
+3.3 Attribute Closure (X+)
+
+The attribute closure of X, written X+, is the complete set of all attributes determinable from X using a given set of FDs.
+
+  Step-by-Step Closure Algorithm:
+  1. Initialize X+ = X.
+  2. Loop through ALL FDs: If the LHS of any FD (A --> B) is a SUBSET of current X+, add B to X+.
+  3. Repeat until NO new attributes can be added to X+.
+
+  Worked Example:
+  Given Relation R(A, B, C, D, E) and FDs:
+    1. A --> B
+    2. B --> C
+    3. C --> D
+    4. E --> A
+
+  Calculate closure of {A}:
+    Step 1: A+ = {A}
+    Using A --> B:  A+ = {A, B}
+    Using B --> C:  A+ = {A, B, C}
+    Using C --> D:  A+ = {A, B, C, D}
+    E --> A cannot fire because E is not in A+ yet.
+    Result: A+ = {A, B, C, D}
+
+  Since A+ does NOT contain E, attribute A alone is NOT a Candidate Key.
 
 
-3.4 Sanchit Sir's Cheat Code: Finding Candidate Keys Instantly
-For finding Candidate Keys of a relation R under a set of FDs, use this shortcut:
-1. Rule 1 (Essential Attributes): Identify all attributes that only appear on the Left-Hand Side (LHS) or do not appear in any FDs. These attributes MUST be part of every candidate key.
-2. Rule 2 (Useless Attributes): Identify attributes that only appear on the Right-Hand Side (RHS). These will NEVER be part of any Candidate Key.
-3. Step-by-step Application:
-   - Find the closure of the "essential attributes".
-   - If the closure contains all attributes of R, then this set is the one and only Candidate Key.
-   - If the closure is incomplete, combine the essential attributes with other attributes (excluding RHS-only attributes) one by one, and calculate their closures to find all minimal keys.
+3.4 Keys in RDBMS
 
-Example Application:
-Let R(A, B, C, D, E, F) and FDs:
-- A -> B
-- C -> D
-- D -> E
-- B -> F
+- Super Key: Any set of attributes X where X+ = R (determines ALL attributes of the relation).
+  Condition: If X+ = entire relation R, then X is a Super Key.
 
-1. LHS attributes: A, C, D, B
-   RHS attributes: B, D, E, F
-2. A and C are never on the RHS. Hence, {A, C} must be present in every Candidate Key.
-3. Check (AC)+ closure:
-   - (AC)+ = {A, C}
-   - Applying A -> B => {A, C, B}
-   - Applying C -> D => {A, C, B, D}
-   - Applying D -> E => {A, C, B, D, E}
-   - Applying B -> F => {A, C, B, D, E, F}
-4. Since (AC)+ = R, {A, C} is the only Candidate Key for this relation.
+- Candidate Key (CK): A MINIMAL Super Key.
+  No proper subset of a candidate key can itself be a super key.
+  Condition: X is a Candidate Key if X+ = R, and for any attribute A in X, removing A makes (X - {A})+ != R.
+
+- Primary Key (PK): A candidate key chosen by the database designer. Cannot accept NULL values.
+
+- Prime Attribute: An attribute that is a member of ANY Candidate Key.
+
+- Non-Prime Attribute: An attribute that is NOT part of ANY Candidate Key.
+
+  Key Hierarchy:
+  Super Key (contains redundant attributes)
+      |
+      v
+  Candidate Key (minimal super key — no redundancy)
+      |
+      v
+  Primary Key (chosen from candidate keys, cannot be NULL)
+
+
+3.5 Cheat Code: Finding Candidate Keys Instantly (Sanchit Sir Method)
+
+                    +------------------------------+
+                    |     Check FD list for:       |
+                    +--------------+---------------+
+         +----------+              +----------+
+         v                                    v
+  +---------------------------------+  +---------------------------------+
+  | Attributes NEVER on the RHS    |  | Attributes NEVER on the LHS    |
+  | of any FD.                     |  | of any FD.                     |
+  +---------------------------------+  +---------------------------------+
+  | MUST be in EVERY Candidate Key!|  | Will NEVER be in any CK!       |
+  +---------------------------------+  +---------------------------------+
+
+Rules:
+1. Essential Attributes Rule: Attributes that ONLY appear on the LHS (or appear in NO FD at all) MUST be part of every Candidate Key.
+2. Useless Attributes Rule: Attributes that ONLY appear on the RHS will NEVER be part of any Candidate Key.
+
+Step-by-Step Process:
+  a) Find the closure of the essential attributes.
+  b) If closure = R, that set IS the one and only Candidate Key.
+  c) If closure is incomplete, combine essential attributes with other attributes (excluding RHS-only ones) one by one, and compute closures to find all minimal keys.
+
+  Worked Example:
+  Given R(A, B, C, D, E, F) and FDs: A --> B, C --> D, D --> E, B --> F
+
+  LHS attributes: A, C, D, B
+  RHS attributes: B, D, E, F
+  Never on RHS: A and C  ---> {A, C} must be in every CK.
+  Never on LHS: E and F  ---> E and F will NEVER be in any CK.
+
+  Compute (AC)+:
+    {A, C} --> using A --> B --> {A, C, B}
+    --> using C --> D --> {A, C, B, D}
+    --> using D --> E --> {A, C, B, D, E}
+    --> using B --> F --> {A, C, B, D, E, F} = R
+
+  Result: {A, C} is the ONLY Candidate Key.
+
+
+3.6 Canonical Cover (Minimal Cover)
+
+A canonical cover Fc is a simplified, minimal set of FDs logically equivalent to the original set F, with no redundant dependencies or extraneous attributes.
+
+Properties of Canonical Cover:
+- No FD in Fc has an extraneous attribute on the LHS or RHS.
+- No FD in Fc can be removed without changing the closure of F.
+- Each LHS of an FD in Fc is unique (no two FDs share the same LHS).
+
+Algorithm to find Canonical Cover:
+1. Apply Union Rule: Combine all FDs that have the same LHS into one FD.
+   Example: A --> B and A --> C become A --> BC.
+
+2. Remove Extraneous LHS Attributes: Attribute A is extraneous in LHS of (X --> Y) if:
+   (X - {A})+ still contains Y using the current set of FDs.
+
+3. Remove Redundant FDs: FD X --> Y is redundant if X+ (computed WITHOUT this FD) still derives Y.
+   Remove it if the other FDs already imply it.
 
 
 Chapter 4: Database Normalization
@@ -214,143 +393,846 @@ Chapter 4: Database Normalization
 Normalization is a systematic process of decomposing database tables to eliminate data redundancy and prevent operational anomalies.
 
 4.1 Database Anomalies
-If a database is not normalized, it suffers from three primary anomalies:
-1. Insertion Anomaly: Inability to insert certain data because other data is not yet available. (e.g., Cannot insert a new department's details until at least one employee is hired).
-2. Deletion Anomaly: The unintentional loss of data caused by the deletion of unrelated records. (e.g., Deleting the last employee of a department deletes all details of that department).
-3. Update Anomaly: Inconsistency that occurs when updating duplicate data in multiple rows. (e.g., If department name changes, we must update it in every employee record).
+
+If a database is NOT normalized, it suffers from three primary anomalies:
+
+1. Insertion Anomaly: Cannot insert certain data because required related data is not yet available.
+   Example: Cannot insert a new Department's details until at least one Employee is hired and assigned to it.
+
+2. Deletion Anomaly: Unintentional loss of data caused by deleting an unrelated record.
+   Example: Deleting the last Employee of a Department accidentally deletes ALL details of that Department.
+
+3. Update Anomaly: Inconsistency when updating duplicate data stored in multiple rows.
+   Example: If a Department name changes, we must update it in EVERY Employee row. Missing even one causes an inconsistent database state.
 
 
 4.2 Hierarchy of Normal Forms
-Database schemas are structured into progressively stricter normal forms:
-BCNF -> 3NF -> 2NF -> 1NF
+
+Database schemas are structured into progressively stricter normal forms.
+If a database is in BCNF, it is AUTOMATICALLY in 3NF, 2NF, and 1NF.
+
+  +-----------------------------------------+
+  |   4NF  (Multi-valued Dependencies)      |
+  +---------------------+-------------------+
+                        |  (subset of)
+  +---------------------v-------------------+
+  |   BCNF (Boyce-Codd Normal Form)         |
+  +---------------------+-------------------+
+                        |
+  +---------------------v-------------------+
+  |   3NF  (Third Normal Form)              |
+  +---------------------+-------------------+
+                        |
+  +---------------------v-------------------+
+  |   2NF  (Second Normal Form)             |
+  +---------------------+-------------------+
+                        |
+  +---------------------v-------------------+
+  |   1NF  (First Normal Form)              |
+  +-----------------------------------------+
 
 
 4.3 Detailed Rules of Normal Forms
 
-First Normal Form (1NF)
-- Rule: Every attribute (column) must contain only atomic (indivisible) values.
-- Violations: Multivalued attributes, composite attributes, or nested relations are not allowed.
+--- 1NF (First Normal Form) ---
+  Rule: Every attribute (column) must contain only ATOMIC (indivisible) values.
+  Violations: Multivalued attributes, composite attributes, or nested relations.
+  Solution: Split multivalued records into separate rows or separate tables.
+  Example of violation: A single cell containing "English, Hindi, French" (multiple languages).
 
-Second Normal Form (2NF)
-- Rule: Must be in 1NF, and there must be no Partial Dependency.
-- Partial Dependency: Occurs when a non-prime attribute depends on a proper subset of a Candidate Key.
-- Condition for 2NF: No FD should look like: Proper Subset of CK -> Non-Prime Attribute
+--- 2NF (Second Normal Form) ---
+  Rule: Must be in 1NF, AND there must be NO Partial Dependency.
 
-Third Normal Form (3NF)
-- Rule: Must be in 2NF, and there must be no Transitive Dependency.
-- Transitive Dependency: A non-prime attribute determines another non-prime attribute.
-- Condition for 3NF: For every non-trivial functional dependency X -> Y, at least one of the following must hold:
-  1. X is a Super Key (LHS is a key).
-  2. Y is a Prime Attribute (RHS is part of some candidate key).
+  Partial Dependency: A non-prime attribute depends on a PROPER SUBSET of a Candidate Key.
+  Formally: FD X --> Y is a partial dependency if X is a proper subset of some CK, and Y is a non-prime attribute.
+  Condition for 2NF: NO FD of the form: (Proper Subset of CK) --> (Non-Prime Attribute)
 
-Boyce-Codd Normal Form (BCNF)
-- Rule: A stricter version of 3NF.
-- Condition for BCNF: For every non-trivial functional dependency X -> Y:
-  1. X must be a Super Key (LHS must be a key).
-  - Note: The 3NF escape hatch (where Y can be a prime attribute) is removed here.
+  Important: If all Candidate Keys are single attributes, the relation is AUTOMATICALLY in 2NF
+  (no partial dependency is possible with single-attribute keys).
+
+  Example of violation:
+    Table: OrderItem(OrderID, ProductID, ProductName, Quantity)
+    CK = {OrderID, ProductID}
+    FD: ProductID --> ProductName  [VIOLATION: ProductID is a proper subset of CK, ProductName is non-prime]
+
+--- 3NF (Third Normal Form) ---
+  Rule: Must be in 2NF, AND there must be NO Transitive Dependency.
+
+  Transitive Dependency: A non-prime attribute determines another non-prime attribute.
+  Example: EmpID --> DeptID --> DeptName  [DeptName transitively depends on EmpID via DeptID]
+
+  Condition for 3NF: For every non-trivial FD X --> Y, AT LEAST ONE must be true:
+    Option A: X is a Super Key (LHS is a key), OR
+    Option B: Y is a Prime Attribute (RHS is part of some Candidate Key).
+
+--- BCNF (Boyce-Codd Normal Form) ---
+  Rule: Must be in 3NF. Stricter version — no exceptions.
+
+  Condition for BCNF: For every non-trivial FD X --> Y:
+    X MUST be a Super Key. (The "Y is prime" escape hatch from 3NF is REMOVED.)
+
+  Warning - 3NF vs BCNF Trade-Off:
+    - 3NF always guarantees BOTH lossless join AND dependency preservation.
+    - BCNF always guarantees lossless join but may NOT preserve all FDs.
+    - Prefer BCNF for eliminating anomalies; fall back to 3NF if dependency preservation is critical.
+
+--- 4NF (Fourth Normal Form) ---
+  Rule: Must be in BCNF, AND have NO non-trivial Multi-valued Dependencies (MVDs).
+
+  Multi-valued Dependency (MVD): X -->> Y (X multi-determines Y) exists when for a given X,
+  there are multiple INDEPENDENT sets of Y values and Z values that coexist in all combinations.
+
+  Example of MVD violation:
+    Table: CourseDetail(Course, Teacher, Book)
+    A Course has multiple Teachers AND multiple Books, independently.
+    This forces unnecessary (Teacher, Book) combinations for every course.
+
+  Condition for 4NF: For every non-trivial MVD X -->> Y, X must be a Super Key.
 
 
-Quick Comparison Matrix of Normal Forms
-- 1NF: Atomic values. No multivalued attributes. Lossless Join: Yes. Dependency Preservation: Yes.
-- 2NF: Eliminate Partial Dependencies. Proper Subset of CK !=> Non-Prime. Lossless Join: Yes. Dependency Preservation: Yes.
-- 3NF: Eliminate Transitive Dependencies. X is Super Key OR Y is Prime. Lossless Join: Yes. Dependency Preservation: Yes.
-- BCNF: Eliminate all anomalies. X must be a Super Key. Lossless Join: Yes. Dependency Preservation: No.
+4.4 Quick Comparison Matrix of Normal Forms
+
+  +----------+------------------------------+-------------------------------------------+---------------+-----------------+
+  | NF       | Core Target                  | Condition for FD X --> Y                  | Lossless Join | FD Preservation |
+  +----------+------------------------------+-------------------------------------------+---------------+-----------------+
+  | 1NF      | Atomic values                | No multivalued or composite attributes     | Yes           | Yes             |
+  | 2NF      | No Partial Dependencies      | No (Proper Subset of CK --> Non-Prime)     | Yes           | Yes             |
+  | 3NF      | No Transitive Dependencies   | X is Super Key OR Y is Prime Attribute     | Yes           | YES (always)    |
+  | BCNF     | No FD anomalies              | X MUST be a Super Key (no exception)       | Yes           | NO (may lose)   |
+  | 4NF      | No MVD anomalies             | X is Super Key (for Multi-valued Deps)     | Yes           | NO (may lose)   |
+  +----------+------------------------------+-------------------------------------------+---------------+-----------------+
+
+
+4.5 Decomposition: Lossless Join & Dependency Preservation
+
+Decomposition: Splitting a relation R into smaller relations R1, R2, ... to achieve a higher normal form.
+
+--- Lossless Join Decomposition ---
+A decomposition {R1, R2} of R is LOSSLESS if and only if:
+  (R1 INTERSECT R2) --> R1   OR   (R1 INTERSECT R2) --> R2
+
+This means: The common attributes of R1 and R2 must form a SUPER KEY of either R1 or R2.
+
+  Example:
+    R(A, B, C) with FD: A --> B, B --> C
+    Decompose into R1(A, B) and R2(B, C)
+    R1 INTERSECT R2 = {B}
+    Check: B+ = {B, C}. B --> C, so B is a super key of R2. LOSSLESS!
+
+--- Dependency Preserving Decomposition ---
+A decomposition is DEPENDENCY PRESERVING if:
+  The UNION of projected FDs on each sub-relation can TOGETHER derive all the original FDs of R.
+  Formally: F1 UNION F2 UNION ... = F (logically equivalent)
+
+Caution: BCNF decomposition is ALWAYS lossless but NOT always dependency preserving.
+When BCNF causes loss of an FD, decompose into 3NF instead using the 3NF Synthesis Algorithm
+(based on the canonical cover).
 
 
 Chapter 5: Indexing Techniques
 
-Indexing is a data structure technique used to quickly locate and access data in a database file without scanning the entire table block-by-block.
+Indexing is a data structure technique to quickly locate and access data in a database file WITHOUT scanning the entire table block-by-block.
 
 5.1 Single-Level Indexing Types
+
+Depending on the data file organization and the index attribute, there are three types of single-level indexes:
+
+                          +------------------------------+
+                          |       INDEXING TYPES         |
+                          +--------------+---------------+
+         +-----------------+-------------+-----------------+
+         v                               v                  v
+  +------------------+           +------------------+  +------------------+
+  |  Primary Index   |           | Clustered Index  |  | Secondary Index  |
+  +------------------+           +------------------+  +------------------+
+  | - Ordered Data   |           | - Ordered Data   |  | - Unordered Data |
+  | - Primary Key    |           | - Non-Key Field  |  | - Key or Non-Key |
+  | - Sparse Index   |           | - Sparse Index   |  | - Dense Index    |
+  +------------------+           +------------------+  +------------------+
+
 1. Primary Index:
-   - Data file ordered on key field (Primary Key). Sparse index (points to Block Anchors).
+   - File Organization: Data file is ordered on the index field.
+   - Index Key Field: Primary Key (unique values).
+   - Type: SPARSE Index — stores the first record of every data block (called a Block Anchor).
+
 2. Clustered Index:
-   - Data file ordered on non-key field (e.g., Dept_ID). Sparse index.
+   - File Organization: Data file is ordered on the index field.
+   - Index Key Field: Non-key field (values can repeat, e.g., Dept_ID).
+   - Type: SPARSE Index — groups records with the same key into blocks. Points to first block of each key.
+
 3. Secondary Index:
-   - Data file is unordered. Built on key/non-key field. Dense index (contains pointer for every record).
+   - File Organization: Data file is UNORDERED.
+   - Index Key Field: Can be key OR non-key.
+   - Type: DENSE Index — must contain a pointer for EVERY record because there is no physical ordering.
 
 
 5.2 Dense vs. Sparse Indexing
-- Dense Index: Contains an index record for every single record in the data file. Fast lookup but takes high storage space and slower updates.
-- Sparse Index: Contains index records for only some records (usually block anchors). Takes much less memory but slower lookup.
+
+  +-------------------+-------------------------------+-------------------------------+
+  | Feature           | Dense Index                   | Sparse Index                  |
+  +-------------------+-------------------------------+-------------------------------+
+  | Coverage          | Index record for EVERY record | Index record for SOME records |
+  |                   | in the data file              | only (block anchors)          |
+  | Lookup Speed      | Very fast (direct access)     | Slower (binary search + scan) |
+  | Storage Space     | High (large index file)       | Low (small index file)        |
+  | Update Cost       | High (update index on insert) | Low (fewer index entries)     |
+  | Used With         | Secondary Index (unordered)   | Primary, Clustered (ordered)  |
+  +-------------------+-------------------------------+-------------------------------+
 
 
 5.3 Multi-Level Indexing and B/B+ Trees
-When the index table itself becomes so massive that it cannot fit into physical RAM, we must build an index on top of the existing index, creating a multi-level indexing structure (usually B/B+ trees).
 
-B-Tree vs. B+ Tree
-- B-Tree: Stores both search keys and data record pointers in all nodes (internal and leaf nodes). Internal nodes are larger, meaning fewer child pointers fit in a single block.
-- B+ Tree (Modern Standard): Internal nodes store only search keys and child pointers. All data record pointers are stored strictly in the leaf nodes. Leaf nodes are linked together as a doubly linked list, allowing fast range queries and sequential scans. Maximizes block fan-out and minimizes tree height.
+When the index table itself becomes too large for RAM, a single-level index fails.
+Solution: Build an index ON TOP OF the existing index (multi-level indexing).
+Modern databases use balanced trees for multi-level indexes.
+
+  B-Tree Node Structure:             B+ Tree Node Structure:
+  +-------------------------+        +-------------------------+
+  | Key | Pointer | DataPtr |        | Key | Pointer |  NULL  |
+  |     | (Child) |         |        |     | (Child) |(No Data|
+  +-------------------------+        +-------------------------+
+  (Data pointers in ALL nodes)       (Data pointers ONLY in Leaf nodes)
+                                     (Leaf nodes linked as doubly linked list)
+
+--- B-Tree ---
+  - Stores BOTH search keys and data record pointers in ALL nodes (internal and leaf nodes).
+  - Disadvantage: Internal nodes are larger, meaning FEWER child pointers fit in one memory block.
+  - This INCREASES the height of the tree, requiring MORE disk I/O operations.
+
+--- B+ Tree (Modern Standard — used in ALL modern databases) ---
+  - Internal nodes store ONLY search keys and child pointers (NO data pointers).
+  - ALL actual data record pointers are stored ONLY in LEAF nodes.
+  - Leaf nodes are linked as a DOUBLY LINKED LIST for fast range queries and sequential scans.
+  - Advantages:
+      * Maximizes block fan-out (more children per node).
+      * Minimizes search tree height.
+      * Drastically reduces disk read operations.
+      * Sequential scan of all records is efficient (follow leaf linked list).
+
+  B-Tree vs B+ Tree Summary:
+  +------------------------+---------------------------+----------------------------------+
+  | Feature                | B-Tree                    | B+ Tree                          |
+  +------------------------+---------------------------+----------------------------------+
+  | Data Pointers          | In ALL nodes              | ONLY in leaf nodes               |
+  | Internal Node Size     | Large (has data ptrs)     | Small (keys + child ptrs only)   |
+  | Tree Height            | Greater                   | Lesser (better fan-out)          |
+  | Range Queries          | Inefficient (no linking)  | Efficient (leaf linked list)     |
+  | Sequential Access      | Poor                      | Excellent                        |
+  | Used in Practice       | Rarely                    | All modern RDBMS                 |
+  +------------------------+---------------------------+----------------------------------+
 
 
 Chapter 6: Structured Query Language (SQL)
 
-SQL is the standardized declarative interface used to define, manipulate, and query relational databases.
+SQL is the standardized declarative interface to define, manipulate, and query relational databases.
 
 6.1 Classification of SQL Commands
-- DDL (Data Definition Language): Defines, changes, and destroys schema structures. (CREATE, ALTER, DROP, TRUNCATE). Auto-committed.
-- DML (Data Manipulation Language): Handles data retrieval and modification. (SELECT, INSERT, UPDATE, DELETE).
-- DCL (Data Control Language): Controls permissions and security. (GRANT, REVOKE).
-- TCL (Transaction Control Language): Manages database transactions. (COMMIT, ROLLBACK, SAVEPOINT).
+
+                         +------------------------------+
+                         |         SQL COMMANDS         |
+                         +--------------+---------------+
+         +------------------+------+------+------------------+
+         v                  v             v                  v
+   +-----------+      +-----------+  +-----------+     +-----------+
+   |    DDL    |      |    DML    |  |    DCL    |     |    TCL    |
+   +-----------+      +-----------+  +-----------+     +-----------+
+   | CREATE    |      | SELECT    |  | GRANT     |     | COMMIT    |
+   | ALTER     |      | INSERT    |  | REVOKE    |     | ROLLBACK  |
+   | DROP      |      | UPDATE    |  +-----------+     | SAVEPOINT |
+   | TRUNCATE  |      | DELETE    |                    +-----------+
+   +-----------+      +-----------+
+
+- DDL (Data Definition Language): Defines, changes, and destroys schema structures.
+  Commands: CREATE, ALTER, DROP, TRUNCATE.
+  Note: DDL operations are auto-committed instantly (cannot be rolled back in most databases).
+
+- DML (Data Manipulation Language): Handles data retrieval and modification.
+  Commands: SELECT, INSERT, UPDATE, DELETE.
+  Note: DML operations can be rolled back within a transaction.
+
+- DCL (Data Control Language): Controls permissions and security.
+  Commands: GRANT (give access), REVOKE (take back access).
+
+- TCL (Transaction Control Language): Manages database transactions.
+  Commands: COMMIT (save changes permanently), ROLLBACK (undo changes), SAVEPOINT (create bookmark in transaction).
 
 
 6.2 Key Constraints and Referential Integrity
+
 Constraints are rules enforced on data columns to ensure database reliability:
-- PRIMARY KEY: Uniquely identifies each record. Cannot contain NULL.
-- UNIQUE: Ensures all values are distinct.
-- NOT NULL: Prevents insertion of NULL values.
-- CHECK: Enforces conditional checks (e.g., CHECK (Age >= 18)).
-- FOREIGN KEY: Enforces Referential Integrity between parent and child tables.
-  - ON DELETE CASCADE: Deletes child records when parent is deleted.
-  - ON DELETE SET NULL: Sets child foreign key columns to NULL.
-  - ON DELETE RESTRICT / NO ACTION: Rejects parent deletion if matching child records exist.
+
+- PRIMARY KEY: Uniquely identifies each record. Cannot contain NULL. Only ONE per table.
+- UNIQUE: Ensures all values in a column are distinct. Can accept ONE NULL value (per SQL standard).
+- NOT NULL: Prevents insertion of NULL values in the column.
+- CHECK: Enforces a conditional check on values. Example: CHECK (Age >= 18).
+- DEFAULT: Provides a default value when no value is inserted.
+- FOREIGN KEY: Enforces Referential Integrity between parent table and child table.
+
+  Foreign Key Referential Integrity Actions on Delete/Update of parent key:
+  - ON DELETE CASCADE: Automatically deletes all child records when the parent record is deleted.
+  - ON DELETE SET NULL: Sets the child FK columns to NULL when parent is deleted.
+  - ON DELETE RESTRICT / NO ACTION: Rejects the parent deletion if matching child records exist.
 
 
 6.3 Relational Joins
-Joins combine columns from tables based on a common matching column.
-1. Inner Join (INNER JOIN): Returns only rows that have matching values in both tables.
-2. Left Outer Join (LEFT OUTER JOIN): Returns all records from left table, and matched records from right. Unmatched RHS filled with NULL.
-3. Right Outer Join (RIGHT OUTER JOIN): Returns all records from right table, and matched records from left. Unmatched LHS filled with NULL.
-4. Full Outer Join (FULL OUTER JOIN): Returns all records when there is a match in either left or right table. Unmatched filled with NULL.
+
+Joins combine columns from one or more tables based on a common matching column.
+
+  Data Example:
+  LEFT Table:              RIGHT Table:
+  +---+---+               +---+-----+
+  | A | B |               | B | C   |
+  +---+---+               +---+-----+
+  | 1 | x |               | x | foo |
+  | 2 | y |               | z | bar |
+  +---+---+               +---+-----+
+        |                     |
+        +-------- Join --------+
+
+Join Types and Results:
+1. INNER JOIN: Returns ONLY rows with matching values in BOTH tables.
+   Result: (1, x, foo)
+
+2. LEFT OUTER JOIN: All rows from LEFT table + matching rows from RIGHT. No match = NULL on right.
+   Result: (1, x, foo), (2, y, NULL)
+
+3. RIGHT OUTER JOIN: All rows from RIGHT table + matching rows from LEFT. No match = NULL on left.
+   Result: (1, x, foo), (NULL, z, bar)
+
+4. FULL OUTER JOIN: ALL rows from both tables. Unmatched cells = NULL on either side.
+   Result: (1, x, foo), (2, y, NULL), (NULL, z, bar)
+
+5. NATURAL JOIN: Auto-joins on all columns with same name and data type. Removes duplicate columns.
+   No explicit ON condition needed.
+
+6. CROSS JOIN (Cartesian Product): Every combination of rows from both tables.
+   Result size = |R1| x |R2|. Example: 3 rows x 4 rows = 12 rows.
+
+  Join Types Comparison:
+  +------------------+------------------+------------------+--------------------+
+  | Join Type        | Matching Rows    | Non-matching L   | Non-matching R     |
+  +------------------+------------------+------------------+--------------------+
+  | INNER JOIN       | Included         | Excluded         | Excluded           |
+  | LEFT OUTER JOIN  | Included         | Included (NULLs) | Excluded           |
+  | RIGHT OUTER JOIN | Included         | Excluded         | Included (NULLs)   |
+  | FULL OUTER JOIN  | Included         | Included (NULLs) | Included (NULLs)   |
+  +------------------+------------------+------------------+--------------------+
 
 
 6.4 Aggregation & SQL Query Execution Order
-- WHERE: Filters individual rows before groups are formed. Cannot contain aggregate functions (like SUM, AVG, COUNT).
-- HAVING: Filters groups after aggregation.
 
-Logical Order of Query Execution
-1. FROM (and JOINs) - Get table source and combine records
-2. WHERE - Filter individual rows
-3. GROUP BY - Group identical rows
-4. HAVING - Filter grouped rows
-5. SELECT - Select specific output columns
-6. DISTINCT - Remove duplicates
-7. ORDER BY - Sort results (ASC/DESC)
-8. LIMIT / OFFSET - Restrict output row count
+- WHERE: Filters individual rows BEFORE groups are formed. CANNOT use aggregate functions (SUM, AVG, COUNT).
+- HAVING: Filters groups AFTER aggregation has occurred. CAN use aggregate functions.
+
+  Logical Order of SQL Query Execution:
+  +---+------------------------+------------------------------------------+
+  | 1 | FROM (and JOINs)       | Get table source and combine records     |
+  | 2 | WHERE                  | Filter individual rows (pre-aggregation) |
+  | 3 | GROUP BY               | Group identical rows together            |
+  | 4 | HAVING                 | Filter grouped rows (post-aggregation)   |
+  | 5 | SELECT                 | Select specific output columns           |
+  | 6 | DISTINCT               | Remove duplicate rows                    |
+  | 7 | ORDER BY               | Sort results (ASC or DESC)               |
+  | 8 | LIMIT / OFFSET         | Restrict number of output rows           |
+  +---+------------------------+------------------------------------------+
+
+  Note: Although you WRITE SQL as SELECT...FROM...WHERE..., the engine EXECUTES in the order above.
 
 
-SQL Cheat Sheet Queries
+6.5 SQL Cheat Sheet: Sample Queries
 
-Creating a Table with Constraints:
-CREATE TABLE Employees (
-    Emp_ID INT PRIMARY KEY,
-    Name VARCHAR(100) NOT NULL,
-    Age INT CHECK (Age >= 18),
-    Dept_ID INT,
-    Salary DECIMAL(10, 2) DEFAULT 30000.00,
-    FOREIGN KEY (Dept_ID) REFERENCES Departments(Dept_ID) 
-        ON DELETE SET NULL
-);
+  Creating a Table with Constraints:
+    CREATE TABLE Employees (
+        Emp_ID   INT PRIMARY KEY,
+        Name     VARCHAR(100) NOT NULL,
+        Age      INT CHECK (Age >= 18),
+        Dept_ID  INT,
+        Salary   DECIMAL(10, 2) DEFAULT 30000.00,
+        FOREIGN KEY (Dept_ID) REFERENCES Departments(Dept_ID) ON DELETE SET NULL
+    );
 
-Fetching Employee Counts by Department (With Filtering):
-SELECT Dept_ID, COUNT(Emp_ID) AS Total_Employees, AVG(Salary) AS Avg_Salary
-FROM Employees
-WHERE Salary > 20000
-GROUP BY Dept_ID
-HAVING COUNT(Emp_ID) >= 2
-ORDER BY Avg_Salary DESC;
+  Fetch Department Stats (With Aggregation and Filtering):
+    SELECT Dept_ID, COUNT(Emp_ID) AS Total_Employees, AVG(Salary) AS Avg_Salary
+    FROM Employees
+    WHERE Salary > 20000
+    GROUP BY Dept_ID
+    HAVING COUNT(Emp_ID) >= 2
+    ORDER BY Avg_Salary DESC;
 
-Using Subqueries:
-SELECT Name, Salary 
-FROM Employees 
-WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+  Subquery — Find employees earning more than company average:
+    SELECT Name, Salary
+    FROM Employees
+    WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+
+
+Chapter 7: Relational Algebra & Relational Calculus
+
+Relational Algebra and Relational Calculus are formal mathematical query languages that form the theoretical foundation for SQL.
+
+7.1 Relational Algebra (Procedural)
+
+Relational Algebra is PROCEDURAL — it specifies HOW to retrieve data by describing a sequence of operations.
+
+  Fundamental Operations:
+  +--------------------+--------+---------------------------------------------------------------+
+  | Operation          | Symbol | Description                                                   |
+  +--------------------+--------+---------------------------------------------------------------+
+  | Select             | sigma  | Filters rows (tuples) based on a condition. Like SQL WHERE.   |
+  | Project            | Pi     | Selects specific columns. Like SQL SELECT column_list.        |
+  | Union              | U      | Combines tuples from two compatible relations. Removes dupes. |
+  | Set Difference     | -      | Tuples in R1 that are NOT in R2.                              |
+  | Cartesian Product  | x      | Every row from R1 combined with every row from R2.            |
+  | Rename             | rho    | Renames a relation or its attributes.                         |
+  +--------------------+--------+---------------------------------------------------------------+
+
+  Note: Two relations are UNION COMPATIBLE if they have the same number of attributes and compatible data types.
+
+  Join Operations (Derived from Cartesian Product + Select):
+  +--------------------+----------+-------------------------------------------------------------------+
+  | Join Type          | Symbol   | Description                                                       |
+  +--------------------+----------+-------------------------------------------------------------------+
+  | Theta Join         | R [th] S | Joins based on any specified condition (any comparison operator). |
+  | Equi-Join          | R [=] S  | Theta Join using ONLY equality (=). Keeps duplicate join columns. |
+  | Natural Join       | R [*] S  | Auto-joins on all COMMON attribute names. Removes duplicate cols. |
+  | Left Outer Join    | R [L] S  | All rows from R + matched S rows. Unmatched S cells = NULL.       |
+  | Right Outer Join   | R [R] S  | All rows from S + matched R rows. Unmatched R cells = NULL.       |
+  | Full Outer Join    | R [F] S  | All rows from both R and S. Unmatched cells = NULL on either side.|
+  +--------------------+----------+-------------------------------------------------------------------+
+
+  Relational Algebra Query Examples:
+    -- Find names of students enrolled in Course CS101:
+    Pi Name (sigma Course='CS101' (Student [*] Enrollment))
+
+    -- Find employees with salary > 50000 in department IT:
+    Pi Name (sigma Salary > 50000 AND Dept='IT' (Employee))
+
+    -- Find students enrolled in BOTH CS101 AND CS102:
+    Pi StudentID (sigma Course='CS101' (Enrollment))
+    INTERSECT
+    Pi StudentID (sigma Course='CS102' (Enrollment))
+
+
+7.2 Relational Calculus (Declarative)
+
+Relational Calculus is DECLARATIVE — it specifies WHAT to retrieve, not HOW to get it.
+There are two types:
+
+--- Tuple Relational Calculus (TRC) ---
+  - Queries are in the form: { T | P(T) }
+    Where T is the result tuple and P(T) is the predicate (condition) it must satisfy.
+  - Uses Existential quantifier (there exists) and Universal quantifier (for all).
+
+  TRC Query Example:
+    Find names of students enrolled in CS101:
+    { t.Name | Student(t) AND (there exists e)(Enrollment(e) AND e.StudentID = t.ID AND e.Course = 'CS101') }
+
+--- Domain Relational Calculus (DRC) ---
+  - Uses domain variables (values from attribute domains, NOT whole tuples).
+  - Queries are in the form: { <x1, x2, ...> | P(x1, x2, ...) }
+
+  DRC Query Example:
+    Find names of students in CS101:
+    { <n> | (there exists id)(Student(id, n) AND (there exists c)(Enrollment(id, c) AND c = 'CS101')) }
+
+
+  Comparison Table: Relational Algebra vs TRC vs DRC:
+  +--------------------+-------------------+-------------------+-------------------+
+  | Feature            | Relational Algebra| TRC               | DRC               |
+  +--------------------+-------------------+-------------------+-------------------+
+  | Type               | Procedural        | Declarative       | Declarative       |
+  | Variables          | Relations (sets)  | Tuples            | Domain values     |
+  | Expressive Power   | Equal             | Equal             | Equal             |
+  | Basis for          | SQL DML           | SQL conceptually  | QBE (Query by Ex.)|
+  +--------------------+-------------------+-------------------+-------------------+
+
+  Key Insight: All three languages have EQUAL expressive power — any query written in one can be
+  expressed in the others. SQL is essentially based on Relational Algebra internally.
+
+
+Chapter 8: Transaction Management & ACID Properties
+
+A Transaction is a single logical unit of work that accesses and possibly modifies database contents.
+It is a sequence of read(r) and write(w) operations treated as ONE atomic unit.
+
+8.1 ACID Properties
+
+Every transaction must follow the ACID properties to guarantee data integrity:
+
+  +--------------------------------------------------------------+
+  |                        A C I D                               |
+  |                                                              |
+  |  A - ATOMICITY      "All or Nothing"                         |
+  |  C - CONSISTENCY    "Valid state before and after"           |
+  |  I - ISOLATION      "Transactions don't interfere"           |
+  |  D - DURABILITY     "Committed changes are permanent"        |
+  +--------------------------------------------------------------+
+
+1. Atomicity — "All or Nothing":
+   - A transaction is treated as a single, indivisible unit of work.
+   - Either ALL operations execute successfully (committed), OR NONE of them do (rolled back).
+   - Managed by: Transaction Manager / Recovery Manager (using UNDO logs).
+   - Example: Bank transfer: Both the debit from Account A AND credit to Account B must succeed together.
+     If credit fails, the debit is ALSO undone. No half-completed transactions.
+
+2. Consistency — "Valid State Before and After":
+   - A transaction must transform the database from one VALID (consistent) state to another valid state.
+   - All defined integrity constraints (primary keys, foreign keys, check constraints) must remain satisfied.
+   - Ensured by: Application logic + DBMS constraint enforcement engine.
+   - Example: After a transfer, the total balance across all accounts must remain the same.
+
+3. Isolation — "Transactions Don't Interfere":
+   - Concurrent transactions must execute as if they were running SERIALLY (one after another).
+   - Intermediate state of a transaction is NOT visible to other concurrent transactions.
+   - Managed by: Concurrency Control Manager (using Locks, Timestamps, MVCC).
+   - Isolation Levels (weakest to strongest): Read Uncommitted, Read Committed, Repeatable Read, Serializable.
+
+4. Durability — "Committed Changes Are Permanent":
+   - Once a transaction COMMITS, its changes are PERMANENT and survive even system failures (crashes, power outages).
+   - Managed by: Recovery Manager using Write-Ahead Logging (WAL).
+   - WAL: Changes are written to a persistent LOG before being applied to the actual database.
+
+
+8.2 Transaction States
+
+  [BEGIN TRANSACTION]
+         |
+         v
+  +-----------+   (executing read/write)   +--------------------+
+  |  ACTIVE   | --------------------------> | PARTIALLY COMMITTED|
+  +-----------+                            +--------------------+
+         |                                          |
+   Error |                            Final checks |
+         v                                          v
+  +-----------+   (undo all changes)      +--------------------+
+  |  FAILED   | --------------------------> |    ABORTED         |
+  +-----------+                            +--------------------+
+                                                    |
+                                     All checks     |
+                                     passed         v
+                                           +--------------------+
+                                           |    COMMITTED       |
+                                           +--------------------+
+
+State Descriptions:
+- Active: Transaction is currently executing read/write operations.
+- Partially Committed: The last statement has been executed. Final consistency checks running.
+- Committed: Transaction completed successfully. Changes are PERMANENT.
+- Failed: An error was detected during execution. Transaction cannot proceed.
+- Aborted: Transaction was rolled back. Database restored to pre-transaction state.
+
+
+8.3 Schedules & Serializability
+
+A Schedule is a sequence of read and write operations from multiple concurrent transactions, ordered by time.
+
+Types of Schedules:
+- Serial Schedule: Transactions execute ONE AFTER ANOTHER without any interleaving.
+  Always CONSISTENT. But has LOW PERFORMANCE (no parallelism).
+
+- Non-Serial (Concurrent) Schedule: Transactions are INTERLEAVED.
+  HIGHER PERFORMANCE. But RISKS INCONSISTENCY.
+
+- Serializable Schedule: A non-serial schedule that produces the SAME RESULT as some serial schedule.
+  This is the GOLD STANDARD for correctness.
+
+--- Conflict Serializability ---
+
+Two operations CONFLICT if ALL of these are true:
+  1. They belong to DIFFERENT transactions, AND
+  2. They access the SAME data item, AND
+  3. At least ONE of them is a WRITE operation.
+
+Conflict Pairs:
+  - Read-Write   (R-W) conflict: One reads, another writes the same item.
+  - Write-Read   (W-R) conflict: One writes, another reads. Causes DIRTY READ.
+  - Write-Write  (W-W) conflict: Both write the same item. Causes LOST UPDATE.
+
+Conflict Equivalent Schedules: Two schedules are conflict equivalent if one can be transformed
+into the other by swapping NON-CONFLICTING adjacent operations.
+
+Conflict Serializable: A schedule is conflict serializable if it is conflict equivalent to
+some serial schedule.
+
+--- Precedence Graph (Serialization Graph) Method ---
+
+To test if a schedule is conflict serializable:
+  Step 1: Draw one node for each transaction (T1, T2, T3, ...).
+  Step 2: Draw a directed edge Ti --> Tj if Ti has an operation that CONFLICTS WITH and comes BEFORE an operation of Tj.
+  Step 3: If the precedence graph has NO CYCLE --> Schedule IS Conflict Serializable.
+          If the graph HAS a CYCLE --> Schedule is NOT Conflict Serializable.
+  Step 4: The topological ordering of nodes gives the equivalent serial schedule.
+
+  Example:
+    Schedule S: r1(A)  w2(A)  r1(B)  w2(B)  [Non-serial]
+
+    Conflicts found:
+      r1(A) before w2(A) --> Edge: T1 --> T2
+      r1(B) before w2(B) --> Edge: T1 --> T2
+
+    Precedence Graph: T1 ---> T2   (No cycle)
+    Result: Conflict Serializable. Equivalent serial schedule: T1 then T2.
+
+--- View Serializability ---
+
+- A BROADER class than conflict serializability.
+- Every conflict serializable schedule IS view serializable.
+- But NOT every view serializable schedule is conflict serializable (some are only view serializable).
+
+View Equivalence Conditions (for schedules S and S' to be view equivalent):
+  For every data item Q:
+  1. The SAME transaction performs the INITIAL READ of Q in both schedules.
+  2. The SAME read-from relationships exist: for each write(Q) in S, the same read follows it in S'.
+  3. The SAME transaction performs the FINAL WRITE of Q in both schedules.
+
+  Hierarchy: Conflict Serializable is a SUBSET of View Serializable.
+
+
+8.4 Recoverability of Schedules
+
+- Recoverable Schedule: If transaction Tj reads data written by Ti, then Ti must COMMIT before Tj commits.
+  This ensures we can recover correctly if a committed transaction's data came from an uncommitted source.
+
+- Cascadeless Schedule (Avoids Cascading Rollback): A transaction can only read data written by
+  ALREADY COMMITTED transactions. Avoids rolling back multiple transactions due to failure of one.
+
+- Strict Schedule: A transaction can neither READ NOR WRITE a data item Q until the transaction
+  that last wrote Q has COMMITTED or ABORTED.
+
+  Strictness Hierarchy:
+  Strict SUBSET_OF Cascadeless SUBSET_OF Recoverable SUBSET_OF All Schedules
+
+  Note: MOST DESIRABLE: Strict schedules (prevents most problems).
+        LEAST RESTRICTIVE: Simply recoverable schedules.
+
+
+Chapter 9: Concurrency Control
+
+Concurrency control manages simultaneous transaction execution to preserve data integrity while maximizing system throughput.
+
+9.1 Problems of Concurrent Execution
+
+  +---------------------+-----------------------------------------------+-----------------------------------------------+
+  | Problem             | Description                                   | Example                                       |
+  +---------------------+-----------------------------------------------+-----------------------------------------------+
+  | Lost Update         | Two transactions read and update same value.  | T1 and T2 both read Balance=1000.             |
+  |                     | Second overwrite destroys first's update.     | T1 adds 500 (writes 1500). T2 adds 200        |
+  |                     |                                               | (writes 1200). T1's update is LOST!           |
+  +---------------------+-----------------------------------------------+-----------------------------------------------+
+  | Dirty Read (W-R)    | Transaction reads data written by an          | T1 transfers Rs500. T2 reads the new          |
+  |                     | UNCOMMITTED transaction. If that transaction  | Rs1500 balance. T1 is aborted. T2 has         |
+  |                     | aborts, the read was based on invalid data.   | been working with invalid (dirty) data.       |
+  +---------------------+-----------------------------------------------+-----------------------------------------------+
+  | Unrepeatable Read   | Transaction reads same data item TWICE but    | T1 reads Salary=50K. T2 updates Salary to     |
+  | (R-W Conflict)      | gets DIFFERENT values because another         | 60K and commits. T1 reads again and gets      |
+  |                     | transaction updated it between the two reads. | 60K. Different from first read!               |
+  +---------------------+-----------------------------------------------+-----------------------------------------------+
+  | Phantom Read        | Transaction re-executes a query and finds     | T1 counts students with GPA > 9 (gets 5).    |
+  |                     | NEW ROWS (phantoms) because another           | T2 inserts student with GPA 9.5. T1 counts   |
+  |                     | transaction inserted them.                    | again and gets 6. Different count!            |
+  +---------------------+-----------------------------------------------+-----------------------------------------------+
+
+
+9.2 Lock-Based Protocols
+
+Locks are synchronization mechanisms to control concurrent access to data items.
+
+Types of Locks:
+- Shared Lock (S / Read Lock): Allows a transaction to READ a data item.
+  Multiple transactions CAN hold shared locks on the same item simultaneously.
+
+- Exclusive Lock (X / Write Lock): Allows a transaction to READ AND WRITE a data item.
+  ONLY ONE transaction can hold an exclusive lock. NO other lock (S or X) can be granted.
+
+  Lock Compatibility Matrix:
+  +------------------+-----------------------------+-----------------------------+
+  |                  | S Lock Requested            | X Lock Requested            |
+  +------------------+-----------------------------+-----------------------------+
+  | S Lock Held      | COMPATIBLE (Grant)          | INCOMPATIBLE (Wait)         |
+  | X Lock Held      | INCOMPATIBLE (Wait)         | INCOMPATIBLE (Wait)         |
+  +------------------+-----------------------------+-----------------------------+
+
+  Rule: S + S is OK (multiple readers). ANY combination with X requires waiting.
+
+--- Two-Phase Locking (2PL) ---
+
+2PL is the most widely used protocol to ensure CONFLICT SERIALIZABILITY.
+
+Core Rule: A transaction must ACQUIRE all locks it needs BEFORE it RELEASES any lock.
+
+  +---------------------------------------------------+
+  |              TWO PHASES OF 2PL                    |
+  |                                                   |
+  |  Phase 1: GROWING Phase                           |
+  |  - Transaction CAN acquire locks (S or X).        |
+  |  - Transaction CANNOT release any lock.           |
+  |                                                   |
+  |  >> LOCK POINT: Maximum number of locks held. <<  |
+  |                                                   |
+  |  Phase 2: SHRINKING Phase                         |
+  |  - Transaction CAN release locks.                 |
+  |  - Transaction CANNOT acquire any new lock.       |
+  +---------------------------------------------------+
+
+  Variants of 2PL:
+  +------------------+--------------------------------------------------------------+
+  | Variant          | Rule                                                         |
+  +------------------+--------------------------------------------------------------+
+  | Basic 2PL        | Standard growing + shrinking phases. Can cause cascading     |
+  |                  | rollbacks (NOT strict). Guarantees serializability.          |
+  | Strict 2PL       | ALL EXCLUSIVE LOCKS held until commit or abort. Prevents    |
+  |                  | dirty reads. MOST COMMONLY USED in practice.                |
+  | Rigorous 2PL     | ALL locks (S and X) held until commit or abort. Strictest.  |
+  |                  | Simplifies recovery. Reduces concurrency.                   |
+  | Conservative 2PL | ALL locks acquired BEFORE transaction begins (pre-claiming).|
+  |                  | Prevents deadlocks but causes very LOW concurrency.         |
+  +------------------+--------------------------------------------------------------+
+
+  Warning: 2PL guarantees serializability but does NOT prevent deadlocks.
+  Deadlocks occur when transactions wait for each other to release locks (circular waiting).
+  Detected using Wait-For Graphs (WFG). A CYCLE in WFG = DEADLOCK detected.
+
+
+9.3 Timestamp-Based Protocols
+
+Instead of locks, each transaction is assigned a unique TIMESTAMP (TS) at the start.
+Older transactions have smaller timestamps (assigned earlier).
+
+Each data item Q maintains two metadata values:
+- W-timestamp(Q): Largest timestamp of any transaction that successfully WROTE Q.
+- R-timestamp(Q): Largest timestamp of any transaction that successfully READ Q.
+
+  Timestamp Ordering (TO) Protocol Rules:
+
+  For a READ operation by Ti on Q:
+    CASE 1: TS(Ti) < W-timestamp(Q)
+      --> Ti is trying to read a value ALREADY OVERWRITTEN by a newer transaction.
+      --> ACTION: ROLLBACK Ti and restart with a new timestamp.
+
+    CASE 2: TS(Ti) >= W-timestamp(Q)
+      --> Proceed with the read.
+      --> Update: R-timestamp(Q) = max(R-timestamp(Q), TS(Ti))
+
+  For a WRITE operation by Ti on Q:
+    CASE 1: TS(Ti) < R-timestamp(Q)
+      --> A NEWER transaction has already READ Q. Ti's write would create an inconsistency.
+      --> ACTION: ROLLBACK Ti.
+
+    CASE 2: TS(Ti) < W-timestamp(Q)
+      --> A NEWER transaction has already WRITTEN Q. Ti's write is OUTDATED.
+      --> ACTION: ROLLBACK Ti.   (OR: use Thomas Write Rule -- skip this write instead!)
+
+    CASE 3: Otherwise (TS(Ti) >= both timestamps)
+      --> Proceed with the write.
+      --> Update: W-timestamp(Q) = TS(Ti)
+
+--- Thomas Write Rule (Modification to TO Protocol) ---
+  When TS(Ti) < W-timestamp(Q) during a WRITE:
+  - Instead of ROLLING BACK Ti, simply IGNORE/SKIP the write.
+  - Reasoning: A newer transaction has already written a more recent value.
+    Ti's write would be immediately overwritten anyway, so skipping it is safe.
+  - Benefit: Allows more transactions to complete without unnecessary rollbacks.
+  - Trade-off: The resulting schedules may not be conflict serializable, but they are view serializable.
+
+
+9.4 Deadlock Handling
+
+--- Deadlock Prevention (Avoid deadlocks from occurring) ---
+
+  Wait-Die (Non-preemptive):
+    If Ti requests a lock held by Tj:
+      If TS(Ti) < TS(Tj)  [Ti is OLDER]: Ti WAITS for Tj to release the lock.
+      If TS(Ti) > TS(Tj)  [Ti is YOUNGER]: Ti DIES (is aborted and restarted).
+
+  Wound-Wait (Preemptive):
+    If Ti requests a lock held by Tj:
+      If TS(Ti) < TS(Tj)  [Ti is OLDER]: Ti WOUNDS Tj (aborts and restarts Tj). Ti gets the lock.
+      If TS(Ti) > TS(Tj)  [Ti is YOUNGER]: Ti WAITS for Tj to release.
+
+  Comparison Table: Deadlock Prevention Schemes:
+  +------------------+-------------------------------+-------------------------------+
+  | Protocol         | Older Transaction Action      | Younger Transaction Action    |
+  +------------------+-------------------------------+-------------------------------+
+  | Wait-Die         | Waits (non-preemptive)        | Dies (aborted and restarted)  |
+  | Wound-Wait       | Wounds (kills younger, takes) | Waits                         |
+  +------------------+-------------------------------+-------------------------------+
+
+  Key Insight: Both protocols restart aborted transactions with their ORIGINAL timestamp to prevent starvation.
+
+--- Deadlock Detection (Detect and recover after deadlock occurs) ---
+
+  Method: Maintain a Wait-For Graph (WFG).
+  - Nodes = all active transactions.
+  - Directed edge Ti --> Tj = Ti is WAITING for Tj to release a lock.
+  - CYCLE in WFG = DEADLOCK detected!
+
+  Resolution (Victim Selection): Choose one or more transactions in the cycle to ABORT (rollback).
+  Selection criteria: Choose victim to minimize cost (fewest updates, lowest priority, or recently started).
+
+
+9.5 Isolation Levels (SQL Standard)
+
+Different isolation levels trade off between consistency guarantees and concurrency performance:
+
+  +-------------------+-------------+-------------------+--------------+-------------+
+  | Isolation Level   | Dirty Read  | Unrepeatable Read | Phantom Read | Performance |
+  +-------------------+-------------+-------------------+--------------+-------------+
+  | Read Uncommitted  | POSSIBLE    | POSSIBLE          | POSSIBLE     | Highest     |
+  | Read Committed    | PREVENTED   | POSSIBLE          | POSSIBLE     | High        |
+  | Repeatable Read   | PREVENTED   | PREVENTED         | POSSIBLE     | Medium      |
+  | Serializable      | PREVENTED   | PREVENTED         | PREVENTED    | Lowest      |
+  +-------------------+-------------+-------------------+--------------+-------------+
+
+  Reading from Left to Right: Fewer problems, but lower performance / concurrency.
+  Default in most databases: Read Committed (MySQL InnoDB: Repeatable Read).
+
+
+Quick Revision: High-Yield Summary & Cheat Sheet
+
+Keys Formula Summary:
+  Super Key (includes redundant attributes)
+    [subset of]
+  Candidate Key (minimal super key — no redundancy)
+    [chosen as]
+  Primary Key (cannot be NULL, uniquely identifies rows)
+
+  - Prime Attribute = Member of ANY Candidate Key
+  - Non-Prime Attribute = NOT in any Candidate Key
+
+Normal Forms Condition Summary:
+  1NF:  No multivalued, composite, or nested attributes.
+  2NF:  1NF + No (Proper Subset of CK --> Non-Prime Attribute).
+  3NF:  2NF + For every FD: LHS is Super Key OR RHS is Prime Attribute.
+  BCNF: 3NF + For every FD: LHS MUST be a Super Key (no RHS exception).
+  4NF:  BCNF + No non-trivial Multi-valued Dependencies.
+
+Armstrong's Axioms Quick Reference:
+  Reflexivity:   Y subset X --> X --> Y
+  Augmentation:  X --> Y --> XZ --> YZ
+  Transitivity:  X --> Y AND Y --> Z --> X --> Z
+  Union:         X --> Y AND X --> Z --> X --> YZ
+  Decomposition: X --> YZ --> X --> Y AND X --> Z
+
+Transaction Serializability Hierarchy:
+  Conflict Serializable [subset] View Serializable [subset] All Schedules
+  Strict [subset] Cascadeless [subset] Recoverable [subset] All Schedules
+
+ACID Properties — Who Manages What:
+  A (Atomicity):   Transaction Manager + Recovery Manager (undo logs)
+  C (Consistency): Application Logic + DBMS Integrity Constraints
+  I (Isolation):   Concurrency Control Manager (Locks / Timestamps / MVCC)
+  D (Durability):  Recovery Manager (Write-Ahead Logging — WAL)
+
+Indexing Quick Reference:
+  Primary Index:   Ordered file + Primary Key + SPARSE (block anchors)
+  Clustered Index: Ordered file + Non-Key field + SPARSE (grouped blocks)
+  Secondary Index: Unordered file + Any field + DENSE (entry per record)
+  B+ Tree:         Internal nodes = keys only. Leaves = data pointers + linked list.
+
+SQL Execution Order (Memorize This!):
+  FROM --> WHERE --> GROUP BY --> HAVING --> SELECT --> DISTINCT --> ORDER BY --> LIMIT
+
+Lock Compatibility (Memorize This!):
+  S + S = OK (both can read simultaneously)
+  S + X = WAIT (one reading, other wants to write)
+  X + S = WAIT (one writing, other wants to read)
+  X + X = WAIT (both want to write)

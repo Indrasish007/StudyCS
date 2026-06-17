@@ -1,4 +1,5 @@
 // Utility to dynamically parse and load plain text files in Vite using import.meta.glob
+// BUNDLE REFRESH: 2026-06-17T09:15:00+05:30 — All 4 subject .txt files fully updated (ai, dsa, ml, networking)
 
 export interface NoteMetadata {
   slug: string;
@@ -35,6 +36,7 @@ export interface RevisionConcept {
 }
 
 // 1. Vite eager glob imports for raw plain text content from text_semester folder
+// Last updated: 2026-06-17 (forces Vite HMR rebundle to pick up .txt file changes)
 const rawNotes = import.meta.glob("../../text_semester/*.txt", {
   query: "?raw",
   import: "default",
