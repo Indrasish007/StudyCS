@@ -1,101 +1,99 @@
-# StudyCS - Handwritten Styled Semester Hub
+# 🎓 StudyCS — Learn Computer Science Smarter
 
-StudyCS is an immersive, interactive semester notes platform designed for computer science subjects. It is built using **React + Vite + TypeScript + Tailwind CSS**, compiled to run fully client-side. 
+<div align="center">
+  <p><strong>A Premium, Immersive CS Learning Platform styled like an Interactive Lecture notebook.</strong></p>
+  
+  <p>
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+    <img src="https://img.shields.io/badge/Framer_Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white" alt="Framer Motion" />
+  </p>
+</div>
 
-The application is styled like a physical double-page opened school notebook featuring ruled paper lines, red margins, handwritten fonts, highlighter strokes, and binder rings.
-
----
-
-## 🎨 Design Features
-
-1. **Tactile School Notebook Style**:
-   - Double-page open notebook layout (stacked on mobile).
-   - Centered realistic metallic spiral binder rings.
-   - Colored subject divider tabs protruding from the notebook edge (AI, DBMS, DSA, ML, Networking).
-   - Cream ruled paper with red vertical margin rules.
-   - Text rendered using handwritten cursive Google Fonts (`Kalam`, `Architects Daughter`, `Caveat`).
-
-2. **Smart Outline & Table of Contents**:
-   - The left page parses and lists the course section outline.
-   - Clicking on any heading in the outline smoothly scrolls the right page to that section.
-
-3. **High-Yield Revision Deck**:
-   - Automatically harvests definitions, formulas, and practice questions from raw text files (`text_semester/*.txt`) at compile-time.
-   - Supports **Active Recall mode** with 3D-flipping flashcards.
-
-4. **Interactive MDX Widgets**:
-   - Parses `<Quiz>`, `<Flashcard>`, `<Formula>`, `<Definition>`, `<Summary>`, and `<PracticeQuestion>` blocks.
-   - Renders **Mermaid Diagrams** and **KaTeX Math blocks** (`$$...$$` and `$....$`) with zero lag.
+<div align="center">
+  <h3>🌐 Live Demo: <a href="https://studycs.vercel.app/">studycs.vercel.app</a></h3>
+</div>
 
 ---
 
-## 📁 Project Structure
+## ⚡ Introduction
+
+**StudyCS** is a premium educational platform that provides structured computer science lecture notes, revision flashcards, quizzes, and diagrams. 
+
+The core notes interface is styled after a **physical open spiral binder diary** with ruled paper sheets, handwritten fonts, sticker annotations, and highlighter strokes. The dashboard, landing page, and about pages employ a high-end, responsive dark interface inspired by premium modern tools like Linear, Apple, and Arc Browser.
+
+---
+
+## ✨ Key Platform Features
+
+### 📖 1. Tactile Notebook Workspace
+- **Spiral Binder Layout**: Centered glossy metallic spine loops dividing two notebook pages.
+- **Rules & Margin Accents**: Cream paper backgrounds with red vertical margin rules and blue horizontal writing lines.
+- **Cursive Handwritten Fonts**: Leverages Google Web Fonts (`Kalam`, `Architects Daughter`, `Caveat`) to replicate handwritten student logs.
+- **Colored divider tabs**: Easily switch subjects (DSA, DBMS, Networks, AI, ML) using folder-tab clips protruding from the notebook edge.
+
+### 🔍 2. Interactive In-Note Find Tool (`Ctrl+F`)
+- **Localized Querying**: Tap the **Find** button or press `Ctrl+F` while reading to toggle an in-note find bar directly on the paper.
+- **Pill Marks**: Highlights matches instantly in **yellow**, and turns the active selection **orange**.
+- **Smooth Auto-Scroll**: Jumps and scrolls the notes sheet directly to matches using Next/Prev controls or standard keys (`Enter` / `Shift+Enter`).
+
+### 🌗 3. System-Sync Dark/Light Mode Theme Switcher
+- **State Persistence**: Saves your custom theme choices in browser `localStorage`.
+- **Night Notebook Mode**: When switching to Dark mode, the white cream notebook sheets turn into a custom charcoal black paper style with soft indigo-ruled guidelines to protect your eyes during late-night study sessions.
+
+### 🎯 4. Active Recall Revision Center (`RevisionView.tsx`)
+- **Card deck harvester**: Automatically aggregates definitions, formulas, warnings, and practice questions from raw notes.
+- **3D Flip cards**: Flip flashcards on a 3D-perspective axis to practice recall questions.
+
+---
+
+## 📁 File Structure
 
 ```text
-d:\website_semester\
+website_semester/
 ├── src/
 │   ├── components/
-│   │   ├── learning/          # Custom Interactive Notebook Blocks
-│   │   │   ├── Quiz.tsx
-│   │   │   ├── Flashcard.tsx
-│   │   │   ├── Definition.tsx
-│   │   │   ├── Summary.tsx
-│   │   │   ├── Important.tsx
-│   │   │   ├── Formula.tsx
-│   │   │   └── PracticeQuestion.tsx
-│   │   ├── MarkdownRenderer.tsx# Markdown parser (Katex, Mermaid, Quiz)
-│   │   ├── RevisionView.tsx   # Aggregated terms deck & flashcards
-│   │   └── SearchModal.tsx    # Ctrl + K Command Palette search
+│   │   ├── learning/          # Interactive notebook blocks (Quiz, Cards, Formulas)
+│   │   ├── Navbar.tsx         # Sticky glassmorphic nav header
+│   │   ├── Home.tsx           # Hero page & showcase counters
+│   │   ├── About.tsx          # Contributor profile cards & disclaimer
+│   │   ├── Footer.tsx         # Nav shortcuts & copyright signatures
+│   │   ├── BookmarksPanel.tsx # Bookmark list controllers
+│   │   ├── MarkdownRenderer.tsx# Markdown parser (Handles KaTeX math, Mermaid diagrams)
+│   │   ├── RevisionView.tsx   # Aggregated flashcard decks
+│   │   └── SearchModal.tsx    # Command Palette global search (Ctrl + K)
 │   ├── lib/
-│   │   └── notes.ts           # Eager glob compiler-safe file loader
+│   │   └── notes.ts           # Eager files loading compiler
 │   ├── App.tsx                # Double-page notebook navigation core
-│   ├── main.tsx               # App bootstrapper
-│   └── index.css              # Custom ruled backgrounds & handwriting fonts
-├── markdown_semester/         # SOURCE md files
-│   ├── ai.md
-│   ├── dbms.md
-│   ├── dsa.md
-│   ├── machine_learning.md
-│   └── networking.md
-├── text_semester/             # Generated plain text files compiled by notes.ts
-│   ├── ai.txt
-│   ├── dbms.txt
-│   ├── dsa.txt
-│   ├── machine_learning.txt
-│   └── networking.txt
-├── public/                    # Static assets
-├── vercel.json                # Vercel SPA routing rules config
-├── vite.config.ts             # Vite build aliases
+│   ├── main.tsx               # Entry bootstrapper
+│   └── index.css              # Custom notebook rules & handwriting styles
+├── text_semester/             # Ruled study text resources (DSA, DBMS, Networks, AI, ML)
+├── public/                    # Page assets & icons
+├── vite.config.ts             # Bundler options
 ├── tailwind.config.js         # Typography & custom animations config
-├── tsconfig.json              # TypeScript compilation
-└── package.json               # Node packages
+└── package.json               # Dependencies
 ```
 
 ---
 
 ## ⚙️ Development Setup
 
-### 1. Clean Up Legacy Next.js Files
-Since we migrated to a React + Vite application, you can safely delete the old Next.js folders:
-```powershell
-# In PowerShell:
-Remove-Item -Recurse -Force app, components, lib, next-env.d.ts, next.config.mjs
-```
-
-### 2. Install Dependencies
+### 1. Install Dependencies
 Run the installation command in your project terminal:
 ```bash
 npm install
 ```
 
-### 3. Run Development Server
+### 2. Run Development Server
 Start the Vite developer server:
 ```bash
 npm run dev
 ```
-Open the provided URL (e.g., `http://localhost:5173`) in your browser to view the animated notebook!
+Open the provided URL (typically `http://localhost:5173`) in your browser to view the animated notebook!
 
-### 4. Build for Production
+### 3. Build for Production
 To compile optimized static assets:
 ```bash
 npm run build
