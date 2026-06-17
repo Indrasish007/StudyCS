@@ -279,7 +279,6 @@ export default function TopicIndexModal({
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                         {groupedTopics[letter].map((item, idx) => {
-                          const _badge = colorBadges[item.color] || colorBadges.indigo;
                           return (
                             <div
                               key={idx}
