@@ -225,7 +225,7 @@ export default function App() {
         )}
 
         {currentView === "about" && (
-          <About onNavigate={setCurrentView} />
+          <About />
         )}
 
         {currentView === "notes" && (
